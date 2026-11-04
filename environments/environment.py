@@ -9,7 +9,7 @@ import numpy as np
 import warp as wp
 from newton.solvers import SolverMuJoCo
 
-TASKS = ('go2', 'franka_reach', 'franka_lift')
+TASKS = ('go2', 'h1', 'franka_reach', 'franka_lift')
 
 
 @wp.kernel
@@ -23,7 +23,7 @@ def leg_pd(q: wp.array(dtype=float), v: wp.array(dtype=float),
 class Environment:
     """Batched fixed-topology scenes. Actions are absolute joint position targets.
 
-    Go2 has 12 targets. Franka has 9 (7 arm, 2 fingers); the finger equality
+    Go2 has 12 targets, H1 has 19. Franka has 9 (7 arm, 2 fingers); the finger equality
     couples their motion. The model and solver are available for direct use.
     Only cuda:0 is supported by the fused launch adapter.
     """
@@ -58,15 +58,18 @@ class Environment:
         self.control = self.model.control()
         self.nq = self.model.joint_coord_count // num_envs
         self.nv = self.model.joint_dof_count // num_envs
-        self.action_size = 12 if task == 'go2' else 9
-        self.control_dt = .02 if task == 'go2' else 1 / 30
-        self.integration_dt = .005 if task == 'go2' else 1 / 240
+        self.action_size = {'go2': 12, 'h1': 19}.get(task, 9)
+        self.control_dt = .02 if task in ('go2', 'h1') else 1 / 30
+        self.integration_dt = {'go2': .005, 'h1': .0025}.get(task, 1 / 240)
         self.integrations = 4 if task == 'go2' else 8
         self.solver = SolverMuJoCo(self.model, use_mujoco_contacts=True, iterations=100)
         self.solver.mjw_model.opt.run_collision_detection = True
         self.initial_q = self.model.joint_q.numpy().reshape(num_envs, self.nq).copy()
         if task == 'go2':
             self.initial_q[:, 7:] = np.tile([0., .8, -1.5], 4)
+            self.default_action = self.initial_q[:, 7:].copy()
+        elif task == 'h1':
+            self.initial_q[:, 7:] = [0., 0., -.28, .79, -.52, 0., 0., -.28, .79, -.52, 0., .28, 0., 0., .52, .28, 0., 0., .52]
             self.default_action = self.initial_q[:, 7:].copy()
         else:
             self.initial_q[:, :9] = [0., -.569, 0., -2.81, 0., 3.037, .741, .04, .04]
@@ -77,7 +80,7 @@ class Environment:
         self.fused = None
         self.reset()
         if engine == 'fused':
-            tag = {'go2': 'go2', 'franka_reach': 'reach', 'franka_lift': 'lift'}[task]
+            tag = {'go2': 'go2', 'h1': 'h1', 'franka_reach': 'reach', 'franka_lift': 'lift'}[task]
             adapter = SimpleNamespace(control=self.control, state_0=self.state,
                                       solver_dt=self.control_dt / 4, collision_pipeline=None)
             cls = import_module(f'.{task}.compact', __package__).Compact
@@ -108,7 +111,10 @@ class Environment:
             self.action.assign(action.ravel())
         else:
             targets = np.zeros((self.num_envs, self.control.joint_target_q.size // self.num_envs), np.float32)
-            targets[:, :9] = action
+            if self.task == 'h1':
+                targets[:, 7:26] = action
+            else:
+                targets[:, :9] = action
             self.control.joint_target_q.assign(targets.ravel())
 
     def physics_step(self):

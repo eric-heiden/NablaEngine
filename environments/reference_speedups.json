@@ -1,60 +1,467 @@
 {
-  "hardware": "NVIDIA L4",
-  "scope": "Archived validation runs. End-to-end includes the original task runtime, which is not distributed here. Physics compares matched integration schedules with contacts refreshed on every substep.",
+  "scope": "Physics only, one control interval, excluding restoration and task runtime",
+  "gpu": "NVIDIA L4",
+  "method": "Median of five round means, each equally averaging three corpus states and 48 CUDA-event replays per state. Contacts refresh each integration. Go2: 4 x 5 ms; H1: 8 x 2.5 ms; Franka: 8 x 4.167 ms.",
   "results": [
     {
+      "tag": "go2",
       "task": "Go2 locomotion",
       "environments": 128,
+      "baseline_ms": 1.6854826485117278,
+      "fused_ms": 0.6297386603222953,
+      "baseline_kernels_min": 488,
+      "baseline_kernels_max": 499,
+      "baseline_kernels_mean": 491.6666666666667,
+      "fused_kernels": 4,
+      "source": "retained timing; unchanged implementation and configuration",
       "physics_speedup": 2.6764795536756645,
-      "end_to_end_speedup": 1.8916670226601378
+      "baseline_steps_per_second": 75942.63881210721,
+      "fused_steps_per_second": 203258.9200327809
     },
     {
+      "tag": "go2",
       "task": "Go2 locomotion",
       "environments": 512,
+      "baseline_ms": 1.9863964186774359,
+      "fused_ms": 1.1061151151855786,
+      "baseline_kernels_min": 522,
+      "baseline_kernels_max": 544,
+      "baseline_kernels_mean": 533,
+      "fused_kernels": 4,
+      "source": "retained timing; unchanged implementation and configuration",
       "physics_speedup": 1.79583154719314,
-      "end_to_end_speedup": 1.8344749231844564
+      "baseline_steps_per_second": 257753.18319436716,
+      "fused_steps_per_second": 462881.29776989727
+    },
+    {
+      "tag": "go2",
+      "task": "Go2 locomotion",
+      "environments": 2048,
+      "baseline_ms": 3.7679146627585096,
+      "fused_ms": 3.2682277891370983,
+      "baseline_kernels_min": 544,
+      "baseline_kernels_max": 566,
+      "baseline_kernels_mean": 558.6666666666666,
+      "fused_kernels": 4,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 1.1528923030647573,
+      "baseline_steps_per_second": 543536.7260947063,
+      "fused_steps_per_second": 626639.3079476042
+    },
+    {
+      "tag": "go2",
+      "task": "Go2 locomotion",
+      "environments": 4096,
+      "baseline_ms": 6.437795549631119,
+      "fused_ms": 6.220047576559915,
+      "source": "new measurement",
+      "baseline_kernels_min": 566,
+      "baseline_kernels_max": 588,
+      "baseline_kernels_mean": 577,
+      "fused_kernels": 4,
+      "physics_speedup": 1.0350074449417046,
+      "baseline_steps_per_second": 636242.6343649105,
+      "fused_steps_per_second": 658515.8633570052
+    },
+    {
+      "tag": "go2",
+      "task": "Go2 locomotion",
+      "environments": 8192,
+      "baseline_ms": 12.470912006166246,
+      "fused_ms": 12.133184876706865,
+      "source": "new measurement",
+      "baseline_kernels_min": 599,
+      "baseline_kernels_max": 632,
+      "baseline_kernels_mean": 613.6666666666666,
+      "fused_kernels": 4,
+      "physics_speedup": 1.0278349941001679,
+      "baseline_steps_per_second": 656888.6057370513,
+      "fused_steps_per_second": 675173.0962022097
+    },
+    {
+      "tag": "h1",
+      "task": "H1 locomotion",
+      "environments": 128,
+      "baseline_ms": 5.098019536998537,
+      "fused_ms": 1.971787105831835,
+      "source": "new measurement",
+      "baseline_kernels_min": 1094,
+      "baseline_kernels_max": 1182,
+      "baseline_kernels_mean": 1130.6666666666667,
+      "fused_kernels": 4,
+      "physics_speedup": 2.5854817297062316,
+      "baseline_steps_per_second": 25107.78922502131,
+      "fused_steps_per_second": 64915.73031460758
+    },
+    {
+      "tag": "h1",
+      "task": "H1 locomotion",
+      "environments": 512,
+      "baseline_ms": 6.319317327605353,
+      "fused_ms": 4.844302912553151,
+      "source": "new measurement",
+      "baseline_kernels_min": 1149,
+      "baseline_kernels_max": 1171,
+      "baseline_kernels_mean": 1163.6666666666667,
+      "fused_kernels": 4,
+      "physics_speedup": 1.3044843482495623,
+      "baseline_steps_per_second": 81021.40998100782,
+      "fused_steps_per_second": 105691.16119333556
+    },
+    {
+      "tag": "h1",
+      "task": "H1 locomotion",
+      "environments": 2048,
+      "baseline_ms": 14.130076428254446,
+      "fused_ms": 16.377155860265095,
+      "source": "new measurement",
+      "baseline_kernels_min": 1239,
+      "baseline_kernels_max": 1250,
+      "baseline_kernels_mean": 1242.6666666666667,
+      "fused_kernels": 4,
+      "physics_speedup": 0.8627918393655517,
+      "baseline_steps_per_second": 144939.0603369156,
+      "fused_steps_per_second": 125052.23846400209
+    },
+    {
+      "tag": "h1",
+      "task": "H1 locomotion",
+      "environments": 4096,
+      "baseline_ms": 24.09312711821662,
+      "fused_ms": 31.80882136027018,
+      "source": "new measurement",
+      "baseline_kernels_min": 1261,
+      "baseline_kernels_max": 1283,
+      "baseline_kernels_mean": 1272,
+      "fused_kernels": 4,
+      "physics_speedup": 0.7574353933248653,
+      "baseline_steps_per_second": 170006.98912608347,
+      "fused_steps_per_second": 128769.31067669114
+    },
+    {
+      "tag": "h1",
+      "task": "H1 locomotion",
+      "environments": 8192,
+      "baseline_ms": 46.10992352167765,
+      "fused_ms": 62.3771305349138,
+      "source": "new measurement",
+      "baseline_kernels_min": 1272,
+      "baseline_kernels_max": 1294,
+      "baseline_kernels_mean": 1283,
+      "fused_kernels": 4,
+      "physics_speedup": 0.7392120016785471,
+      "baseline_steps_per_second": 177662.40701198945,
+      "fused_steps_per_second": 131330.18351036144
+    },
+    {
+      "tag": "reach",
+      "task": "Franka reach",
+      "environments": 128,
+      "baseline_ms": 3.2042595512337155,
+      "fused_ms": 0.4874833311057753,
+      "baseline_kernels_min": 972,
+      "baseline_kernels_max": 972,
+      "baseline_kernels_mean": 972,
+      "fused_kernels": 1,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 6.573064855295427,
+      "baseline_steps_per_second": 39946.82638949051,
+      "fused_steps_per_second": 262573.08062134794
+    },
+    {
+      "tag": "reach",
+      "task": "Franka reach",
+      "environments": 512,
+      "baseline_ms": 3.6754489441712694,
+      "fused_ms": 0.5758791135417091,
+      "baseline_kernels_min": 972,
+      "baseline_kernels_max": 983,
+      "baseline_kernels_mean": 979.3333333333334,
+      "fused_kernels": 1,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 6.382327224140711,
+      "baseline_steps_per_second": 139302.71043812428,
+      "fused_steps_per_second": 889075.4812258311
+    },
+    {
+      "tag": "reach",
+      "task": "Franka reach",
+      "environments": 2048,
+      "baseline_ms": 5.229482683870527,
+      "fused_ms": 2.1005440023210316,
+      "baseline_kernels_min": 972,
+      "baseline_kernels_max": 1027,
+      "baseline_kernels_mean": 1005,
+      "fused_kernels": 1,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 2.4895849256631246,
+      "baseline_steps_per_second": 391625.7350496095,
+      "fused_steps_per_second": 974985.5264812486
+    },
+    {
+      "tag": "reach",
+      "task": "Franka reach",
+      "environments": 4096,
+      "baseline_ms": 8.202140453788969,
+      "fused_ms": 4.1098951184087325,
+      "source": "new measurement",
+      "baseline_kernels_min": 972,
+      "baseline_kernels_max": 1038,
+      "baseline_kernels_mean": 1012.3333333333334,
+      "fused_kernels": 1,
+      "physics_speedup": 1.9957055393093999,
+      "baseline_steps_per_second": 499381.84100564354,
+      "fused_steps_per_second": 996619.1063254888
+    },
+    {
+      "tag": "reach",
+      "task": "Franka reach",
+      "environments": 8192,
+      "baseline_ms": 14.506140457259283,
+      "fused_ms": 8.124209764930937,
+      "source": "new measurement",
+      "baseline_kernels_min": 972,
+      "baseline_kernels_max": 1137,
+      "baseline_kernels_mean": 1045.3333333333333,
+      "fused_kernels": 1,
+      "physics_speedup": 1.7855447947536591,
+      "baseline_steps_per_second": 564726.3670262127,
+      "fused_steps_per_second": 1008344.2251037987
+    },
+    {
+      "tag": "lift",
+      "task": "Franka lift",
+      "environments": 128,
+      "baseline_ms": 6.82436266541481,
+      "fused_ms": 1.1246617808938026,
+      "baseline_kernels_min": 1190,
+      "baseline_kernels_max": 1212,
+      "baseline_kernels_mean": 1201,
+      "fused_kernels": 4,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 6.067924403006994,
+      "baseline_steps_per_second": 18756.330264903892,
+      "fused_steps_per_second": 113811.99412526896
+    },
+    {
+      "tag": "lift",
+      "task": "Franka lift",
+      "environments": 512,
+      "baseline_ms": 6.857976896895303,
+      "fused_ms": 1.8746280007892184,
+      "baseline_kernels_min": 1269,
+      "baseline_kernels_max": 1313,
+      "baseline_kernels_mean": 1290.2666666666667,
+      "fused_kernels": 4,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 3.658313486199979,
+      "baseline_steps_per_second": 74657.58600496149,
+      "fused_steps_per_second": 273120.8537290855
+    },
+    {
+      "tag": "lift",
+      "task": "Franka lift",
+      "environments": 2048,
+      "baseline_ms": 11.392874624994066,
+      "fused_ms": 5.867541551589966,
+      "baseline_kernels_min": 1247,
+      "baseline_kernels_max": 1368,
+      "baseline_kernels_mean": 1316.6666666666667,
+      "fused_kernels": 4,
+      "source": "retained timing; unchanged implementation and configuration",
+      "physics_speedup": 1.9416777068935906,
+      "baseline_steps_per_second": 179761.47964509585,
+      "fused_steps_per_second": 349038.85758508864
+    },
+    {
+      "tag": "lift",
+      "task": "Franka lift",
+      "environments": 4096,
+      "baseline_ms": 18.753002683321636,
+      "fused_ms": 12.045625971423254,
+      "source": "new measurement",
+      "baseline_kernels_min": 1335,
+      "baseline_kernels_max": 1412,
+      "baseline_kernels_mean": 1360.6666666666667,
+      "fused_kernels": 4,
+      "physics_speedup": 1.5568308967762072,
+      "baseline_steps_per_second": 218418.35513855395,
+      "fused_steps_per_second": 340040.443702739
+    },
+    {
+      "tag": "lift",
+      "task": "Franka lift",
+      "environments": 8192,
+      "baseline_ms": 36.00979182455275,
+      "fused_ms": 24.201615307066177,
+      "source": "new measurement",
+      "baseline_kernels_min": 1401,
+      "baseline_kernels_max": 1445,
+      "baseline_kernels_mean": 1426.6666666666667,
+      "fused_kernels": 4,
+      "physics_speedup": 1.4879086113743376,
+      "baseline_steps_per_second": 227493.67838373352,
+      "fused_steps_per_second": 338489.8031003811
+    }
+  ],
+  "behavioral_validation": [
+    {
+      "task": "Go2 locomotion",
+      "environments": 128,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "H1 locomotion",
+      "environments": 128,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Franka reach",
+      "environments": 128,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Franka lift",
+      "environments": 128,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Go2 locomotion",
+      "environments": 512,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "H1 locomotion",
+      "environments": 512,
+      "passed": false,
+      "failed_checks": {
+        "reward_std_relative_difference": {
+          "value": 0.4017257637925933,
+          "limit": 0.2,
+          "pass": false
+        }
+      }
+    },
+    {
+      "task": "Franka reach",
+      "environments": 512,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Franka lift",
+      "environments": 512,
+      "passed": true,
+      "failed_checks": {}
     },
     {
       "task": "Go2 locomotion",
       "environments": 2048,
-      "physics_speedup": 1.1528923030647573,
-      "end_to_end_speedup": 1.5759438852069452
+      "passed": true,
+      "failed_checks": {}
     },
     {
-      "task": "Franka reach",
-      "environments": 128,
-      "physics_speedup": 6.573064855295427,
-      "end_to_end_speedup": 1.389162876239456
-    },
-    {
-      "task": "Franka reach",
-      "environments": 512,
-      "physics_speedup": 6.382327224140711,
-      "end_to_end_speedup": 1.4637252796337517
+      "task": "H1 locomotion",
+      "environments": 2048,
+      "passed": true,
+      "failed_checks": {}
     },
     {
       "task": "Franka reach",
       "environments": 2048,
-      "physics_speedup": 2.4895849256631246,
-      "end_to_end_speedup": 1.5368128906395584
-    },
-    {
-      "task": "Franka lift",
-      "environments": 128,
-      "physics_speedup": 6.067924403006994,
-      "end_to_end_speedup": 2.120504498124731
-    },
-    {
-      "task": "Franka lift",
-      "environments": 512,
-      "physics_speedup": 3.658313486199979,
-      "end_to_end_speedup": 2.0926255824294144
+      "passed": true,
+      "failed_checks": {}
     },
     {
       "task": "Franka lift",
       "environments": 2048,
-      "physics_speedup": 1.9416777068935906,
-      "end_to_end_speedup": 1.6822995175771243
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Go2 locomotion",
+      "environments": 4096,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "H1 locomotion",
+      "environments": 4096,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Franka reach",
+      "environments": 4096,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Franka lift",
+      "environments": 4096,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Go2 locomotion",
+      "environments": 8192,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "H1 locomotion",
+      "environments": 8192,
+      "passed": false,
+      "failed_checks": {
+        "reward_std_relative_difference": {
+          "value": 0.20098283575676248,
+          "limit": 0.2,
+          "pass": false
+        }
+      }
+    },
+    {
+      "task": "Franka reach",
+      "environments": 8192,
+      "passed": true,
+      "failed_checks": {}
+    },
+    {
+      "task": "Franka lift",
+      "environments": 8192,
+      "passed": true,
+      "failed_checks": {}
+    }
+  ],
+  "native_baseline_repeats": [
+    {
+      "task": "H1 locomotion",
+      "environments": 512,
+      "reward_mean": 0.03701973706483841,
+      "reward_std": 0.00916438177227974,
+      "falls": 2,
+      "seed": 42
+    },
+    {
+      "task": "H1 locomotion",
+      "environments": 8192,
+      "reward_mean": 0.03703076392412186,
+      "reward_std": 0.008184202946722507,
+      "falls": 24,
+      "seed": 42
+    },
+    {
+      "task": "H1 locomotion",
+      "environments": 512,
+      "reward_mean": 0.03702869266271591,
+      "reward_std": 0.0071350629441440105,
+      "falls": 1,
+      "seed": 42
     }
   ]
 }

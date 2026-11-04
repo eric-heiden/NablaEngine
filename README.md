@@ -2,13 +2,15 @@
 
 ## Added Newton / MuJoCo Warp environments
 
-This fork adds [Go2 locomotion, Franka reach and Franka lift](environments/README.md), with standalone Newton runners, MJCF models and fused CUDA physics. On an NVIDIA L4, the final implementations measured **1.15–6.57× physics-only speedups** and **1.39–2.12× end-to-end speedups** over MuJoCo Warp at 128, 512 and 2,048 environments. All nine original behavioral comparisons passed.
+This fork adds [Go2 locomotion, H1 locomotion, Franka reach and Franka lift](environments/README.md), with standalone Newton runners, MJCF models and hand-written fused CUDA physics. The physics-only study covers **128, 512, 2,048, 4,096 and 8,192 environments** on an NVIDIA L4. Speedups over MuJoCo Warp range from **0.74× to 6.57×**; ratios below 1 mean fused CUDA is slower. 18 of 20 behavioral comparisons pass the fixed thresholds.
 
-![Speedups for Go2 locomotion, Franka reach and Franka lift, with physics-only and end-to-end scopes](docs/assets/task_speedups.png)
+![Physics-only speedups for Go2, H1, Franka reach and Franka lift across 128 to 8192 environments](docs/assets/task_speedups.png)
 
-Physics-only ratios use matched integration schedules and contact refresh on every substep. End-to-end includes the original full task runtime; for Go2, it retains the original eight-integration baseline versus four fused integrations. That runtime and its evaluation harness stay local. The new [standalone benchmark](environments/README.md#benchmark) measures the packaged scenes separately.
+Both engines use matched integration counts and refresh contacts every integration. CUDA events exclude controller work, observations, rewards and resets. [Exact timing, throughput and executed kernel counts](environments/reference_speedups.json) accompany the plot. The [standalone benchmark](environments/README.md#benchmark) measures the packaged scenes separately from the original randomized evaluation, whose harness stays local.
 
-The task solvers provide forward physics. The upstream differentiable G1 engine and its API are described below.
+The [validation summary](environments/reference_speedups.json) retains every failed check. H1 fails the reward-standard-deviation threshold at 512 and 8,192 environments (40.2% and 20.1% differences, versus a 20% limit). All locomotion-specific checks pass; rare falls strongly affect reward variance.
+
+These task solvers provide forward physics. The upstream differentiable G1 engine and its API are described below.
 
 **Fast, exact simulation gradients for the Unitree G1.**
 
