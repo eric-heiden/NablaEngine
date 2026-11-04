@@ -17,7 +17,7 @@ Two different kinds of knobs exist, and they are easy to confuse because both ar
 gradients) compared with the default build.
 
 The benchmark harness (`benchmarks/README.md`: `DK_BENCH_*`) and the timing kits (`scripts/paper_bench/README.md`:
-`PAPER_BENCH_*`; `scripts/physx_bench/README.md`: `PHYSX_BENCH_*`) document their own variables; none of them changes
+`PAPER_BENCH_*`) document their own variables; none of them changes
 the engine's results.
 
 ## Environment variables

@@ -1,0 +1,60 @@
+{
+  "hardware": "NVIDIA L4",
+  "scope": "Archived validation runs. End-to-end includes the original task runtime, which is not distributed here. Physics compares matched integration schedules with contacts refreshed on every substep.",
+  "results": [
+    {
+      "task": "Go2 locomotion",
+      "environments": 128,
+      "physics_speedup": 2.6764795536756645,
+      "end_to_end_speedup": 1.8916670226601378
+    },
+    {
+      "task": "Go2 locomotion",
+      "environments": 512,
+      "physics_speedup": 1.79583154719314,
+      "end_to_end_speedup": 1.8344749231844564
+    },
+    {
+      "task": "Go2 locomotion",
+      "environments": 2048,
+      "physics_speedup": 1.1528923030647573,
+      "end_to_end_speedup": 1.5759438852069452
+    },
+    {
+      "task": "Franka reach",
+      "environments": 128,
+      "physics_speedup": 6.573064855295427,
+      "end_to_end_speedup": 1.389162876239456
+    },
+    {
+      "task": "Franka reach",
+      "environments": 512,
+      "physics_speedup": 6.382327224140711,
+      "end_to_end_speedup": 1.4637252796337517
+    },
+    {
+      "task": "Franka reach",
+      "environments": 2048,
+      "physics_speedup": 2.4895849256631246,
+      "end_to_end_speedup": 1.5368128906395584
+    },
+    {
+      "task": "Franka lift",
+      "environments": 128,
+      "physics_speedup": 6.067924403006994,
+      "end_to_end_speedup": 2.120504498124731
+    },
+    {
+      "task": "Franka lift",
+      "environments": 512,
+      "physics_speedup": 3.658313486199979,
+      "end_to_end_speedup": 2.0926255824294144
+    },
+    {
+      "task": "Franka lift",
+      "environments": 2048,
+      "physics_speedup": 1.9416777068935906,
+      "end_to_end_speedup": 1.6822995175771243
+    }
+  ]
+}

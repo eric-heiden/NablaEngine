@@ -1,15 +1,18 @@
 # NablaEngine
 
+## Added Newton / MuJoCo Warp environments
+
+This fork adds [Go2 locomotion, Franka reach and Franka lift](environments/README.md), with standalone Newton runners, MJCF models and fused CUDA physics. On an NVIDIA L4, the final implementations measured **1.15–6.57× physics-only speedups** and **1.39–2.12× end-to-end speedups** over MuJoCo Warp at 128, 512 and 2,048 environments. All nine original behavioral comparisons passed.
+
+![Speedups for Go2 locomotion, Franka reach and Franka lift, with physics-only and end-to-end scopes](docs/assets/task_speedups.png)
+
+Physics-only ratios use matched integration schedules and contact refresh on every substep. End-to-end includes the original full task runtime; for Go2, it retains the original eight-integration baseline versus four fused integrations. That runtime and its evaluation harness stay local. The new [standalone benchmark](environments/README.md#benchmark) measures the packaged scenes separately.
+
+The task solvers provide forward physics. The upstream differentiable G1 engine and its API are described below.
+
 **Fast, exact simulation gradients for the Unitree G1.**
 
 *Pronounced "Nabla Engine".*
-
-<p align="center"><img src="docs/assets/speed_rtx6000.png" alt="Time per control step: NablaEngine forward 1.21 ms, gradient of one step 1.78 ms" width="820"></p>
-
-<sub>Time per 20 ms control step for 4096 Unitree G1 worlds on one NVIDIA RTX PRO 6000: the forward step, and one
-step with its gradient from the input state. MuJoCo Warp and MJX simulate the same model (medians over 3 processes,
-`docs/results/paper_rtx6000/paper_bench.md`); Isaac Lab runs its own G1 asset with its task defaults (median over
-rounds, `docs/results/physx_rtx6000/physx_bench_results.md`).</sub>
 
 NablaEngine is a differentiable GPU physics engine for the Unitree G1 humanoid. It simulates thousands of worlds per
 call with MuJoCo's physics and returns analytic gradients of every step with respect to the state and the actions,
@@ -31,7 +34,7 @@ the engine's simulation gradients.
 
 ## Scope
 
-NablaEngine is specialized for the Unitree G1 (the mjlab model), the first robot it supports: contacts between
+The upstream differentiable API is specialized for the Unitree G1 (the mjlab model), the first robot it supports: contacts between
 spheres, capsules and the floor, joint limits, PD position actuators, MuJoCo's Newton solver and implicitfast
 integration, in float32. Other models are rejected with an error that names the unsupported features.
 

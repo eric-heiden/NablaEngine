@@ -1,0 +1,6 @@
+newton @ git+https://github.com/newton-physics/newton.git@1f2e0c829423a2f2c44cabacbea850542b50140f
+mujoco==3.15.0
+mujoco-warp==3.15.0
+warp-lang==1.17.0
+numpy>=2.0,<3
+scipy>=1.14,<2

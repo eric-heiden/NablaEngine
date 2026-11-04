@@ -7,3 +7,7 @@ dist/
 .venv/
 .dk_env/
 *.so
+
+# Standalone environment builds and local runs
+environments/**/build/
+.venv-tasks/

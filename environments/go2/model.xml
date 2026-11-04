@@ -1,0 +1,279 @@
+<mujoco model="go2">
+  <compiler angle="radian" />
+  <option ls_tolerance="0.01" ccd_tolerance="1e-06" sleep_tolerance="0.001" gravity="0 0 -9.81" integrator="implicitfast">
+    <flag multiccd="disable" />
+  </option>
+  <worldbody>
+    <geom name="geom_1" size="5 5 5" type="plane" contype="0" conaffinity="511" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" rgba="0 0.3 0.6 1" />
+    <body name="body_1" pos="0 0 0.4" simple="false">
+      <inertial pos="0.021112 0 -0.005366" quat="-0.000543471 0.713435 -0.00173769 0.700719" mass="6.921" diaginertia="0.107027 0.0980772 0.0244531" />
+      <joint name="joint_1" type="free" />
+      <geom name="geom_2" size="0.1881 0.04675 0.057" type="box" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+      <body name="body_2" pos="0.1934 0.0465 0" simple="false">
+        <inertial pos="-0.0054 0.00194 -0.000105" quat="0.497014 0.499245 0.505462 0.498237" mass="0.678" diaginertia="0.000884029 0.000596003 0.000479967" />
+        <joint name="joint_2" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-1.0472 1.0472" actuatorfrcrange="-23.7 23.7" axis="1 0 0" limited="true" actuatorfrclimited="true" />
+        <geom name="geom_3" size="0.046 0.02" pos="0 0.08 0" quat="0.707107 0.707107 0 0" type="cylinder" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+        <body name="body_3" pos="0 0.0955 0" simple="false">
+          <inertial pos="-0.00374 -0.0223 -0.0327" quat="0.829534 0.0847635 -0.0200631 0.551622" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878788" />
+          <joint name="joint_3" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-1.5708 3.4907" actuatorfrcrange="-23.7 23.7" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+          <geom name="geom_4" size="0.1065 0.01225 0.017" pos="0 0 -0.1065" quat="0.707107 0 0.707107 0" type="box" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+          <body name="body_4" pos="0 0 -0.213" simple="false">
+            <inertial pos="0.00548 -0.000975 -0.115" quat="0.715503 -0.00296115 -0.00858043 0.698551" mass="0.154" diaginertia="0.00110008 0.00108027 3.25534e-05" />
+            <joint name="joint_4" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-2.7227 -0.83776" actuatorfrcrange="-45.43 45.43" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+            <geom name="geom_5" size="0.012 0.06" pos="0.008 0 -0.06" quat="0.994493 0 -0.104807 0" type="cylinder" contype="3" conaffinity="32" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_6" size="0.011 0.0325" pos="0.02 0 -0.148" quat="0.999687 0 0.0249983 0" type="cylinder" contype="33" conaffinity="2" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_7" size="0.0155 0.015" pos="0.00801333 0 -0.18745" quat="0.965092 0 0.261909 0" type="cylinder" conaffinity="34" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <body name="body_5" pos="0 0 -0.213" simple="false">
+              <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06" />
+              <geom name="geom_8" size="0.022" pos="-0.002 0 0" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="body_6" pos="0.1934 -0.0465 0" simple="false">
+        <inertial pos="-0.0054 -0.00194 -0.000105" quat="0.498237 0.505462 0.499245 0.497014" mass="0.678" diaginertia="0.000884029 0.000596003 0.000479967" />
+        <joint name="joint_5" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-1.0472 1.0472" actuatorfrcrange="-23.7 23.7" axis="1 0 0" limited="true" actuatorfrclimited="true" />
+        <geom name="geom_9" size="0.046 0.02" pos="0 -0.08 0" quat="0.707107 0.707107 0 0" type="cylinder" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+        <body name="body_7" pos="0 -0.0955 0" simple="false">
+          <inertial pos="-0.00374 0.0223 -0.0327" quat="0.551622 -0.0200631 0.0847635 0.829534" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878788" />
+          <joint name="joint_6" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-1.5708 3.4907" actuatorfrcrange="-23.7 23.7" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+          <geom name="geom_10" size="0.1065 0.01225 0.017" pos="0 0 -0.1065" quat="0.707107 0 0.707107 0" type="box" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+          <body name="body_8" pos="0 0 -0.213" simple="false">
+            <inertial pos="0.00548 0.000975 -0.115" quat="0.698551 -0.00858043 -0.00296115 0.715503" mass="0.154" diaginertia="0.00110008 0.00108027 3.25534e-05" />
+            <joint name="joint_7" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-2.7227 -0.83776" actuatorfrcrange="-45.43 45.43" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+            <geom name="geom_11" size="0.013 0.06" pos="0.01 0 -0.06" quat="0.995004 0 -0.0998333 0" type="cylinder" contype="5" conaffinity="64" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_12" size="0.011 0.0325" pos="0.02 0 -0.148" quat="0.999687 0 0.0249983 0" type="cylinder" contype="65" conaffinity="4" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_13" size="0.0155 0.015" pos="0.00801333 0 -0.18745" quat="0.965092 0 0.261909 0" type="cylinder" conaffinity="68" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <body name="body_9" pos="0 0 -0.213" simple="false">
+              <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06" />
+              <geom name="geom_14" size="0.022" pos="-0.002 0 0" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="body_10" pos="0.285 0 0.01" simple="false">
+        <inertial pos="0 0 0" mass="0.001" diaginertia="9.6e-06 9.6e-06 9.6e-06" />
+        <geom name="geom_15" size="0.05 0.045" type="cylinder" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+        <body name="body_11" pos="0.008 0 -0.07" simple="false">
+          <inertial pos="0 0 0" mass="0.001" diaginertia="9.6e-06 9.6e-06 9.6e-06" />
+          <geom name="geom_16" size="0.047" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+        </body>
+      </body>
+      <body name="body_12" pos="-0.1934 0.0465 0" simple="false">
+        <inertial pos="0.0054 0.00194 -0.000105" quat="0.505462 0.498237 0.497014 0.499245" mass="0.678" diaginertia="0.000884029 0.000596003 0.000479967" />
+        <joint name="joint_8" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-1.0472 1.0472" actuatorfrcrange="-23.7 23.7" axis="1 0 0" limited="true" actuatorfrclimited="true" />
+        <geom name="geom_17" size="0.046 0.02" pos="0 0.08 0" quat="0.707107 0.707107 0 0" type="cylinder" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+        <body name="body_13" pos="0 0.0955 0" simple="false">
+          <inertial pos="-0.00374 -0.0223 -0.0327" quat="0.829534 0.0847635 -0.0200631 0.551622" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878788" />
+          <joint name="joint_9" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-0.5236 4.5379" actuatorfrcrange="-23.7 23.7" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+          <geom name="geom_18" size="0.1065 0.01225 0.017" pos="0 0 -0.1065" quat="0.707107 0 0.707107 0" type="box" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+          <body name="body_14" pos="0 0 -0.213" simple="false">
+            <inertial pos="0.00548 -0.000975 -0.115" quat="0.715503 -0.00296115 -0.00858043 0.698551" mass="0.154" diaginertia="0.00110008 0.00108027 3.25534e-05" />
+            <joint name="joint_10" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-2.7227 -0.83776" actuatorfrcrange="-45.43 45.43" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+            <geom name="geom_19" size="0.013 0.06" pos="0.01 0 -0.06" quat="0.995004 0 -0.0998333 0" type="cylinder" contype="9" conaffinity="128" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_20" size="0.011 0.0325" pos="0.02 0 -0.148" quat="0.999687 0 0.0249983 0" type="cylinder" contype="129" conaffinity="8" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_21" size="0.0155 0.015" pos="0.00801333 0 -0.18745" quat="0.965092 0 0.261909 0" type="cylinder" conaffinity="136" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <body name="body_15" pos="0 0 -0.213" simple="false">
+              <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06" />
+              <geom name="geom_22" size="0.022" pos="-0.002 0 0" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="body_16" pos="-0.1934 -0.0465 0" simple="false">
+        <inertial pos="0.0054 -0.00194 -0.000105" quat="0.499245 0.497014 0.498237 0.505462" mass="0.678" diaginertia="0.000884029 0.000596003 0.000479967" />
+        <joint name="joint_11" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-1.0472 1.0472" actuatorfrcrange="-23.7 23.7" axis="1 0 0" limited="true" actuatorfrclimited="true" />
+        <geom name="geom_23" size="0.046 0.02" pos="0 -0.08 0" quat="0.707107 0.707107 0 0" type="cylinder" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+        <body name="body_17" pos="0 -0.0955 0" simple="false">
+          <inertial pos="-0.00374 0.0223 -0.0327" quat="0.551622 -0.0200631 0.0847635 0.829534" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878788" />
+          <joint name="joint_12" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-0.5236 4.5379" actuatorfrcrange="-23.7 23.7" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+          <geom name="geom_24" size="0.1065 0.01225 0.017" pos="0 0 -0.1065" quat="0.707107 0 0.707107 0" type="box" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+          <body name="body_18" pos="0 0 -0.213" simple="false">
+            <inertial pos="0.00548 0.000975 -0.115" quat="0.698551 -0.00858043 -0.00296115 0.715503" mass="0.154" diaginertia="0.00110008 0.00108027 3.25534e-05" />
+            <joint name="joint_13" solimplimit="0.9 0.95 0.001" solreffriction="0.02 1" solimpfriction="0.9 0.95 0.001" range="-2.7227 -0.83776" actuatorfrcrange="-45.43 45.43" axis="1.19209e-07 1 0" limited="true" actuatorfrclimited="true" />
+            <geom name="geom_25" size="0.013 0.06" pos="0.01 0 -0.06" quat="0.995004 0 -0.0998333 0" type="cylinder" contype="17" conaffinity="256" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_26" size="0.011 0.0325" pos="0.02 0 -0.148" quat="0.999687 0 0.0249983 0" type="cylinder" contype="257" conaffinity="16" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <geom name="geom_27" size="0.0155 0.015" pos="0.00801333 0 -0.18745" quat="0.965092 0 0.261909 0" type="cylinder" conaffinity="272" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            <body name="body_19" pos="0 0 -0.213" simple="false">
+              <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06" />
+              <geom name="geom_28" size="0.022" pos="-0.002 0 0" conaffinity="0" friction="1 0.005 0.0001" solref="0.00181818 1.375" solimp="0.9 0.95 0.001" gap="0.01" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <contact>
+    <exclude body1="body_1" body2="body_2" />
+    <exclude body1="body_1" body2="body_3" />
+    <exclude body1="body_1" body2="body_4" />
+    <exclude body1="body_1" body2="body_5" />
+    <exclude body1="body_1" body2="body_6" />
+    <exclude body1="body_1" body2="body_7" />
+    <exclude body1="body_1" body2="body_8" />
+    <exclude body1="body_1" body2="body_9" />
+    <exclude body1="body_1" body2="body_10" />
+    <exclude body1="body_1" body2="body_11" />
+    <exclude body1="body_1" body2="body_12" />
+    <exclude body1="body_1" body2="body_13" />
+    <exclude body1="body_1" body2="body_14" />
+    <exclude body1="body_1" body2="body_15" />
+    <exclude body1="body_1" body2="body_16" />
+    <exclude body1="body_1" body2="body_17" />
+    <exclude body1="body_1" body2="body_18" />
+    <exclude body1="body_1" body2="body_19" />
+    <exclude body1="body_2" body2="body_3" />
+    <exclude body1="body_2" body2="body_4" />
+    <exclude body1="body_2" body2="body_5" />
+    <exclude body1="body_2" body2="body_6" />
+    <exclude body1="body_2" body2="body_7" />
+    <exclude body1="body_2" body2="body_8" />
+    <exclude body1="body_2" body2="body_9" />
+    <exclude body1="body_2" body2="body_10" />
+    <exclude body1="body_2" body2="body_11" />
+    <exclude body1="body_2" body2="body_12" />
+    <exclude body1="body_2" body2="body_13" />
+    <exclude body1="body_2" body2="body_14" />
+    <exclude body1="body_2" body2="body_15" />
+    <exclude body1="body_2" body2="body_16" />
+    <exclude body1="body_2" body2="body_17" />
+    <exclude body1="body_2" body2="body_18" />
+    <exclude body1="body_2" body2="body_19" />
+    <exclude body1="body_3" body2="body_4" />
+    <exclude body1="body_3" body2="body_5" />
+    <exclude body1="body_3" body2="body_6" />
+    <exclude body1="body_3" body2="body_7" />
+    <exclude body1="body_3" body2="body_8" />
+    <exclude body1="body_3" body2="body_9" />
+    <exclude body1="body_3" body2="body_10" />
+    <exclude body1="body_3" body2="body_11" />
+    <exclude body1="body_3" body2="body_12" />
+    <exclude body1="body_3" body2="body_13" />
+    <exclude body1="body_3" body2="body_14" />
+    <exclude body1="body_3" body2="body_15" />
+    <exclude body1="body_3" body2="body_16" />
+    <exclude body1="body_3" body2="body_17" />
+    <exclude body1="body_3" body2="body_18" />
+    <exclude body1="body_3" body2="body_19" />
+    <exclude body1="body_4" body2="body_5" />
+    <exclude body1="body_4" body2="body_6" />
+    <exclude body1="body_4" body2="body_7" />
+    <exclude body1="body_4" body2="body_8" />
+    <exclude body1="body_4" body2="body_9" />
+    <exclude body1="body_4" body2="body_10" />
+    <exclude body1="body_4" body2="body_11" />
+    <exclude body1="body_4" body2="body_12" />
+    <exclude body1="body_4" body2="body_13" />
+    <exclude body1="body_4" body2="body_14" />
+    <exclude body1="body_4" body2="body_15" />
+    <exclude body1="body_4" body2="body_16" />
+    <exclude body1="body_4" body2="body_17" />
+    <exclude body1="body_4" body2="body_18" />
+    <exclude body1="body_4" body2="body_19" />
+    <exclude body1="body_5" body2="body_6" />
+    <exclude body1="body_5" body2="body_7" />
+    <exclude body1="body_5" body2="body_8" />
+    <exclude body1="body_5" body2="body_9" />
+    <exclude body1="body_5" body2="body_10" />
+    <exclude body1="body_5" body2="body_11" />
+    <exclude body1="body_5" body2="body_12" />
+    <exclude body1="body_5" body2="body_13" />
+    <exclude body1="body_5" body2="body_14" />
+    <exclude body1="body_5" body2="body_15" />
+    <exclude body1="body_5" body2="body_16" />
+    <exclude body1="body_5" body2="body_17" />
+    <exclude body1="body_5" body2="body_18" />
+    <exclude body1="body_5" body2="body_19" />
+    <exclude body1="body_6" body2="body_7" />
+    <exclude body1="body_6" body2="body_8" />
+    <exclude body1="body_6" body2="body_9" />
+    <exclude body1="body_6" body2="body_10" />
+    <exclude body1="body_6" body2="body_11" />
+    <exclude body1="body_6" body2="body_12" />
+    <exclude body1="body_6" body2="body_13" />
+    <exclude body1="body_6" body2="body_14" />
+    <exclude body1="body_6" body2="body_15" />
+    <exclude body1="body_6" body2="body_16" />
+    <exclude body1="body_6" body2="body_17" />
+    <exclude body1="body_6" body2="body_18" />
+    <exclude body1="body_6" body2="body_19" />
+    <exclude body1="body_7" body2="body_8" />
+    <exclude body1="body_7" body2="body_9" />
+    <exclude body1="body_7" body2="body_10" />
+    <exclude body1="body_7" body2="body_11" />
+    <exclude body1="body_7" body2="body_12" />
+    <exclude body1="body_7" body2="body_13" />
+    <exclude body1="body_7" body2="body_14" />
+    <exclude body1="body_7" body2="body_15" />
+    <exclude body1="body_7" body2="body_16" />
+    <exclude body1="body_7" body2="body_17" />
+    <exclude body1="body_7" body2="body_18" />
+    <exclude body1="body_7" body2="body_19" />
+    <exclude body1="body_8" body2="body_9" />
+    <exclude body1="body_8" body2="body_10" />
+    <exclude body1="body_8" body2="body_11" />
+    <exclude body1="body_8" body2="body_12" />
+    <exclude body1="body_8" body2="body_13" />
+    <exclude body1="body_8" body2="body_14" />
+    <exclude body1="body_8" body2="body_15" />
+    <exclude body1="body_8" body2="body_16" />
+    <exclude body1="body_8" body2="body_17" />
+    <exclude body1="body_8" body2="body_18" />
+    <exclude body1="body_8" body2="body_19" />
+    <exclude body1="body_9" body2="body_10" />
+    <exclude body1="body_9" body2="body_11" />
+    <exclude body1="body_9" body2="body_12" />
+    <exclude body1="body_9" body2="body_13" />
+    <exclude body1="body_9" body2="body_14" />
+    <exclude body1="body_9" body2="body_15" />
+    <exclude body1="body_9" body2="body_16" />
+    <exclude body1="body_9" body2="body_17" />
+    <exclude body1="body_9" body2="body_18" />
+    <exclude body1="body_9" body2="body_19" />
+    <exclude body1="body_10" body2="body_11" />
+    <exclude body1="body_10" body2="body_12" />
+    <exclude body1="body_10" body2="body_13" />
+    <exclude body1="body_10" body2="body_14" />
+    <exclude body1="body_10" body2="body_15" />
+    <exclude body1="body_10" body2="body_16" />
+    <exclude body1="body_10" body2="body_17" />
+    <exclude body1="body_10" body2="body_18" />
+    <exclude body1="body_10" body2="body_19" />
+    <exclude body1="body_11" body2="body_12" />
+    <exclude body1="body_11" body2="body_13" />
+    <exclude body1="body_11" body2="body_14" />
+    <exclude body1="body_11" body2="body_15" />
+    <exclude body1="body_11" body2="body_16" />
+    <exclude body1="body_11" body2="body_17" />
+    <exclude body1="body_11" body2="body_18" />
+    <exclude body1="body_11" body2="body_19" />
+    <exclude body1="body_12" body2="body_13" />
+    <exclude body1="body_12" body2="body_14" />
+    <exclude body1="body_12" body2="body_15" />
+    <exclude body1="body_12" body2="body_16" />
+    <exclude body1="body_12" body2="body_17" />
+    <exclude body1="body_12" body2="body_18" />
+    <exclude body1="body_12" body2="body_19" />
+    <exclude body1="body_13" body2="body_14" />
+    <exclude body1="body_13" body2="body_15" />
+    <exclude body1="body_13" body2="body_16" />
+    <exclude body1="body_13" body2="body_17" />
+    <exclude body1="body_13" body2="body_18" />
+    <exclude body1="body_13" body2="body_19" />
+    <exclude body1="body_14" body2="body_15" />
+    <exclude body1="body_14" body2="body_16" />
+    <exclude body1="body_14" body2="body_17" />
+    <exclude body1="body_14" body2="body_18" />
+    <exclude body1="body_14" body2="body_19" />
+    <exclude body1="body_15" body2="body_16" />
+    <exclude body1="body_15" body2="body_17" />
+    <exclude body1="body_15" body2="body_18" />
+    <exclude body1="body_15" body2="body_19" />
+    <exclude body1="body_16" body2="body_17" />
+    <exclude body1="body_16" body2="body_18" />
+    <exclude body1="body_16" body2="body_19" />
+    <exclude body1="body_17" body2="body_18" />
+    <exclude body1="body_17" body2="body_19" />
+    <exclude body1="body_18" body2="body_19" />
+  </contact>
+</mujoco>
