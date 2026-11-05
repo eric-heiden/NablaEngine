@@ -49,7 +49,7 @@ done
 
 CUDA events measure one captured physics control interval from a restored nominal state. Reset, JIT compilation, controller preparation and observations are excluded. Both engines refresh contacts every integration: four 5 ms integrations for Go2, eight 2.5 ms integrations for H1, and eight 4.167 ms integrations for Franka. The fused solvers execute four launches per control interval, except reach, which uses one. A separate wall-clock number includes the minimal Python control loop and CPU state observations.
 
-The [tiled plot](../docs/assets/task_speedups.svg) and [reference measurements](reference_speedups.json) cover all four tasks and five batch sizes on an NVIDIA L4. Physics-only speedups span 0.74–6.57×; a ratio below 1 indicates a slowdown. 18 of 20 behavioral comparisons pass. Each locomotion rollout lasts 1,000 controls; Franka rollouts last 600. The checks compare finite state, rewards, observations and task behavior with fixed thresholds. H1 fails the reward-standard-deviation threshold at 512 and 8,192 environments (40.2% and 20.1% differences, versus a 20% limit). All locomotion-specific checks pass; rare falls strongly affect reward variance. Both failed comparisons remain in the result. These results do not establish training equivalence. Lift has limited success in both engines.
+The [tiled plot](../docs/assets/task_speedups.svg) and [reference measurements](reference_speedups.json) cover all four tasks and five batch sizes on NVIDIA L4. Physics-only speedups span 1.48–10.17×. 18/20 behavioral comparisons pass; remaining failures: h1 / 512: reward std relative difference; h1 / 4,096: reward std relative difference. Locomotion rollouts last 1,000 controls and Franka rollouts 600, with unchanged controllers and acceptance thresholds. Every failure is retained. These results do not establish training equivalence. Lift has limited success in both engines; the thin 1×5×5 cm box has any-success frequency 7.5% with CUDA versus 15.4% native at 8,192 worlds.
 
 The standalone runner has nominal resets and absolute joint actions. Its timings are a separate experiment; it does not reproduce the randomized evaluation or supply the evaluation policies. The original task harness stays local. Earlier end-to-end results are outside the scope of this physics-only scaling study.
 
@@ -61,24 +61,36 @@ Regenerate the tiled figure with `uv run --no-project --with matplotlib python -
 | --- | --- |
 | `environment.py` | Load MJCF into Newton, replicate worlds, set controls, reset and step either engine |
 | `run.py`, `benchmark.py` | Headless rollout and scoped timing |
-| `<task>/model.xml` | Collision geometry, articulation, inertia, friction and actuators |
-| `<task>/compact.py` | Specialize model constants, pack varying fields, compile and launch CUDA |
-| `<task>/build_kernel.py` and transform helpers | Assemble fixed-size, lane-parallel task kernels |
-| `<task>/physics_core.cuh`, `full_reach.py` | Dynamics, contact rows, constraint solve and integration |
-| `<task>/direct_io.cuh`, `launch.cuh` | Read/write Newton buffers and fuse the integrations |
-| `<task>/*collision*.cuh`, `analytic_proxy.cuh` | Task contact geometry and lift object primitives |
+| `<task>/model.xml` | Authored articulation, inertial parameters and baseline collision model |
+| `<task>/compact.py`, `task_specs.py` | Compile topology, ancestry, actuator maps and fixed pairs; pack varying model fields |
+| `<task>/task_step.cuh` | Kinematics, mass/bias, task collision, constraints, register Cholesky and integration |
+| `<task>/primitive_math.cuh`, `primitive_collision.cuh` | Only the math and analytic collision helpers used by that task |
+| `<task>/direct_io.cuh`, `launch.cuh` | Read/write Newton buffers and fuse the fixed integrations |
 
-One warp handles a world, with two worlds per block in the Go2 and reach builds at larger batches. Body transforms, mass/bias terms, contacts and solver workspaces stay in shared memory during a launch. Topology and constant model fields are compiled in; varying physical fields use a compact parameter buffer. This is forward simulation only; it does not add gradients for these tasks to the upstream G1 API.
+One warp handles a world. Body Jacobians store only ancestor DOFs; each matrix row stays in a lane's registers during Cholesky. Direct actuator maps avoid scanning every actuator for each DOF. Shared scratch is reused between stages. Topology and fixed physical values compile into CUDA; varying parameters remain in an audited per-world pack. Full articulated mass and bias remain.
 
-The Go2 implementation stores only free-base and same-leg Jacobian entries. H1 keeps all 25 velocity DOFs, full dense mass/bias calculations and the authored minimal collision model: two foot meshes and one torso mesh against the ground, with up to four deepest vertices per pair. Reach keeps all nine joint coordinates and fuses the eight integrations. Lift keeps full articulated mass and bias calculations, removes the kinematic table's six solver degrees of freedom, and uses the eight analytic object primitives. Fixed collision pairs and bounded constraint storage replace general scene dispatch. These kernels support the supplied topology; changing geometry or the joint tree requires revisiting that specialization.
+Go2 replaces body and limb boxes and cylinders with capsules, retaining foot spheres and all 27 plane pairs. Removing leg contacts failed the fall-count check; the all-capsule body model passes at every batch size. H1 uses two longitudinal capsules per sole and one torso capsule, five plane pairs and ten contact slots. Its 64 constraint rows cover all possible contacts plus 19 joint limits. All 25 velocity DOFs remain.
 
-```text
-Newton state + controls
-    → kinematics and mass/bias
-    → contact refresh and constraint rows
-    → Newton constraint solve
-    → integration (repeat within the launch where fused)
-    → Newton state + contact outputs
+Reach retains nine DOFs and the finger equality. Capsule links contact a bounded tabletop plane; finger pads retain their flat faces because spherical pads changed success counts. Lift keeps 15 dynamic DOFs and 19 fixed pairs. Its object families are four boxes, a sphere and three capsules. Finger-pad/object box contacts use a small SAT-and-vertex routine; table contacts use bounded analytic top faces. There is no gripper/object attachment. Robot and object inertia remain the authored values.
+
+General convex support mapping, GJK/EPA, polyhedral collision, mesh traversal, unused friction-loss constraints and the source-transform pipeline are removed. The MJCF meshes remain for the native reference and rendering; fused physics does not traverse them.
+
+```cpp
+for (int sub = 0; sub < INTERNAL_STEPS; ++sub) {
+    prepare(dd, s, world, lane, v.H, v.p);
+    __syncwarp();
+    solve_integrate(dd, s, v, world, lane, io,
+                    sub == INTERNAL_STEPS - 1);
+    __syncwarp();
+}
 ```
 
-Model coordinates are centered per world and asset names are simplified. Collision models contain numeric inertial data, primitives and inline convex mesh vertices; no external rendering assets are required. Robot model notices and licenses are in [licenses/](licenses/); the source retains its MuJoCo, MuJoCo Warp and NablaEngine attributions.
+```text
+H1 sole capsule, body coordinates:
+  center = (0.055, ±0.025, -0.055)
+  axis = (1, 0, 0), radius = 0.015, half-length = 0.105
+```
+
+The upstream G1 benchmark fixture has 31 capsules, two spheres and 502 explicit candidate pairs, including 14 sole-floor pairs. Its sparse ancestry, fixed pair handling and register/warp matrix solves inform these specializations; it does not use a tiny foot-only candidate set. See [the G1 model description](../fixtures/mjlab/README.md).
+
+These forward solvers support the supplied topology. Changing the model requires revisiting the hard-coded proxies and maps. Model notices and licenses are in [licenses/](licenses/); source attributions to MuJoCo, MuJoCo Warp and NablaEngine are retained.

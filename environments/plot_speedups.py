@@ -20,7 +20,7 @@ for ax, name, color in zip(axs.flat, ['Go2 locomotion','H1 locomotion','Franka r
     ax.set_xscale('log', base=2)
     ax.set_xticks([128,512,2048,4096,8192], ['128','512','2,048','4,096','8,192'])
     ax.set_xlim(85,12000)
-    ax.set_ylim(0,7.5)
+    ax.set_ylim(0,max(7.5,max(r["physics_speedup"] for r in rows)*1.2))
     ax.set_ylabel('Speedup over MuJoCo Warp')
     ax.set_xlabel('Parallel environments')
     ax.set_title(name, fontweight='bold', pad=10)

@@ -3,7 +3,6 @@ __global__ void task_step(IO io){
  extern __shared__ __align__(16) unsigned char storage[];Shared &mem=((Shared*)storage)[threadIdx.x/32];Work&s=mem.s;Solve&v=mem.v;Data&dd=mem.d;int w=blockIdx.x*WORLDS_PER_BLOCK+threadIdx.x/32,l=threadIdx.x&31;if(w>=NWORLDS)return;
  if(l==0){MARK(0);}
  for(int i=l;i<NPARAM;i+=32)s.params[i]=io.params[w*NPARAM+i];
- for(int i=l;i<NP;i+=32)s.failed_pairs[i]=s.resolved_pairs[i]=0;
  __syncwarp();if(l==0)s.ever_error=(int)io.diag[w*4+2]|io.param_errors[w];import_state(s,dd,w,io);__syncwarp();
  if(l==0){MARK(1);}
  for(int sub=0;sub<INTERNAL_STEPS;sub++){

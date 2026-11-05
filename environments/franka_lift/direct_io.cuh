@@ -1,9 +1,6 @@
 // Direct Newton input and output. All lookup constants are task-specialized.
 __device__ void tr_read(const float*t,float*p,float*q){for(int k=0;k<3;k++)p[k]=t[k];q[0]=t[6];for(int k=0;k<3;k++)q[k+1]=t[k+3];}
 __device__ void import_state(Work&s,Data&dd,int w,const IO&io){
- #if REDUCED_GRIP
- if((threadIdx.x&31)==0){dd.grip_q=.5f*(io.qin[w*NWQ+7]+io.qin[w*NWQ+8]);dd.grip_v=.5f*(io.vin[w*NWV+7]+io.vin[w*NWV+8]);dd.grip_target=io.tq[w*NWT+7];}
- #endif
 
  #if STATIC_TABLE
  if((threadIdx.x&31)==0){int table_id=w*NWB+C_bodymap(13);for(int k=0;k<3;k++)dd.table_pos[k]=io.bq[table_id*7+k];dd.table_quat[0]=io.bq[table_id*7+6];for(int k=0;k<3;k++)dd.table_quat[k+1]=io.bq[table_id*7+3+k];}
@@ -31,9 +28,6 @@ __device__ void import_state(Work&s,Data&dd,int w,const IO&io){
 }
 }
 __device__ void export_state(Work&s,Data&dd,int w,const IO&io){
- #if REDUCED_GRIP
- if((threadIdx.x&31)<2){int k=threadIdx.x&31;io.qout[w*NWQ+7+k]=dd.grip_q;io.vout[w*NWV+7+k]=dd.grip_v;}
- #endif
 
  for(int b=1+(threadIdx.x&31);b<NB;b+=32){
   int nb=C_bodymap(b);if(nb<0||C_kin(nb))continue;int id=w*NWB+nb;

@@ -1,13 +1,7 @@
 // Direct Newton input and output. All lookup constants are task-specialized.
 __device__ void tr_read(const float*t,float*p,float*q){for(int k=0;k<3;k++)p[k]=t[k];q[0]=t[6];for(int k=0;k<3;k++)q[k+1]=t[k+3];}
 __device__ void import_state(Work&s,Data&dd,int w,const IO&io){
- #if REDUCED_GRIP
- if((threadIdx.x&31)==0){dd.grip_q=.5f*(io.qin[w*NWQ+7]+io.qin[w*NWQ+8]);dd.grip_v=.5f*(io.vin[w*NWV+7]+io.vin[w*NWV+8]);dd.grip_target=io.tq[w*NWT+7];}
- #endif
 
- #if STATIC_TABLE
- if((threadIdx.x&31)==0){int table_id=w*NWB+C_bodymap(13);for(int k=0;k<3;k++)dd.table_pos[k]=io.bq[table_id*7+k];dd.table_quat[0]=io.bq[table_id*7+6];for(int k=0;k<3;k++)dd.table_quat[k+1]=io.bq[table_id*7+3+k];}
- #endif
  for(int b=(threadIdx.x&31);b<NB;b+=32){int mc=M(body_mocapid,b),nb=C_bodymap(b);if(mc>=0){for(int k=0;k<3;k++)dd.mocap_pos[3*mc+k]=io.bq[(w*NWB+nb)*7+k];dd.mocap_quat[4*mc]=io.bq[(w*NWB+nb)*7+6];for(int k=0;k<3;k++)dd.mocap_quat[4*mc+1+k]=io.bq[(w*NWB+nb)*7+3+k];}}
  for(int i=(threadIdx.x&31);i<NV;i+=32){dd.qfrc_applied[i]=0;dd.qacc_warmstart[i]=io.warm[w*NV+i];}
  __syncwarp();
@@ -25,15 +19,9 @@ __device__ void import_state(Work&s,Data&dd,int w,const IO&io){
  }
  for(int b=(threadIdx.x&31);b<NB;b+=32){int nb=C_bodymap(b);for(int k=0;k<6;k++)dd.xfrc_applied[b*6+k]=nb<0||C_kin(nb)?0:io.bforce[(w*NWB+nb)*6+k];if(nb>=0&&!C_kin(nb)&&C_freev(nb)>=0)for(int k=0;k<6;k++)dd.xfrc_applied[b*6+k]+=io.jforce[w*NWV+C_freev(nb)+k];}
  for(int a=(threadIdx.x&31);a<NU;a+=32){int idx=C_ctrlidx(a);dd.ctrl[a]=idx>=0?io.tq[w*NWT+C_ctrlq(a)]+P(ref,idx):idx<=-2?io.tv[w*NWV-(idx+2)]:0;
- #if STATIC_TABLE
- if(idx>=0&&io.relative_delta){int j=M(actuator_trnid,2*a);dd.ctrl[a]=dd.qpos[M(jnt_qposadr,j)]+io.relative_delta[w*9+idx];}
- #endif
 }
 }
 __device__ void export_state(Work&s,Data&dd,int w,const IO&io){
- #if REDUCED_GRIP
- if((threadIdx.x&31)<2){int k=threadIdx.x&31;io.qout[w*NWQ+7+k]=dd.grip_q;io.vout[w*NWV+7+k]=dd.grip_v;}
- #endif
 
  for(int b=1+(threadIdx.x&31);b<NB;b+=32){
   int nb=C_bodymap(b);if(nb<0||C_kin(nb))continue;int id=w*NWB+nb;

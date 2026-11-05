@@ -2,15 +2,13 @@
 
 ## Added Newton / MuJoCo Warp environments
 
-This fork adds [Go2 locomotion, H1 locomotion, Franka reach and Franka lift](environments/README.md), with standalone Newton runners, MJCF models and hand-written fused CUDA physics. The physics-only study covers **128, 512, 2,048, 4,096 and 8,192 environments** on an NVIDIA L4. Speedups over MuJoCo Warp range from **0.74× to 6.57×**; ratios below 1 mean fused CUDA is slower. 18 of 20 behavioral comparisons pass the fixed thresholds.
+Go2 locomotion, H1 locomotion, Franka reach and Franka lift have standalone models and hand-written, task-specific CUDA physics. [Build and run them](environments/README.md). These are forward solvers; the original differentiable G1 engine is documented below.
 
-![Physics-only speedups for Go2, H1, Franka reach and Franka lift across 128 to 8192 environments](docs/assets/task_speedups.png)
+![Four-task physics-only scaling on NVIDIA L4](docs/assets/task_speedups.png)
 
-Both engines use matched integration counts and refresh contacts every integration. CUDA events exclude controller work, observations, rewards and resets. [Exact timing, throughput and executed kernel counts](environments/reference_speedups.json) accompany the plot. The [standalone benchmark](environments/README.md#benchmark) measures the packaged scenes separately from the original randomized evaluation, whose harness stays local.
+Physics-only speedups span 1.48–10.17× across 128 / 512 / 2,048 / 4,096 / 8,192 environments. H1: 4.92×, 3.55×, 2.44×, 2.16×, 2.08×. Both engines refresh contacts every integration with matched timesteps. CUDA events exclude controller work, observations, rewards and resets. The baseline retains authored collision geometry; CUDA uses task-specific analytic proxies.
 
-The [validation summary](environments/reference_speedups.json) retains every failed check. H1 fails the reward-standard-deviation threshold at 512 and 8,192 environments (40.2% and 20.1% differences, versus a 20% limit). All locomotion-specific checks pass; rare falls strongly affect reward variance.
-
-These task solvers provide forward physics. The upstream differentiable G1 engine and its API are described below.
+18/20 behavioral comparisons pass the fixed thresholds. Remaining failures: h1 / 512: reward std relative difference; h1 / 4,096: reward std relative difference. Lift still grasps and lifts through contact and friction, with limited success under the scripted controller. For the thin 1×5×5 cm box, 7.5% of 8,192 CUDA worlds ever succeed versus 15.4% in the baseline. [Exact results](environments/reference_speedups.json) include every batch size. The standalone benchmark is separate from the original randomized evaluation, whose harness stays local.
 
 **Fast, exact simulation gradients for the Unitree G1.**
 
