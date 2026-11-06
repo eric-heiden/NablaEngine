@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 root = Path(__file__).resolve().parents[1]
 rows = json.loads((root / 'environments/reference_speedups.json').read_text())['results']
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':11,'svg.fonttype':'none','axes.spines.top':False,'axes.spines.right':False})
-fig, axs = plt.subplots(2, 2, figsize=(11, 7), layout='constrained')
-for ax, name, color in zip(axs.flat, ['Go2 locomotion','H1 locomotion','Franka reach','Franka lift'], ['#206da0','#9b4380','#16806a','#b26225']):
+fig, axs = plt.subplots(2, 3, figsize=(14, 7), layout='constrained')
+for ax, name, color in zip(axs.flat, ['Go2 locomotion','H1 locomotion','Franka reach','Franka lift','Allegro cube interaction'], ['#206da0','#9b4380','#16806a','#b26225','#bb4458']):
     vals = [r for r in rows if r['task'] == name]
     x, y = [r['environments'] for r in vals], [r['physics_speedup'] for r in vals]
     ax.plot(x, y, 'o-', color=color, lw=2.5, ms=7)
@@ -20,10 +20,13 @@ for ax, name, color in zip(axs.flat, ['Go2 locomotion','H1 locomotion','Franka r
     ax.set_xscale('log', base=2)
     ax.set_xticks([128,512,2048,4096,8192], ['128','512','2,048','4,096','8,192'])
     ax.set_xlim(85,12000)
-    ax.set_ylim(0,max(7.5,max(r["physics_speedup"] for r in rows)*1.2))
+    ax.set_ylim(0,max(r["physics_speedup"] for r in vals)*1.25+.1)
     ax.set_ylabel('Speedup over MuJoCo Warp')
     ax.set_xlabel('Parallel environments')
     ax.set_title(name, fontweight='bold', pad=10)
+axs.flat[-1].axis('off')
+axs.flat[-1].text(.05,.85,'Measurement scope',fontsize=13,fontweight='bold')
+axs.flat[-1].text(.05,.72,'One control interval of physics\nContacts refreshed every integration\nController and task runtime excluded\n\nNVIDIA L4 · identical sampled inputs\n\nBelow 1× means CUDA is slower.\nPanel scales differ.',va='top',linespacing=1.6,fontsize=11)
 fig.suptitle('Physics-only speedups on NVIDIA L4', fontsize=16)
 fig.supxlabel('Matched integrations and contact refresh · Dashed line: equal speed', fontsize=10)
 for ext in ['svg','png']:

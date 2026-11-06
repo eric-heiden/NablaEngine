@@ -4,3 +4,7 @@ mujoco-warp==3.15.0
 warp-lang==1.17.0
 numpy>=2.0,<3
 scipy>=1.14,<2
+
+# Allegro physics asset loader
+usd-core==26.8
+newton-usd-schemas==0.6.0

@@ -1,5 +1,5 @@
 {
-  "scope": "Physics only, one control interval, excluding restoration and task runtime",
+  "scope": "Physics only, one control interval, excluding restoration and controller/task runtime",
   "gpu": "NVIDIA L4",
   "method": "Median of five round means, each equally averaging three corpus states and 48 CUDA-event replays per state. Contacts refresh each integration. Go2: 4 x 5 ms; H1: 8 x 2.5 ms; Franka: 8 x 4.167 ms.",
   "results": [
@@ -9,12 +9,10 @@
       "environments": 128,
       "baseline_ms": 1.714254221154584,
       "fused_ms": 0.4170573320653703,
-      "source": "new measurement",
       "baseline_kernels_min": 488,
       "baseline_kernels_max": 510,
       "baseline_kernels_mean": 499,
       "fused_kernels": 4,
-      "before_speedup": 2.6764795536756645,
       "physics_speedup": 4.110356273237485,
       "baseline_steps_per_second": 74668.03839268921,
       "fused_steps_per_second": 306912.2400177275
@@ -25,12 +23,10 @@
       "environments": 512,
       "baseline_ms": 2.0042880086435213,
       "fused_ms": 0.7532431073486805,
-      "source": "new measurement",
       "baseline_kernels_min": 522,
       "baseline_kernels_max": 555,
       "baseline_kernels_mean": 540.3333333333334,
       "fused_kernels": 4,
-      "before_speedup": 1.79583154719314,
       "physics_speedup": 2.6608779942220235,
       "baseline_steps_per_second": 255452.30914518898,
       "fused_steps_per_second": 679727.4279776347
@@ -41,12 +37,10 @@
       "environments": 2048,
       "baseline_ms": 3.7485653195116253,
       "fused_ms": 2.2219310800234475,
-      "source": "new measurement",
       "baseline_kernels_min": 555,
       "baseline_kernels_max": 566,
       "baseline_kernels_mean": 562.3333333333334,
       "fused_kernels": 4,
-      "before_speedup": 1.1528923030647573,
       "physics_speedup": 1.6870754242620647,
       "baseline_steps_per_second": 546342.3537906549,
       "fused_steps_per_second": 921720.7583137043
@@ -57,12 +51,10 @@
       "environments": 4096,
       "baseline_ms": 6.517603549692366,
       "fused_ms": 4.249120652675629,
-      "source": "new measurement",
       "baseline_kernels_min": 566,
       "baseline_kernels_max": 599,
       "baseline_kernels_mean": 577.7333333333333,
       "fused_kernels": 4,
-      "before_speedup": 1.0350074449417046,
       "physics_speedup": 1.5338711423946731,
       "baseline_steps_per_second": 628451.848715673,
       "fused_steps_per_second": 963964.1551295536
@@ -73,12 +65,10 @@
       "environments": 8192,
       "baseline_ms": 12.350080026520622,
       "fused_ms": 8.32758801513248,
-      "source": "new measurement",
       "baseline_kernels_min": 577,
       "baseline_kernels_max": 610,
       "baseline_kernels_mean": 588,
       "fused_kernels": 4,
-      "before_speedup": 1.0278349941001679,
       "physics_speedup": 1.4830320621143442,
       "baseline_steps_per_second": 663315.539851439,
       "fused_steps_per_second": 983718.2128983691
@@ -89,12 +79,10 @@
       "environments": 128,
       "baseline_ms": 5.065251559019089,
       "fused_ms": 1.0296989008784294,
-      "source": "new measurement",
       "baseline_kernels_min": 1105,
       "baseline_kernels_max": 1138,
       "baseline_kernels_mean": 1119.6666666666667,
       "fused_kernels": 4,
-      "before_speedup": 2.5854817297062316,
       "physics_speedup": 4.919157973945544,
       "baseline_steps_per_second": 25270.215804402782,
       "fused_steps_per_second": 124308.18357755266
@@ -105,12 +93,10 @@
       "environments": 512,
       "baseline_ms": 6.353912873400582,
       "fused_ms": 1.7899775596128569,
-      "source": "new measurement",
       "baseline_kernels_min": 1160,
       "baseline_kernels_max": 1193,
       "baseline_kernels_mean": 1174.6666666666667,
       "fused_kernels": 4,
-      "before_speedup": 1.3044843482495623,
       "physics_speedup": 3.5497164974374487,
       "baseline_steps_per_second": 80580.26765576031,
       "fused_steps_per_second": 286037.1054655776
@@ -121,12 +107,10 @@
       "environments": 2048,
       "baseline_ms": 14.667847123410967,
       "fused_ms": 6.013864888085259,
-      "source": "new measurement",
       "baseline_kernels_min": 1228,
       "baseline_kernels_max": 1261,
       "baseline_kernels_mean": 1250,
       "fused_kernels": 4,
-      "before_speedup": 0.8627918393655517,
       "physics_speedup": 2.439005098446937,
       "baseline_steps_per_second": 139625.12581217464,
       "fused_steps_per_second": 340546.393727189
@@ -137,12 +121,10 @@
       "environments": 4096,
       "baseline_ms": 23.864945782555473,
       "fused_ms": 11.02479041284985,
-      "source": "new measurement",
       "baseline_kernels_min": 1250,
       "baseline_kernels_max": 1272,
       "baseline_kernels_mean": 1261,
       "fused_kernels": 4,
-      "before_speedup": 0.7574353933248653,
       "physics_speedup": 2.1646620832573733,
       "baseline_steps_per_second": 171632.48713491936,
       "fused_steps_per_second": 371526.3371561188
@@ -153,12 +135,10 @@
       "environments": 8192,
       "baseline_ms": 46.01617063416375,
       "fused_ms": 22.103203627798294,
-      "source": "new measurement",
       "baseline_kernels_min": 1272,
       "baseline_kernels_max": 1294,
       "baseline_kernels_mean": 1283,
       "fused_kernels": 4,
-      "before_speedup": 0.7392120016785471,
       "physics_speedup": 2.0818778765758235,
       "baseline_steps_per_second": 178024.37462968766,
       "fused_steps_per_second": 370625.0070327931
@@ -169,12 +149,10 @@
       "environments": 128,
       "baseline_ms": 3.2111360016796326,
       "fused_ms": 0.31587599880165523,
-      "source": "new measurement",
       "baseline_kernels_min": 972,
       "baseline_kernels_max": 972,
       "baseline_kernels_mean": 972,
       "fused_kernels": 1,
-      "before_speedup": 6.573064855295427,
       "physics_speedup": 10.165811944756108,
       "baseline_steps_per_second": 39861.28271522841,
       "fused_steps_per_second": 405222.30395976914
@@ -185,12 +163,10 @@
       "environments": 512,
       "baseline_ms": 3.6789973659647837,
       "fused_ms": 0.40580977954798275,
-      "source": "new measurement",
       "baseline_kernels_min": 972,
       "baseline_kernels_max": 983,
       "baseline_kernels_mean": 979.3333333333334,
       "fused_kernels": 1,
-      "before_speedup": 6.382327224140711,
       "physics_speedup": 9.065817413426284,
       "baseline_steps_per_second": 139168.35188212554,
       "fused_steps_per_second": 1261674.8678908104
@@ -201,12 +177,10 @@
       "environments": 2048,
       "baseline_ms": 5.071715533733368,
       "fused_ms": 1.4399502260817423,
-      "source": "new measurement",
       "baseline_kernels_min": 972,
       "baseline_kernels_max": 1027,
       "baseline_kernels_mean": 1005,
       "fused_kernels": 1,
-      "before_speedup": 2.4895849256631246,
       "physics_speedup": 3.522146419973172,
       "baseline_steps_per_second": 403808.136788862,
       "fused_steps_per_second": 1422271.3833469271
@@ -217,12 +191,10 @@
       "environments": 4096,
       "baseline_ms": 8.407921774519814,
       "fused_ms": 2.8870499945349164,
-      "source": "new measurement",
       "baseline_kernels_min": 972,
       "baseline_kernels_max": 1038,
       "baseline_kernels_mean": 1012.3333333333334,
       "fused_kernels": 1,
-      "before_speedup": 1.9957055393093999,
       "physics_speedup": 2.912288249401885,
       "baseline_steps_per_second": 487159.6227753828,
       "fused_steps_per_second": 1418749.2449918024
@@ -233,12 +205,10 @@
       "environments": 8192,
       "baseline_ms": 16.608462234338123,
       "fused_ms": 6.321820454465018,
-      "source": "new measurement",
       "baseline_kernels_min": 972,
       "baseline_kernels_max": 1137,
       "baseline_kernels_mean": 1049,
       "fused_kernels": 1,
-      "before_speedup": 1.7855447947536591,
       "physics_speedup": 2.627164493829904,
       "baseline_steps_per_second": 493242.53410186147,
       "fused_steps_per_second": 1295829.2724390961
@@ -249,12 +219,10 @@
       "environments": 128,
       "baseline_ms": 8.899427553017935,
       "fused_ms": 1.051228005439043,
-      "source": "new measurement",
       "baseline_kernels_min": 1157,
       "baseline_kernels_max": 1212,
       "baseline_kernels_mean": 1186.3333333333333,
       "fused_kernels": 4,
-      "before_speedup": 6.067924403006994,
       "physics_speedup": 8.46574435514692,
       "baseline_steps_per_second": 14382.947581453507,
       "fused_steps_per_second": 121762.35729806407
@@ -265,12 +233,10 @@
       "environments": 512,
       "baseline_ms": 7.817258665959041,
       "fused_ms": 1.3117968945039644,
-      "source": "new measurement",
       "baseline_kernels_min": 1247,
       "baseline_kernels_max": 1313,
       "baseline_kernels_mean": 1287.3333333333333,
       "fused_kernels": 4,
-      "before_speedup": 3.658313486199979,
       "physics_speedup": 5.959198942085479,
       "baseline_steps_per_second": 65496.10571664339,
       "fused_steps_per_second": 390304.3238973399
@@ -281,12 +247,10 @@
       "environments": 2048,
       "baseline_ms": 11.6169600420528,
       "fused_ms": 3.807444883717431,
-      "source": "new measurement",
       "baseline_kernels_min": 1313,
       "baseline_kernels_max": 1368,
       "baseline_kernels_mean": 1349.6666666666667,
       "fused_kernels": 4,
-      "before_speedup": 1.9416777068935906,
       "physics_speedup": 3.051117060612702,
       "baseline_steps_per_second": 176293.96955712553,
       "fused_steps_per_second": 537893.538198882
@@ -297,12 +261,10 @@
       "environments": 4096,
       "baseline_ms": 19.03716977437337,
       "fused_ms": 7.659917334715526,
-      "source": "new measurement",
       "baseline_kernels_min": 1324,
       "baseline_kernels_max": 1401,
       "baseline_kernels_mean": 1357,
       "fused_kernels": 4,
-      "before_speedup": 1.5568308967762072,
       "physics_speedup": 2.4852970263915224,
       "baseline_steps_per_second": 215158.03286651228,
       "fused_steps_per_second": 534731.6192873924
@@ -313,18 +275,74 @@
       "environments": 8192,
       "baseline_ms": 35.38913411564297,
       "fused_ms": 15.428608424133724,
-      "source": "new measurement",
       "baseline_kernels_min": 1412,
       "baseline_kernels_max": 1445,
       "baseline_kernels_mean": 1426.6666666666667,
       "fused_kernels": 4,
-      "before_speedup": 1.4879086113743376,
       "physics_speedup": 2.293734674106228,
       "baseline_steps_per_second": 231483.48228104602,
       "fused_steps_per_second": 530961.6897908899
+    },
+    {
+      "tag": "allegro",
+      "task": "Allegro cube interaction",
+      "environments": 128,
+      "baseline_ms": 5.344042658805847,
+      "fused_ms": 2.0346553615397878,
+      "physics_speedup": 2.6265100025399777,
+      "baseline_steps_per_second": 23951.904610844223,
+      "fused_steps_per_second": 62909.91704026577
+    },
+    {
+      "tag": "allegro",
+      "task": "Allegro cube interaction",
+      "environments": 512,
+      "baseline_ms": 6.165063129531013,
+      "fused_ms": 5.662735333045323,
+      "physics_speedup": 1.0887076239559208,
+      "baseline_steps_per_second": 83048.62241353052,
+      "fused_steps_per_second": 90415.66838064724,
+      "baseline_kernels_min": 1109,
+      "baseline_kernels_max": 1284,
+      "baseline_kernels_mean": 1196.3333333333333,
+      "fused_kernels": 8
+    },
+    {
+      "tag": "allegro",
+      "task": "Allegro cube interaction",
+      "environments": 2048,
+      "baseline_ms": 12.703253348668417,
+      "fused_ms": 21.436774452527363,
+      "physics_speedup": 0.5925916409112904,
+      "baseline_steps_per_second": 161218.5432966017,
+      "fused_steps_per_second": 95536.76111746112
+    },
+    {
+      "tag": "allegro",
+      "task": "Allegro cube interaction",
+      "environments": 4096,
+      "baseline_ms": 23.623352845509846,
+      "fused_ms": 41.585244523154365,
+      "physics_speedup": 0.5680705528220841,
+      "baseline_steps_per_second": 173387.75011264067,
+      "fused_steps_per_second": 98496.47505906515
+    },
+    {
+      "tag": "allegro",
+      "task": "Allegro cube interaction",
+      "environments": 8192,
+      "baseline_ms": 48.55751114421421,
+      "fused_ms": 82.82064421971639,
+      "physics_speedup": 0.5862971919826548,
+      "baseline_steps_per_second": 168707.16408157803,
+      "fused_steps_per_second": 98912.5365683862,
+      "baseline_kernels_min": 1109,
+      "baseline_kernels_max": 1339,
+      "baseline_kernels_mean": 1218.3333333333333,
+      "fused_kernels": 8
     }
   ],
-  "behavioral_validation": [
+  "original_task_validation": [
     {
       "task": "Go2 locomotion",
       "environments": 128,
@@ -458,36 +476,156 @@
       "failed_checks": {}
     }
   ],
-  "lift_family_success_8192": {
-    "labels": [
-      "Box 5\u00d75\u00d75 cm",
-      "Box 2.5\u00d75\u00d75 cm",
-      "Box 2.5\u00d72.5\u00d75 cm",
-      "Box 1\u00d75\u00d75 cm",
-      "Sphere \u00d84 cm",
-      "Capsule \u00d85\u00d715 cm",
-      "Capsule \u00d85\u00d725 cm",
-      "Capsule \u00d82\u00d722 cm"
-    ],
-    "baseline": [
-      0.1962890625,
-      0.208984375,
-      0.0576171875,
-      0.154296875,
-      0.0537109375,
-      0.1806640625,
-      0.1767578125,
-      0.0341796875
-    ],
-    "fused": [
-      0.171875,
-      0.1787109375,
-      0.041015625,
-      0.0751953125,
-      0.0654296875,
-      0.169921875,
-      0.1689453125,
-      0.0439453125
-    ]
-  }
+  "allegro_validation": [
+    {
+      "environments": 128,
+      "pass": true,
+      "checks": {
+        "finite": true,
+        "zero_flags": true,
+        "hand_near_origin": true,
+        "original_example": true,
+        "held_fraction_difference": true,
+        "cube_height_difference": true
+      },
+      "baseline": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.953125,
+        "mean_cube_height": 1.0017155408859253,
+        "overflow_or": 0,
+        "example_pass": true
+      },
+      "fused": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.953125,
+        "mean_cube_height": 1.0145068168640137,
+        "overflow_or": 0,
+        "example_pass": true
+      }
+    },
+    {
+      "environments": 512,
+      "pass": true,
+      "checks": {
+        "finite": true,
+        "zero_flags": true,
+        "hand_near_origin": true,
+        "original_example": true,
+        "held_fraction_difference": true,
+        "cube_height_difference": true
+      },
+      "baseline": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95703125,
+        "mean_cube_height": 1.0056674480438232,
+        "overflow_or": 0,
+        "example_pass": true
+      },
+      "fused": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95703125,
+        "mean_cube_height": 1.0185048580169678,
+        "overflow_or": 0,
+        "example_pass": true
+      }
+    },
+    {
+      "environments": 2048,
+      "pass": true,
+      "checks": {
+        "finite": true,
+        "zero_flags": true,
+        "hand_near_origin": true,
+        "original_example": true,
+        "held_fraction_difference": true,
+        "cube_height_difference": true
+      },
+      "baseline": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95654296875,
+        "mean_cube_height": 1.0051729679107666,
+        "overflow_or": 0,
+        "example_pass": true
+      },
+      "fused": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95654296875,
+        "mean_cube_height": 1.0180013179779053,
+        "overflow_or": 0,
+        "example_pass": true
+      }
+    },
+    {
+      "environments": 4096,
+      "pass": true,
+      "checks": {
+        "finite": true,
+        "zero_flags": true,
+        "hand_near_origin": true,
+        "original_example": true,
+        "held_fraction_difference": true,
+        "cube_height_difference": true
+      },
+      "baseline": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95654296875,
+        "mean_cube_height": 1.0051740407943726,
+        "overflow_or": 0,
+        "example_pass": true
+      },
+      "fused": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95654296875,
+        "mean_cube_height": 1.0180013179779053,
+        "overflow_or": 0,
+        "example_pass": true
+      }
+    },
+    {
+      "environments": 8192,
+      "pass": true,
+      "checks": {
+        "finite": true,
+        "zero_flags": true,
+        "hand_near_origin": true,
+        "original_example": true,
+        "held_fraction_difference": true,
+        "cube_height_difference": true
+      },
+      "baseline": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95654296875,
+        "mean_cube_height": 1.0051743984222412,
+        "overflow_or": 0,
+        "example_pass": true
+      },
+      "fused": {
+        "frame": 1000,
+        "finite": true,
+        "hand_near_origin": true,
+        "held_fraction": 0.95654296875,
+        "mean_cube_height": 1.0180014371871948,
+        "overflow_or": 0,
+        "example_pass": true
+      }
+    }
+  ]
 }

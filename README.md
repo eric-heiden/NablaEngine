@@ -2,13 +2,15 @@
 
 ## Added Newton / MuJoCo Warp environments
 
-Go2 locomotion, H1 locomotion, Franka reach and Franka lift have standalone models and hand-written, task-specific CUDA physics. [Build and run them](environments/README.md). These are forward solvers; the original differentiable G1 engine is documented below.
+Go2 locomotion, H1 locomotion, Franka reach, Franka lift and Allegro cube interaction use hand-written, task-specific CUDA physics. [Build and run them](environments/README.md). These are forward solvers; the original differentiable G1 engine is documented below.
 
-![Four-task physics-only scaling on NVIDIA L4](docs/assets/task_speedups.png)
+![Five-task physics-only scaling on NVIDIA L4](docs/assets/task_speedups.png)
 
-Physics-only speedups span 1.48–10.17× across 128 / 512 / 2,048 / 4,096 / 8,192 environments. H1: 4.92×, 3.55×, 2.44×, 2.16×, 2.08×. Both engines refresh contacts every integration with matched timesteps. CUDA events exclude controller work, observations, rewards and resets. The baseline retains authored collision geometry; CUDA uses task-specific analytic proxies.
+Across 128 / 512 / 2,048 / 4,096 / 8,192 worlds, the original four tasks run 1.48–10.17× faster than MuJoCo Warp. Allegro's ratios are **2.63×, 1.09×, 0.59×, 0.57×, 0.59×**: it is slower at the three largest batches. Both engines refresh contacts every integration. CUDA events exclude controls, observations and resets. [Exact results](environments/reference_speedups.json) retain every batch size.
 
-18/20 behavioral comparisons pass the fixed thresholds. Remaining failures: h1 / 512: reward std relative difference; h1 / 4,096: reward std relative difference. Lift still grasps and lifts through contact and friction, with limited success under the scripted controller. For the thin 1×5×5 cm box, 7.5% of 8,192 CUDA worlds ever succeed versus 15.4% in the baseline. [Exact results](environments/reference_speedups.json) include every batch size. The standalone benchmark is separate from the original randomized evaluation, whose harness stays local.
+Allegro passes 5/5 paired retention checks over 20 seconds using Newton's animated-root, sinusoidal-finger example. Cube retention is about 95–96% in both engines. Its approximate hull–cube contact routine preserves retention but is its largest runtime stage; this is not an orientation-tracking or randomized robustness test. [Allegro model, code and benchmark](environments/allegro/README.md).
+
+The other tasks retain 18/20 behavioral passes. H1 fails the reward-standard-deviation threshold at 512 and 4,096 worlds. Lift's thin-box success remains limited: 7.5% of 8,192 CUDA worlds ever succeed versus 15.4% native. The [reports page](https://reports.eric-heiden.com/) includes profiling, measured G1 comparisons and rollout videos. The original evaluation harness stays local.
 
 **Fast, exact simulation gradients for the Unitree G1.**
 
