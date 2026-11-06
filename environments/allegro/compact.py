@@ -179,13 +179,14 @@ class Compact:
         lines.append('__global__ void refresh_parameters(Refresh r,float*out,int*errors){int w=blockIdx.x;' + ''.join(refresh_ops) + '}')
         self.refresh_args = self.Refresh(**{name: a.ptr for name, a, *_ in pack_sources})
         source = '\n'.join(lines) + '\n' + physics_source('allegro') + '\n' + (ROOT / 'launch.cuh').read_text()
-        key = hashlib.sha256((source + ''.join((p.read_text() for p in sorted(ROOT.glob('*.cuh'))))).encode()).hexdigest()[:16]
+        arch = os.environ.get('CUDA_ARCH') or f"sm_{wp.get_device('cuda:0').arch}"
+        key = hashlib.sha256((arch + source + ''.join((p.read_text() for p in sorted(ROOT.glob('*.cuh'))))).encode()).hexdigest()[:16]
         build = ROOT / 'build'
         build.mkdir(exist_ok=True)
         path = build / f'allegro_{key}.cu'
         path.write_text(source)
         libpath = path.with_suffix('.so')
-        cmd = [os.environ.get('NVCC') or shutil.which('nvcc') or 'nvcc', '-O3', '-lineinfo', '-arch=' + os.environ.get('CUDA_ARCH', 'sm_89'), '--shared', '-Xcompiler=-fPIC', '--use_fast_math', '-Xptxas=-v', f'-I{ROOT}', '-o', str(libpath), str(path)]
+        cmd = [os.environ.get('NVCC') or shutil.which('nvcc') or 'nvcc', '-O3', '-lineinfo', '-arch=' + arch, '--shared', '-Xcompiler=-fPIC', '--use_fast_math', '-Xptxas=-v', f'-I{ROOT}', '-o', str(libpath), str(path)]
         if not libpath.exists():
             p = subprocess.run(cmd, capture_output=True, text=True)
             path.with_suffix('.log').write_text(p.stdout + p.stderr)
