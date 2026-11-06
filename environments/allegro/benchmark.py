@@ -51,8 +51,8 @@ def run(args):
         native={key:getattr(e.solver,key) for key in ['step','reset','notify_model_changed','update_contacts']}
         native_collision=e.solver.mjw_model.opt.run_collision_detection
         result=dict(environments=args.num_envs,control_dt=.02,integration_dt=.0025,integrations=8,
-                    contact_refresh='every integration',samples=[],validation={},gpu=wp.get_device().name)
-        result['acceptance']={'example_held_minimum':.5,'held_fraction_absolute_difference_maximum':.10,'mean_cube_height_difference_maximum_m':.05,'finite':True,'overflow_or':0,'hand_near_origin':True}
+                    contact_refresh='every integration',collision_geometry='20 cuboids; identical in both engines',samples=[],validation={},gpu=wp.get_device().name)
+        result['acceptance']={'example_held_minimum':.5,'held_fraction_absolute_difference_maximum':.10,'mean_cube_height_difference_maximum_m':.05,'finite':True,'overflow_or':0,'hand_near_origin':True,'root_pose_error_maximum':1e-5}
         def save():Path(args.output).write_text(json.dumps(result,indent=2))
         engine=None
         e.step();restore(initial);wp.synchronize()
@@ -115,6 +115,7 @@ def run(args):
         x=result['validation']['baseline']['final'];y=result['validation']['fused']['final']
         checks={'finite':all(r['finite'] for group in result['validation'].values() for r in group['trace']),
                 'zero_flags':all(r['overflow_or']==0 for group in result['validation'].values() for r in group['trace']),
+                'root_tracks_command':all(r['root_tracks_command'] for group in result['validation'].values() for r in group['trace']),
                 'hand_near_origin':all(r['hand_near_origin'] for group in result['validation'].values() for r in group['trace']),
                 'original_example':x['example_pass'] and y['example_pass'],
                 'held_fraction_difference':abs(x['held_fraction']-y['held_fraction'])<=.10,

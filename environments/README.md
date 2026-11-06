@@ -42,7 +42,7 @@ The [Allegro package](allegro/README.md) follows Newton's moving-hand example, i
 python -m environments.allegro.benchmark --num-envs 128 --output allegro.json
 ```
 
-Repeat for 512, 2048, 4096 and 8192 worlds. Ratios on L4: 2.63×, 1.09×, 0.59×, 0.57×, 0.59×. All 5/5 retention comparisons pass. The hull–cube contact manifold is approximate; retaining a cube does not establish orientation-tracking equivalence. The public Allegro benchmark reproduces this sweep directly.
+Repeat for 512, 2048, 4096 and 8192 worlds. Ratios on L4: 4.70×, 2.87×, 1.78×, 1.72×, 1.78×. All 5/5 retention comparisons pass. Both engines use cuboids. The CUDA contact manifold uses six face axes and at most four clipped points; it omits edge-cross axes. Retaining a cube does not establish orientation-tracking equivalence. The public Allegro benchmark reproduces this sweep directly.
 
 ## Benchmark
 
@@ -59,7 +59,7 @@ done
 
 CUDA events measure one captured physics control interval from a restored nominal state. Reset, JIT compilation, controller preparation and observations are excluded. Both engines refresh contacts every integration: four 5 ms integrations for Go2, eight 2.5 ms integrations for H1, and eight 4.167 ms integrations for Franka. The fused solvers execute four launches per control interval, except reach, which uses one. A separate wall-clock number includes the minimal Python control loop and CPU state observations.
 
-The [tiled plot](../docs/assets/task_speedups.svg) and [reference measurements](reference_speedups.json) cover all five tasks and five batch sizes on NVIDIA L4. The original four tasks span 1.48–10.17×. Allegro spans 0.57–2.63× and is slower at 2,048 worlds and above. For the original four tasks, 18/20 behavioral comparisons pass; remaining failures: h1 / 512: reward std relative difference; h1 / 4,096: reward std relative difference. Locomotion rollouts last 1,000 controls and Franka rollouts 600, with unchanged controllers and acceptance thresholds. Every failure is retained. These results do not establish training equivalence. Lift has limited success in both engines; the thin 1×5×5 cm box has any-success frequency 7.5% with CUDA versus 15.4% native at 8,192 worlds.
+The [tiled plot](../docs/assets/task_speedups.svg) and [reference measurements](reference_speedups.json) cover all five tasks and five batch sizes on NVIDIA L4. The original four tasks span 1.48–10.17×. Allegro spans 1.72–4.70×. For the original four tasks, 18/20 behavioral comparisons pass; remaining failures: h1 / 512: reward std relative difference; h1 / 4,096: reward std relative difference. Locomotion rollouts last 1,000 controls and Franka rollouts 600, with unchanged controllers and acceptance thresholds. Every failure is retained. These results do not establish training equivalence. Lift has limited success in both engines; the thin 1×5×5 cm box has any-success frequency 7.5% with CUDA versus 15.4% native at 8,192 worlds.
 
 The original four standalone runners have nominal resets and absolute joint actions. Their timings are a separate experiment; they do not reproduce the randomized evaluation or supply the evaluation policies. The original task harness stays local. Earlier end-to-end results are outside the scope of this physics-only scaling study.
 
@@ -83,7 +83,7 @@ Go2 replaces body and limb boxes and cylinders with capsules, retaining foot sph
 
 Reach retains nine DOFs and the finger equality. Capsule links contact a bounded tabletop plane; finger pads retain their flat faces because spherical pads changed success counts. Lift keeps 15 dynamic DOFs and 19 fixed pairs. Its object families are four boxes, a sphere and three capsules. Finger-pad/object box contacts use a small SAT-and-vertex routine; table contacts use bounded analytic top faces. There is no gripper/object attachment. Robot and object inertia remain the authored values.
 
-The original four tasks remove general convex support mapping, GJK/EPA, polyhedral collision, mesh traversal, unused friction-loss constraints and the source-transform pipeline. Allegro retains fixed hull face tests because capsule and box hand proxies fail retention. The MJCF meshes remain for the native reference and rendering; fused physics does not traverse them.
+The original four tasks remove general convex support mapping, GJK/EPA, polyhedral collision, mesh traversal, unused friction-loss constraints and the source-transform pipeline. Allegro uses cuboids only, 14 fixed pairs and six face axes with clipping; no hull data or mesh path remains. The MJCF meshes remain for the native reference and rendering; fused physics does not traverse them.
 
 ```cpp
 for (int sub = 0; sub < INTERNAL_STEPS; ++sub) {

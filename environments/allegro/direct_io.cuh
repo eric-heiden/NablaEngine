@@ -9,7 +9,6 @@ __device__ void import_state(Work&s,Data&dd,int w,const IO&io){
  }
 
 
- for(int b=(threadIdx.x&31);b<NB;b+=32){int mc=M(body_mocapid,b),nb=C_bodymap(b);if(mc>=0){for(int k=0;k<3;k++)dd.mocap_pos[3*mc+k]=io.bq[(w*NWB+nb)*7+k];dd.mocap_quat[4*mc]=io.bq[(w*NWB+nb)*7+6];for(int k=0;k<3;k++)dd.mocap_quat[4*mc+1+k]=io.bq[(w*NWB+nb)*7+3+k];}}
  for(int i=(threadIdx.x&31);i<NV;i+=32){dd.qfrc_applied[i]=0;dd.qacc_warmstart[i]=io.warm[w*NV+i];}
  __syncwarp();
  for(int j=(threadIdx.x&31);j<NWJ;j+=32){
@@ -47,9 +46,9 @@ __device__ void export_state(Work&s,Data&dd,int w,const IO&io){
 __device__ void export_contacts(Work&s,int w,int l,const IO&io){
 
  if(l==0)s.output_base=atomicAdd(io.count,s.nc);__syncwarp();int base=s.output_base;
- for(int cidx=l;cidx<s.nc;cidx+=32){Contact&c=s.con[cidx];if(c.row+(c.dim==1?1:4)>NR){atomicOr(&s.unsupported,2);continue;}int id=base+cidx;if(id>=MAX_OUT){s.unsupported|=512;continue;}
+ for(int cidx=l;cidx<s.nc;cidx+=32){Contact&c=s.con[cidx];if(c.row+4>NR){atomicOr(&s.unsupported,2);continue;}int id=base+cidx;if(id>=MAX_OUT){s.unsupported|=512;continue;}
   io.shape0[id]=C_shape(c.g1)<0?C_shape(c.g1):w*C_shape_stride(c.g1)+C_shape(c.g1);io.shape1[id]=C_shape(c.g2)<0?C_shape(c.g2):w*C_shape_stride(c.g2)+C_shape(c.g2);
-  float force[3]={0,0,0};for(int e=0;e<(c.dim==1?1:4);e++){float f=s.force[c.row+e];for(int k=0;k<3;k++)force[k]-=f*(c.fr[k]+(c.dim==1?0:(e%2?-c.mu:c.mu)*c.fr[3*(1+e/2)+k]));}
+  float force[3]={0,0,0};for(int e=0;e<4;e++){float f=s.force[c.row+e];for(int k=0;k<3;k++)force[k]-=f*(c.fr[k]+(e%2?-1.f:1.f)*c.fr[3*(1+e/2)+k]);}
   for(int k=0;k<3;k++){io.normal[id*3+k]=c.fr[k];io.cforce[id*6+k]=force[k];io.cforce[id*6+3+k]=0;}
   int bodies[2]={M(geom_bodyid,c.g1),M(geom_bodyid,c.g2)};for(int side=0;side<2;side++){float pt[3],out[3];int b=bodies[side];for(int k=0;k<3;k++)pt[k]=c.p[k]+(side?.5f:-.5f)*c.dist*c.fr[k]-s.x[b][k];qrot_inv(s.q[b],pt,out);for(int k=0;k<3;k++)(side?io.point1:io.point0)[id*3+k]=out[k];}
  }

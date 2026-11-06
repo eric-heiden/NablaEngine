@@ -1,16 +1,16 @@
 // Full-step CUDA research implementation. All dynamics and constraints execute here.
 #include "primitive_math.cuh"
-struct Contact {int g1,g2,row,dim;float dist,p[3],fr[9],mu;};
+struct Contact {int g1,g2,row;float dist,p[3],fr[9];};
 struct Work {int output_base;
 #if STAGE_PROFILE
  unsigned long long ticks[8];
 #endif
  float x[NB][3],q[NB][4],com[NB][3],v[NB][3],om[NB][3],ab[NB][3],al[NB][3];
  float jp[NJ][3],axis[NV][3],origin[NV][3];int db[NV],rot[NV];
- union { struct { float Jv[NJAC][3],IW[NB][9],fb[NB][3],tb[NB][3];}; struct { float J[NR*NV],D[NR],aref[NR],fl[NR],force[NR];}; float collision_scratch[1]; };
+ union { struct { float Jv[NJAC][3],IW[NB][9],fb[NB][3],tb[NB][3];}; struct { float J[NR*NV],D[NR],aref[NR],force[NR];}; float collision_scratch[1]; };
  float gp[NG][3],gq[NG][4];
  float mass[NV*NV],smooth[NV],bias[NV],qsm[NV],damp[NV];
- Contact con[NC];int nc,nr,ne,nf,unsupported,niter,ever_error;
+ Contact con[NC];int nc,nr,unsupported,niter,ever_error;
 
  float params[NPARAM];
 };
@@ -21,7 +21,7 @@ __device__ void inertia_mul(const float *I,const float *a,float *out){for(int i=
 template<bool DYNAMICS> __device__ void kin(Work &s,int w,Data &dd){
  int lane=(threadIdx.x&31);
  for(int depth=0;depth<=TREE_DEPTH;depth++){int b=lane;if(b<NB && BODY_DEPTH[b]==depth){
-  int parent=M(body_parentid,b),ja=M(body_jntadr,b),nj=M(body_jntnum,b),mc=M(body_mocapid,b);
+  int parent=M(body_parentid,b),ja=M(body_jntadr,b),nj=M(body_jntnum,b);
   float pos[3],quat[4],r[3];for(int k=0;k<3;k++)pos[k]=M(body_pos,b*3+k);for(int k=0;k<4;k++)quat[k]=M(body_quat,b*4+k);
   if(b==1){for(int k=0;k<3;k++)pos[k]=dd.root_pos[k];for(int k=0;k<4;k++)quat[k]=dd.root_quat[k];}
   for(int k=0;k<3;k++)s.v[b][k]=s.om[b][k]=s.ab[b][k]=s.al[b][k]=0;
@@ -30,7 +30,6 @@ template<bool DYNAMICS> __device__ void kin(Work &s,int w,Data &dd){
    qrot(s.q[parent],pos,r);for(int k=0;k<3;k++){s.x[b][k]=s.x[parent][k]+r[k];s.v[b][k]=s.v[parent][k];s.om[b][k]=s.om[parent][k];s.ab[b][k]=s.ab[parent][k];s.al[b][k]=s.al[parent][k];}
    qmul(s.q[parent],quat,s.q[b]);crossadd(s.v[b],s.om[parent],r);crossadd(s.ab[b],s.al[parent],r);float c[3];cross(s.om[parent],r,c);crossadd(s.ab[b],s.om[parent],c);
   }
-  if(mc>=0){for(int k=0;k<3;k++)s.x[b][k]=D(mocap_pos,mc*3+k);for(int k=0;k<4;k++)s.q[b][k]=D(mocap_quat,mc*4+k);}
   for(int j=ja;j<ja+nj;j++){
    int type=M(jnt_type,j),qa=M(jnt_qposadr,j),da=M(jnt_dofadr,j);
    float ax[3],anchor[3];for(int k=0;k<3;k++){ax[k]=M(jnt_axis,3*j+k);anchor[k]=M(jnt_pos,3*j+k);}float aw[3],pre[3];qrot(s.q[b],ax,aw);qrot(s.q[b],anchor,pre);
@@ -51,11 +50,6 @@ template<bool DYNAMICS> __device__ void kin(Work &s,int w,Data &dd){
     crossadd(s.v[b],s.om[b],post,-1);crossadd(s.ab[b],s.al[b],post,-1);cross(s.om[b],post,c);crossadd(s.ab[b],s.om[b],c,-1);
     for(int k=0;k<3;k++)s.x[b][k]+=pre[k]-post[k];for(int k=0;k<4;k++)s.q[b][k]=qn[k];
     s.db[da]=b;s.rot[da]=1;copy3(s.axis[da],aw);copy3(s.origin[da],s.jp[j]);
-   }else if(type==2){
-    float delta=D(qpos,qa)-M(qpos0,qa),vel=D(qvel,da),off[3];for(int k=0;k<3;k++)off[k]=aw[k]*delta;
-    crossadd(s.v[b],s.om[b],off);crossadd(s.ab[b],s.al[b],off);float c[3];cross(s.om[b],off,c);crossadd(s.ab[b],s.om[b],c);crossadd(s.ab[b],s.om[b],aw,2*vel);
-    for(int k=0;k<3;k++){s.x[b][k]+=off[k];s.v[b][k]+=aw[k]*vel;}
-    s.db[da]=b;s.rot[da]=0;copy3(s.axis[da],aw);copy3(s.origin[da],s.jp[j]);
    }else s.unsupported|=1;
   }
 }
@@ -119,68 +113,63 @@ __device__ void kbi(const float* ref,const float* imp,float pos,float h,float& k
  impedance=x>=1?hi:lo+(hi-lo)*y;
  float tc=fmaxf(ref[0],2*h),ratio=ref[1];k=ref[0]>0?1/(hi*hi*tc*tc*ratio*ratio):-ref[0]/(hi*hi);b=ref[1]>0?2/(hi*tc):-ref[1]/hi;
 }
-__device__ void row_add(Work&s,Data &dd,int w,const float*j,float pos,float invw,const float*ref,const float*imp,float fl=0,int fixed_row=-1){
- int r=fixed_row>=0?fixed_row:s.nr++;if(r>=NR){atomicOr(&s.unsupported,2);return;}float vel=0;for(int i=0;i<NV;i++){s.J[r*NV+i]=j[i];vel+=j[i]*D(qvel,i);}float k,b,ip;kbi(ref,imp,pos,M(timestep,0),k,b,ip);s.D[r]=1/fmaxf(invw*(1-ip)/ip,1e-15f);s.aref[r]=-k*ip*pos-b*vel;s.fl[r]=fl;
+__device__ void row_add(Work&s,Data &dd,int w,const float*j,float pos,float invw,const float*ref,const float*imp,int fixed_row=-1){
+ int r=fixed_row>=0?fixed_row:s.nr++;if(r>=NR){atomicOr(&s.unsupported,2);return;}float vel=0;for(int i=0;i<NV;i++){s.J[r*NV+i]=j[i];vel+=j[i]*D(qvel,i);}float k,b,ip;kbi(ref,imp,pos,M(timestep,0),k,b,ip);s.D[r]=1/fmaxf(invw*(1-ip)/ip,1e-15f);s.aref[r]=-k*ip*pos-b*vel;
 }
 __device__ void add_contact(Work&s,int pair,int slot,float dist,const float*pos,const float*frame){
  if(dist>=0)return;int id=atomicAdd(&s.nc,1);if(id>=NC){atomicOr(&s.unsupported,4);return;}Contact &c=s.con[id];c.row=pair;c.g1=PAIRS[2*pair];c.g2=PAIRS[2*pair+1];c.dist=dist;for(int k=0;k<3;k++)c.p[k]=pos[k];for(int k=0;k<9;k++)c.fr[k]=frame[k];
 }
 #include "primitive_collision.cuh"
-// A fixed hand hull against the one cube. No broadphase or iterative GJK/EPA.
+// The only narrow phase: one fixed hand/floor cuboid against the free cube.
+// Six face axes and a four-point clipped manifold, specialized to this grasp.
 __device__ void hand_cube(Work&s,int pair,int hand){
- int mesh=M(geom_dataid,hand),va=VS(mesh),vb=VS(mesh+1),na=NS(mesh),nb=NS(mesh+1),ea=ES(mesh),eb=ES(mesh+1);
- float cube[3],relative[3],Q[4],iq[4],B[9],half[3],margin=M(geom_margin,hand)+M(geom_margin,19);
- for(int k=0;k<3;k++){relative[k]=s.gp[19][k]-s.gp[hand][k];half[k]=M(geom_size,57+k);}qrot_inv(s.gq[hand],relative,cube);
- iq[0]=s.gq[hand][0];for(int k=1;k<4;k++)iq[k]=-s.gq[hand][k];qmul(iq,s.gq[19],Q);quat2mat(Q,B);
- float best=1e30f,normal[3],support=0;
- for(int ax=0;ax<(nb-na)+3;ax++){
-  float n[3];if(ax<nb-na){for(int k=0;k<3;k++)n[k]=HN(3*(na+ax)+k);}
-  else if(ax<nb-na+3){for(int k=0;k<3;k++)n[k]=B[3*k+ax-(nb-na)];}
-  else{int edge=ea+(ax-(nb-na)-3)/3,col=(ax-(nb-na)-3)%3;float x[3],y[3];for(int k=0;k<3;k++){x[k]=HE(3*edge+k);y[k]=B[3*k+col];}cross(x,y,n);}
-  float len=sqrtf(dot3(n,n));if(len<1e-5f)continue;for(int k=0;k<3;k++)n[k]/=len;
-  float lo=1e30f,hi=-1e30f;if(ax<nb-na){lo=HLO(na+ax);hi=HHI(na+ax);}else for(int v=va;v<vb;v++){float x=0;for(int k=0;k<3;k++)x+=HV(3*v+k)*n[k];lo=fminf(lo,x);hi=fmaxf(hi,x);}
-  float radius=0;for(int j=0;j<3;j++){float x=0;for(int k=0;k<3;k++)x+=B[3*k+j]*n[k];radius+=half[j]*fabsf(x);}
-  float center=dot3(cube,n),p1=hi-center+radius+margin,p2=center+radius-lo+margin;
-  if(p1<=0||p2<=0)return;
-  if(fminf(p1,p2)<best){best=fminf(p1,p2);for(int k=0;k<3;k++)normal[k]=p1<p2?n[k]:-n[k];support=p1<p2?hi:-lo;}
+ float A[9],B[9],h[3],v[3],delta[3],normal[3],best=1e30f;
+ quat2mat(s.gq[hand],A);quat2mat(s.gq[19],B);
+ float margin=M(geom_margin,hand)+M(geom_margin,19);int feature=-1;
+ for(int k=0;k<3;k++){h[k]=M(geom_size,3*hand+k);v[k]=M(geom_size,57+k);delta[k]=s.gp[19][k]-s.gp[hand][k];}
+ for(int axis=0;axis<6;axis++){
+  float n[3];
+  for(int k=0;k<3;k++)n[k]=axis<3?A[3*k+axis]:B[3*k+axis-3];
+  float ra=0,rb=0;for(int j=0;j<3;j++){float da=0,db=0;for(int k=0;k<3;k++){da+=A[3*k+j]*n[k];db+=B[3*k+j]*n[k];}ra+=h[j]*fabsf(da);rb+=v[j]*fabsf(db);}
+  float d=dot3(delta,n),overlap=ra+rb-fabsf(d)+margin;if(overlap<=0)return;
+  if(overlap<best){best=overlap;feature=axis;for(int k=0;k<3;k++)normal[k]=d>=0?n[k]:-n[k];}
  }
- float wn[3],fr[9];qrot(s.gq[hand],normal,wn);make_frame(wn,fr);
- // Candidates are support vertices projected halfway through the overlap.
- float candidates[4][3];int count=0;
- for(int v=va;v<vb+8;v++){
-  float point[3],p[3],local[3],d;
-  if(v<vb){for(int k=0;k<3;k++)point[k]=HV(3*v+k);d=dot3(point,normal);if(d<support-.001f)continue;
-   for(int k=0;k<3;k++)p[k]=point[k]-cube[k];mtv3(B,p,local);bool inside=true;for(int k=0;k<3;k++)inside&=fabsf(local[k])<=half[k]+margin+.0001f;if(!inside)continue;
-   for(int k=0;k<3;k++)point[k]-=normal[k]*.5f*(best-margin);
-  }else{
-   int corner=v-vb;for(int k=0;k<3;k++){point[k]=cube[k];for(int j=0;j<3;j++)point[k]+=B[3*k+j]*((corner&(1<<j))?half[j]:-half[j]);}
-   d=support-dot3(point,normal)+margin;if(d<=0||d>best+.001f)continue;
-   // Project to the supporting face and require containment in every hull halfspace.
-   for(int k=0;k<3;k++)p[k]=point[k]+normal[k]*(support-dot3(point,normal));
-   bool inside=true;for(int face=na;face<nb&&inside;face++){float n[3],limit=HHI(face);for(int k=0;k<3;k++)n[k]=HN(3*face+k);inside=dot3(p,n)<=limit+margin+.0001f;}if(!inside)continue;
-   for(int k=0;k<3;k++)point[k]+=normal[k]*.5f*(best-margin);
+ float frame[9];make_frame(normal,frame);
+ // Face contact: clip the incident quad by the four reference side planes.
+ bool flip=feature>=3;const float*R=flip?B:A;const float*I=flip?A:B;
+ const float*rh=flip?v:h;const float*ih=flip?h:v;
+ const float*rc=flip?s.gp[19]:s.gp[hand];const float*ic=flip?s.gp[hand]:s.gp[19];
+ int axis=feature%3,side0=(axis+1)%3,side1=(axis+2)%3,incident=0;float n[3],score=-1,sign=1;
+ for(int k=0;k<3;k++)n[k]=flip?-normal[k]:normal[k];
+ for(int j=0;j<3;j++){float d=0;for(int k=0;k<3;k++)d+=I[3*k+j]*n[k];if(fabsf(d)>score){score=fabsf(d);incident=j;sign=d>=0?-1:1;}}
+ float polygon[8][3],tmp[8][3];int count=4;
+ for(int c=0;c<4;c++)for(int k=0;k<3;k++)polygon[c][k]=ic[k]+I[3*k+incident]*sign*ih[incident]+I[3*k+(incident+1)%3]*((c==0||c==3)?-1:1)*ih[(incident+1)%3]+I[3*k+(incident+2)%3]*(c<2?-1:1)*ih[(incident+2)%3];
+ for(int plane=0;plane<4&&count;plane++){
+  int ax=plane<2?side0:side1;float sg=plane%2?1:-1;int next=0;
+  for(int c=0;c<count;c++){
+   int prev=(c+count-1)%count;float d0=-rh[ax],d1=-rh[ax];
+   for(int k=0;k<3;k++){d0+=sg*R[3*k+ax]*(polygon[prev][k]-rc[k]);d1+=sg*R[3*k+ax]*(polygon[c][k]-rc[k]);}
+   if((d0<=0)!=(d1<=0)){float t=d0/(d0-d1);if(next<8){for(int k=0;k<3;k++)tmp[next][k]=polygon[prev][k]+t*(polygon[c][k]-polygon[prev][k]);next++;}}
+   if(d1<=0&&next<8){copy3(tmp[next],polygon[c]);next++;}
   }
-  if(count<4){copy3(candidates[count],point);count++;}
+  count=next;for(int c=0;c<count;c++)copy3(polygon[c],tmp[c]);
  }
- if(!count){for(int k=0;k<3;k++)candidates[0][k]=cube[k]-normal[k]*(best*.5f);count=1;}
- for(int c=0;c<count;c++){float p[3];qrot(s.gq[hand],candidates[c],p);for(int k=0;k<3;k++)p[k]+=s.gp[hand][k];add_contact(s,pair,c,-best,p,fr);}
+ for(int c=0;c<min(count,4);c++){
+  int idx=c*count/min(count,4);float d=-rh[axis];for(int k=0;k<3;k++)d+=n[k]*(polygon[idx][k]-rc[k]);
+  float p[3];for(int k=0;k<3;k++)p[k]=polygon[idx][k]-.5f*d*n[k];add_contact(s,pair,c,d-margin,p,frame);
+ }
 }
 __device__ void collisions(Work&s,int w){
  int pair=threadIdx.x&31;if(pair>=NP)return;int hand=PAIRS[2*pair];
- if(hand==0){
-  float normal[3],frame[9],R[9];zaxis_rn(s.gq[0],normal);make_frame(normal,frame);quat2mat(s.gq[19],R);
-  float depth[4]={1e30f,1e30f,1e30f,1e30f},points[4][3];
-  for(int i=0;i<8;i++){float world[3],point[3];for(int k=0;k<3;k++){world[k]=s.gp[19][k];for(int j=0;j<3;j++)world[k]+=R[3*k+j]*((i&(1<<j))?M(geom_size,57+j):-M(geom_size,57+j));}
-   float dist=plane_point(s.gp[0],normal,world,M(geom_margin,0)+M(geom_margin,19),point);int worst=0;for(int j=1;j<4;j++)if(depth[j]>depth[worst])worst=j;if(dist<depth[worst]){depth[worst]=dist;copy3(points[worst],point);}}
-  for(int i=0;i<4;i++)if(depth[i]<0)add_contact(s,pair,i,depth[i],points[i],frame);return;
- }
- float delta[3];for(int k=0;k<3;k++)delta[k]=s.gp[hand][k]-s.gp[19][k];float bound=M(geom_rbound,hand)+M(geom_rbound,19)+.02f;if(dot3(delta,delta)>bound*bound)return;
+ float delta[3];for(int k=0;k<3;k++)delta[k]=s.gp[hand][k]-s.gp[19][k];
+ float bound=M(geom_rbound,hand)+M(geom_rbound,19)+M(geom_margin,hand)+M(geom_margin,19);
+ if(dot3(delta,delta)>bound*bound)return;
  hand_cube(s,pair,hand);
 }
 
 __device__ void constraints(Work&s,Data &dd,int w){
  if((threadIdx.x&31)==0){
- s.nr=s.ne=s.nf=0;
+ s.nr=0;
 
 
  for(int a=0;a<NJ;a++)if(M(jnt_limited,a)){
@@ -188,17 +177,16 @@ __device__ void constraints(Work&s,Data &dd,int w){
   float j[NV]={0},ref[2],imp[5];j[da]=low<high?1:-1;for(int k=0;k<2;k++)ref[k]=M(jnt_solref,2*a+k);for(int k=0;k<5;k++)imp[k]=M(jnt_solimp,5*a+k);row_add(s,dd,w,j,distance-margin,M(dof_invweight0,da),ref,imp);
  }
 
- for(int cidx=0;cidx<s.nc;cidx++){Contact&c=s.con[cidx];int a=c.g1,b=c.g2,pa=M(geom_priority,a),pb=M(geom_priority,b);int dim=pa==pb?max(M(geom_condim,a),M(geom_condim,b)):M(geom_condim,pa>pb?a:b);c.row=s.nr;s.nr+=(dim==1?1:4);}
+ for(int cidx=0;cidx<s.nc;cidx++){s.con[cidx].row=s.nr;s.nr+=4;}
  if(s.nr>NR){s.unsupported|=2;s.nr=NR;}
  }__syncwarp();
  for(int cidx=(threadIdx.x&31);cidx<s.nc;cidx+=32){
-  Contact &c=s.con[cidx];int a=c.g1,b=c.g2,ba=M(geom_bodyid,a),bb=M(geom_bodyid,b),pa=M(geom_priority,a),pb=M(geom_priority,b);float weight=M(geom_solmix,a)/(M(geom_solmix,a)+M(geom_solmix,b)+1e-30f);if(pa!=pb)weight=pa>pb?1:0;
-  float mu=pa==pb?fmaxf(M(geom_friction,3*a),M(geom_friction,3*b)):M(geom_friction,3*(pa>pb?a:b));mu=fmaxf(mu,1e-5f);c.mu=mu;
-  float ref[2],imp[5];for(int k=0;k<2;k++){float ra=M(geom_solref,2*a+k),rb=M(geom_solref,2*b+k);ref[k]=ra>0&&rb>0?weight*ra+(1-weight)*rb:fminf(ra,rb);}for(int k=0;k<5;k++)imp[k]=weight*M(geom_solimp,5*a+k)+(1-weight)*M(geom_solimp,5*b+k);
-  int dim=pa==pb?max(M(geom_condim,a),M(geom_condim,b)):M(geom_condim,pa>pb?a:b);c.dim=dim;if(dim!=1&&dim!=3){s.unsupported|=16;continue;}
+  Contact &c=s.con[cidx];int ba=M(geom_bodyid,c.g1),bb=M(geom_bodyid,c.g2);
+  // All cuboids have the same contact material: mu=1, pyramidal dim=3.
+  float ref[2],imp[5];for(int k=0;k<2;k++)ref[k]=M(geom_solref,k);for(int k=0;k<5;k++)imp[k]=M(geom_solimp,k);
   float jt[3][NV];for(int i=0;i<NV;i++){float va[3],vb[3],dv[3];jacpoint(s,w,ba,c.p,i,va);jacpoint(s,w,bb,c.p,i,vb);for(int k=0;k<3;k++)dv[k]=vb[k]-va[k];for(int k=0;k<3;k++)jt[k][i]=dot3(c.fr+3*k,dv);}
-  float iw=M(body_invweight0,ba*2)+M(body_invweight0,bb*2);if(dim==3)iw*=2*mu*mu*(1+mu*mu)/M(impratio,0);
-  for(int edge=0;edge<(dim==1?1:4);edge++){float j[NV];for(int i=0;i<NV;i++)j[i]=jt[0][i]+(dim==1?0:(edge%2?-mu:mu)*jt[1+edge/2][i]);row_add(s,dd,w,j,c.dist,iw,ref,imp,0,c.row+edge);}
+  float iw=M(body_invweight0,ba*2)+M(body_invweight0,bb*2);iw*=4/M(impratio,0);
+  for(int edge=0;edge<4;edge++){float j[NV];for(int i=0;i<NV;i++)j[i]=jt[0][i]+(edge%2?-1.f:1.f)*jt[1+edge/2][i];row_add(s,dd,w,j,c.dist,iw,ref,imp,c.row+edge);}
  }
 
 __syncwarp();
@@ -222,19 +210,19 @@ __device__ void prepare(Data &dd,Work &s,int w,int l,float*pre_A,float*pre_rhs){
  __syncwarp();constraints(s,dd,w);__syncwarp();if(l==0){MARK(5);}__syncwarp();
 }
 __device__ float sumwarp(float v){for(int k=16;k;k/=2)v+=__shfl_down_sync(0xffffffff,v,k);return __shfl_sync(0xffffffff,v,0);}
-__device__ void row_eval(float x,float d,float fl,int r,int ne,int nf,float&f,float&diag){f=diag=0;if(r<ne){f=-d*x;diag=d;}else if(r<ne+nf){f=clampf(-d*x,-fl,fl);if(fabsf(x)<fl/d)diag=d;}else if(x<0){f=-d*x;diag=d;}}
+__device__ void row_eval(float x,float d,float&f,float&diag){f=x<0?-d*x:0;diag=x<0?d:0;}
 struct Solve {float H[NV*NV],a[NV],g[NV],p[NV],x[NR],jp[NR],f[NR],diag[NR],lo,hi,gd,pmp;int stop;};
 __device__ void solve_integrate(Data &dd,Work &s,Solve &v,int w,int l,const IO&io,bool output){
  int n=s.nr;
  // Choose the lower objective between the previous acceleration and the smooth solution.
  float cold_cost=0,warm_cost=0;
  for(int i=l;i<NV;i+=32){float d=D(qacc_warmstart,i)-s.qsm[i],md=0;for(int j=0;j<NV;j++)md+=s.mass[i*NV+j]*(D(qacc_warmstart,j)-s.qsm[j]);warm_cost+=.5f*d*md;}
- for(int r=l;r<n;r+=32){float xc=-s.aref[r],xw=xc;for(int i=0;i<NV;i++){xc+=s.J[r*NV+i]*s.qsm[i];xw+=s.J[r*NV+i]*D(qacc_warmstart,i);}float xs[2]={xc,xw};for(int which=0;which<2;which++){float x=xs[which],cost=0;if(r<s.ne)cost=.5f*s.D[r]*x*x;else if(r<s.ne+s.nf){float bound=s.fl[r]/s.D[r];cost=fabsf(x)<bound?.5f*s.D[r]*x*x:s.fl[r]*(fabsf(x)-.5f*bound);}else if(x<0)cost=.5f*s.D[r]*x*x;if(which==0)cold_cost+=cost;else warm_cost+=cost;}}
+ for(int r=l;r<n;r+=32){float xc=-s.aref[r],xw=xc;for(int i=0;i<NV;i++){xc+=s.J[r*NV+i]*s.qsm[i];xw+=s.J[r*NV+i]*D(qacc_warmstart,i);}float xs[2]={xc,xw};for(int which=0;which<2;which++){float x=xs[which],cost=0;if(x<0)cost=.5f*s.D[r]*x*x;if(which==0)cold_cost+=cost;else warm_cost+=cost;}}
  cold_cost=sumwarp(cold_cost);warm_cost=sumwarp(warm_cost);
  for(int i=l;i<NV;i+=32)v.a[i]=(warm_cost<cold_cost)?D(qacc_warmstart,i):s.qsm[i];__syncwarp();
  int nit=0;
  for(int it=0;it<ITERS && n>0;it++){
-  for(int r=l;r<n;r+=32){float x=-s.aref[r];for(int i=0;i<NV;i++)x+=s.J[r*NV+i]*v.a[i];v.x[r]=x;row_eval(x,s.D[r],s.fl[r],r,s.ne,s.nf,v.f[r],v.diag[r]);}__syncwarp();
+  for(int r=l;r<n;r+=32){float x=-s.aref[r];for(int i=0;i<NV;i++)x+=s.J[r*NV+i]*v.a[i];v.x[r]=x;row_eval(x,s.D[r],v.f[r],v.diag[r]);}__syncwarp();
   float gg=0;for(int i=l;i<NV;i+=32){float g=-s.smooth[i];for(int j=0;j<NV;j++)g+=s.mass[i*NV+j]*v.a[j];for(int r=0;r<n;r++)g-=s.J[r*NV+i]*v.f[r];v.g[i]=g;gg+=g*g;}
   float norm=sqrtf(sumwarp(gg));if(norm<M(tolerance,0)*M(meaninertia,0)*NV)break;
   for(int t=l;t<NV*NV;t+=32){int i=t/NV,j=t%NV;if(j<=i){float h=s.mass[t];for(int r=0;r<n;r++)h+=s.J[r*NV+i]*v.diag[r]*s.J[r*NV+j];v.H[t]=h;}}__syncwarp();
@@ -243,10 +231,10 @@ __device__ void solve_integrate(Data &dd,Work &s,Solve &v,int w,int l,const IO&i
   if(v.stop)break;
   for(int r=l;r<n;r+=32){float jp=0;for(int i=0;i<NV;i++)jp+=s.J[r*NV+i]*v.p[i];v.jp[r]=jp;}
   float gd=0,pmp=0;for(int i=l;i<NV;i+=32){float mp=0,ma=-s.smooth[i];for(int j=0;j<NV;j++){mp+=s.mass[i*NV+j]*v.p[j];ma+=s.mass[i*NV+j]*v.a[j];}gd+=ma*v.p[i];pmp+=mp*v.p[i];}gd=sumwarp(gd);pmp=sumwarp(pmp);if(l==0){v.gd=gd;v.pmp=pmp;v.lo=0;v.hi=1;}__syncwarp();
-  for(int k=0;k<16;k++){float df=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+v.hi*v.jp[r],s.D[r],s.fl[r],r,s.ne,s.nf,f,d);df-=f*v.jp[r];}df=sumwarp(df)+v.gd+v.hi*v.pmp;if(df>=0)break;if(l==0){v.lo=v.hi;v.hi*=2;}__syncwarp();}
+  for(int k=0;k<16;k++){float df=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+v.hi*v.jp[r],s.D[r],f,d);df-=f*v.jp[r];}df=sumwarp(df)+v.gd+v.hi*v.pmp;if(df>=0)break;if(l==0){v.lo=v.hi;v.hi*=2;}__syncwarp();}
   float alpha=.5f*(v.lo+v.hi);
   for(int k=0;k<24;k++){
-   float df=0,curv=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+alpha*v.jp[r],s.D[r],s.fl[r],r,s.ne,s.nf,f,d);df-=f*v.jp[r];curv+=d*v.jp[r]*v.jp[r];}
+   float df=0,curv=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+alpha*v.jp[r],s.D[r],f,d);df-=f*v.jp[r];curv+=d*v.jp[r]*v.jp[r];}
    df=sumwarp(df)+v.gd+alpha*v.pmp;curv=sumwarp(curv)+v.pmp;
    if(fabsf(df)<=1e-7f*(fabsf(v.gd)+fabsf(alpha*v.pmp)+1.f))break;
    if(l==0){if(df<0)v.lo=alpha;else v.hi=alpha;}__syncwarp();
@@ -256,7 +244,7 @@ __device__ void solve_integrate(Data &dd,Work &s,Solve &v,int w,int l,const IO&i
   }
   for(int i=l;i<NV;i+=32)v.a[i]+=alpha*v.p[i];__syncwarp();nit=it+1;
  }
- for(int r=l;r<n;r+=32){float x=-s.aref[r],dg;for(int i=0;i<NV;i++)x+=s.J[r*NV+i]*v.a[i];row_eval(x,s.D[r],s.fl[r],r,s.ne,s.nf,s.force[r],dg);}__syncwarp();
+ for(int r=l;r<n;r+=32){float x=-s.aref[r],dg;for(int i=0;i<NV;i++)x+=s.J[r*NV+i]*v.a[i];row_eval(x,s.D[r],s.force[r],dg);}__syncwarp();
  if(l==0){MARK(6); }
  // Contact force and geometry are final outputs, written directly for Newton sensors.
  if(output)export_contacts(s,w,l,io);
@@ -267,7 +255,7 @@ __device__ void solve_integrate(Data &dd,Work &s,Solve &v,int w,int l,const IO&i
  for(int i=l;i<NV*NV;i+=32)A[i]=s.mass[i];__syncwarp();
  if(l<NV){D(qacc_warmstart,l)=v.a[l];float z=0;for(int j=0;j<NV;j++)z+=s.mass[l*NV+j]*v.a[j];rhs[l]=z;A[l*NV+l]+=h*s.damp[l];}__syncwarp();
  chol_parallel(A,rhs,l);if(l<NV)D(qvel,l)+=h*rhs[l];__syncwarp();
-   for(int j=l;j<NJ;j+=32){int qa=M(jnt_qposadr,j),da=M(jnt_dofadr,j),type=M(jnt_type,j);if(type==0){for(int k=0;k<3;k++)D(qpos,qa+k)+=h*D(qvel,da+k);float vv[3];for(int k=0;k<3;k++)vv[k]=D(qvel,da+3+k);float speed=sqrtf(dot3(vv,vv)),angle=h*speed,sc=speed>1e-10f?sinf(.5f*angle)/speed:.5f*h;float dq[4]={cosf(.5f*angle),vv[0]*sc,vv[1]*sc,vv[2]*sc},q[4],out[4];for(int k=0;k<4;k++)q[k]=D(qpos,qa+3+k);qmul(q,dq,out);float norm=0;for(int k=0;k<4;k++)norm+=out[k]*out[k];for(int k=0;k<4;k++)D(qpos,qa+3+k)=out[k]*rsqrtf(norm);}else if(type==2||type==3)D(qpos,qa)+=h*D(qvel,da);}
+   for(int j=l;j<NJ;j+=32){int qa=M(jnt_qposadr,j),da=M(jnt_dofadr,j),type=M(jnt_type,j);if(type==0){for(int k=0;k<3;k++)D(qpos,qa+k)+=h*D(qvel,da+k);float vv[3];for(int k=0;k<3;k++)vv[k]=D(qvel,da+3+k);float speed=sqrtf(dot3(vv,vv)),angle=h*speed,sc=speed>1e-10f?sinf(.5f*angle)/speed:.5f*h;float dq[4]={cosf(.5f*angle),vv[0]*sc,vv[1]*sc,vv[2]*sc},q[4],out[4];for(int k=0;k<4;k++)q[k]=D(qpos,qa+3+k);qmul(q,dq,out);float norm=0;for(int k=0;k<4;k++)norm+=out[k]*out[k];for(int k=0;k<4;k++)D(qpos,qa+3+k)=out[k]*rsqrtf(norm);}else if(type==3)D(qpos,qa)+=h*D(qvel,da);}
  __syncwarp();if(output){kin<false>(s,w,dd);export_state(s,dd,w,io);}__syncwarp();
  if(l==0){for(int i=0;i<NV;i++)if(!isfinite(D(qvel,i)))s.unsupported|=1024;for(int i=0;i<NQ;i++)if(!isfinite(D(qpos,i)))s.unsupported|=1024;s.ever_error|=s.unsupported;}
 

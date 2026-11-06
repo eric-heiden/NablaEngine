@@ -101,7 +101,8 @@ class Environment:
 
         builder.default_shape_cfg.ke = 1.0e3
         builder.default_shape_cfg.kd = 1.0e2
-        builder.add_ground_plane()
+        builder.add_shape_box(-1, xform=wp.transform(wp.vec3(0, 0, -.05)),
+                              hx=10., hy=10., hz=.05, label='floor')
 
         self.model = builder.finalize()
 
@@ -179,8 +180,15 @@ class Environment:
                 & (cubes[:, 2] >= .9) & (cubes[:, 2] <= origin[:, 2] + .5))
         finite = bool(np.isfinite(q).all() and np.isfinite(v).all())
         near = bool((np.abs(q[:, :self.cube_body_offset, :3] - origin[:, None, :]) <= .5).all())
+        # The fixed root must follow the controller, rather than its preceding pose.
+        command = self.model.joint_X_p.numpy().reshape(self.world_count, -1, 7)[:, 0]
+        root = q[:, 0]
+        quat_error = np.minimum(np.linalg.norm(root[:, 3:] - command[:, 3:], axis=1),
+                                np.linalg.norm(root[:, 3:] + command[:, 3:], axis=1))
+        root_error = float(max(np.max(np.abs(root[:, :3] - command[:, :3])), quat_error.max()))
         flags = (self.fused.diag.numpy()[:, 2] if self.fused else self.solver.mjw_data.overflow.numpy()).astype(np.int64)
         return dict(finite=finite, hand_near_origin=near, held_fraction=float(held.mean()),
                     mean_cube_height=float(cubes[:, 2].mean()),
-                    overflow_or=int(np.bitwise_or.reduce(flags.ravel())),
+                    overflow_or=int(np.bitwise_or.reduce(flags.ravel())), root_pose_error=root_error,
+                    root_tracks_command=bool(root_error < 1e-5),
                     example_pass=bool(finite and near and held.mean() >= .5))

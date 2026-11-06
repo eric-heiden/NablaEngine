@@ -6,7 +6,7 @@ import numpy as np
 import warp as wp
 from .build_kernel import physics_source
 ROOT = Path(__file__).parent.resolve()
-FIELDS = ['body_parentid', 'body_jntadr', 'body_jntnum', 'body_pos', 'body_quat', 'body_ipos', 'body_iquat', 'body_mass', 'body_inertia', 'body_invweight0', 'body_mocapid', 'jnt_type', 'jnt_qposadr', 'jnt_dofadr', 'jnt_pos', 'jnt_axis', 'jnt_limited', 'jnt_range', 'jnt_margin', 'jnt_solref', 'jnt_solimp', 'jnt_actfrclimited', 'jnt_actfrcrange', 'dof_armature', 'dof_damping', 'dof_invweight0', 'geom_margin', 'geom_size', 'geom_dataid', 'geom_rbound', 'geom_type', 'geom_bodyid', 'geom_pos', 'geom_quat', 'geom_friction', 'geom_solref', 'geom_solimp', 'geom_condim', 'geom_priority', 'geom_solmix', 'actuator_gainprm', 'actuator_biasprm', 'actuator_gear', 'actuator_forcelimited', 'actuator_forcerange', 'actuator_ctrllimited', 'actuator_ctrlrange', 'qpos0', 'timestep', 'gravity', 'tolerance', 'meaninertia', 'impratio']
+FIELDS = ['body_parentid', 'body_jntadr', 'body_jntnum', 'body_pos', 'body_quat', 'body_ipos', 'body_iquat', 'body_mass', 'body_inertia', 'body_invweight0', 'jnt_type', 'jnt_qposadr', 'jnt_dofadr', 'jnt_pos', 'jnt_axis', 'jnt_limited', 'jnt_range', 'jnt_margin', 'jnt_solref', 'jnt_solimp', 'jnt_actfrclimited', 'jnt_actfrcrange', 'dof_armature', 'dof_damping', 'dof_invweight0', 'geom_margin', 'geom_size', 'geom_rbound', 'geom_bodyid', 'geom_pos', 'geom_quat', 'geom_solref', 'geom_solimp', 'actuator_gainprm', 'actuator_biasprm', 'actuator_gear', 'actuator_forcelimited', 'actuator_forcerange', 'actuator_ctrllimited', 'actuator_ctrlrange', 'qpos0', 'timestep', 'gravity', 'tolerance', 'meaninertia', 'impratio']
 
 def literal(v, integer=False):
     if integer:
@@ -38,29 +38,33 @@ class Compact:
         self.backend = backend
         from .task_specs import SPECS
         old = SPECS['allegro']
-        dims = dict(NMOCAP=cpu.nmocap, NV=m.nv, NQ=m.nq, NB=m.nbody, NG=m.ngeom, NJ=cpu.njnt, NU=m.nu, NEQ=cpu.neq, NR=old['defines']['NR'], NC=(old['defines']['NR'] + 3) // 4, ITERS=m.opt.iterations, NP=len(old['pairs']), NWJ=nm.joint_count // n, NWQ=nm.joint_coord_count // n, NWV=nm.joint_dof_count // n, NWB=nm.body_count // n, NWS=nm.shape_count // n, NWT=backend.control.joint_target_q.size // n, MAX_OUT=n * ((old['defines']['NR'] + 3) // 4))
+        dims = dict(NV=m.nv, NQ=m.nq, NB=m.nbody, NG=m.ngeom, NJ=cpu.njnt, NU=m.nu, NR=old['defines']['NR'], NC=(old['defines']['NR'] + 3) // 4, ITERS=m.opt.iterations, NP=len(old['pairs']), NWJ=nm.joint_count // n, NWQ=nm.joint_coord_count // n, NWV=nm.joint_dof_count // n, NWB=nm.body_count // n, NWS=nm.shape_count // n, NWT=backend.control.joint_target_q.size // n, MAX_OUT=n * ((old['defines']['NR'] + 3) // 4))
         assert (dims['NQ'], dims['NV'], dims['NB']) == (23, 22, 23)
+        assert cpu.ngeom == 20 and cpu.nmesh == 0 and np.all(cpu.geom_type == 6), 'Only cuboid collision is supported'
+        assert cpu.neq == 0 and set(cpu.jnt_type) == {0,3}
+        assert cpu.nmocap == 1 and cpu.body_mocapid[1] == 0  # animated root only
+        assert np.all(cpu.geom_condim == 3) and np.all(cpu.geom_friction[:,0] == 1)
+        for field in ['geom_solref','geom_solimp']:
+            values=getattr(m,field).numpy()
+            assert np.all(values == values.reshape(-1,values.shape[-1])[0])
         dims['INTERNAL_STEPS'] = 1
         self.internal_steps = dims['INTERNAL_STEPS']
-        capacity = 144
-        dims.update(NR=capacity, NC=32, MAX_OUT=n * 32)
+        capacity = 64
+        dims.update(NR=capacity, NC=12, MAX_OUT=n * 12)
         dims['WORLDS_PER_BLOCK'] = 1
         dims['NWORLDS'] = n
         dims['STAGE_PROFILE'] = int(os.getenv('COMPACT_STAGE_PROFILE', '0'))
         self.nv = dims['NV']
         self.dt = float(backend.solver_dt) / self.internal_steps
         lines = ['#include <cuda_runtime.h>', '#include <math.h>'] + [f'#define {k} {v}' for k, v in dims.items()]
-        lines.append('#define STATIC_TABLE 0')
-        lines.append('#define REDUCED_GRIP 0')
         lines.extend(['#if STAGE_PROFILE', '#define MARK(K) s.ticks[K]=clock64()', '#else', '#define MARK(K) ((void)0)', '#endif'])
         lines += ['#define M(F,I) field_##F(s.params,(I))', '#define P(F,I) field_nw_##F(s.params,(I))', '#define D(F,I) dd.F[(I)]']
         pack = []
         pack_sources = []
-        access = []
         specs = []
         immutable = []
 
-        def add(name, a, shape, mutable=False):
+        def add(name, a, shape):
             ar = a.numpy() if isinstance(a, wp.array) else np.asarray(a)
             integer = ar.dtype.kind in 'biu'
             typ = 'int' if integer else 'float'
@@ -89,7 +93,6 @@ class Compact:
                 else:
                     lines.append(f'__device__ __forceinline__ {typ} field_{name}(const float*p,int i){{return __ldg(K_{name}+i);}}')
             immutable.append({'field': name, 'elements': int((~mask).sum())})
-        fixed = {'body_parentid', 'body_jntadr', 'body_jntnum', 'body_mocapid', 'body_quat', 'body_iquat', 'jnt_type', 'jnt_qposadr', 'jnt_dofadr', 'jnt_pos', 'jnt_axis', 'jnt_limited', 'jnt_range', 'jnt_margin', 'jnt_solref', 'jnt_solimp', 'jnt_actfrclimited', 'jnt_actfrcrange', 'dof_solref', 'dof_solimp', 'geom_margin', 'geom_size', 'geom_dataid', 'geom_rbound', 'geom_type', 'geom_bodyid', 'geom_quat', 'geom_condim', 'geom_priority', 'geom_solmix', 'mesh_vertadr', 'mesh_vertnum', 'mesh_vert', 'eq_type', 'eq_obj1id', 'eq_obj2id', 'eq_data', 'eq_solref', 'eq_solimp', 'actuator_trnid', 'actuator_gear', 'actuator_forcelimited', 'actuator_forcerange', 'actuator_ctrllimited', 'actuator_ctrlrange', 'qpos0', 'tolerance', 'impratio', 'timestep'}
         for name in FIELDS:
             obj = m.opt if name in ['timestep', 'gravity', 'tolerance', 'impratio'] else m.stat if name == 'meaninertia' else m
             a = getattr(obj, name, None)
@@ -98,10 +101,10 @@ class Compact:
                 a = np.asarray(raw)
             if name == 'timestep':
                 a = np.asarray([self.dt], dtype=np.float32)
-            add(name, a, np.shape(raw), mutable=name not in fixed)
+            add(name, a, np.shape(raw))
         extra = {'Xp': (nm.joint_X_p, (dims['NWJ'], 7)), 'com': (nm.body_com, (dims['NWB'], 3)), 'ref': (nm.mujoco.dof_ref, (dims['NWV'],))}
         for name, (a, shape) in extra.items():
-            add('nw_' + name, a, shape, True)
+            add('nw_' + name, a, shape)
         lines.append(f'#define NPARAM {len(pack)}')
         self.nparam = len(pack)
         self.params = wp.empty((n, len(pack)), dtype=wp.float32, device='cuda:0')
@@ -153,28 +156,10 @@ class Compact:
         for name, vals in [('ACT_COUNT', actcounts), ('ACT_IDS', actids), ('DOF_JOINT', joints)]:
             lines.append('__device__ const int ' + name + '[' + str(len(vals)) + ']={' + ','.join(map(str, vals)) + '};')
         lines.append('__device__ const unsigned int DOF_BODIES[NV]={' + ','.join((str(x) + 'u' for x in masks)) + '};')
-        # Fixed hand convex hulls: precompute unique face normals and edge directions.
-        hull_vertices=[];hull_normals=[];hull_lo=[];hull_hi=[];hull_edges=[];vstart=[0];nstart=[0];estart=[0]
-        from scipy.spatial import ConvexHull
-        for mesh in range(cpu.nmesh):
-            vertices=np.asarray(cpu.mesh_vert[cpu.mesh_vertadr[mesh]:cpu.mesh_vertadr[mesh]+cpu.mesh_vertnum[mesh]],np.float64)
-            hull=ConvexHull(vertices)
-            normals=np.unique(np.round(hull.equations[:,:3],5),axis=0)
-            edges=[]
-            for face in hull.simplices:
-                for i,j in [(0,1),(1,2),(2,0)]:
-                    edge=vertices[face[j]]-vertices[face[i]];edge/=np.linalg.norm(edge)
-                    if edge[np.argmax(abs(edge))]<0:edge=-edge
-                    edges.append(edge)
-            edges=np.unique(np.round(edges,5),axis=0)
-            hull_lo.extend((vertices @ normals.T).min(0));hull_hi.extend((vertices @ normals.T).max(0));hull_vertices.extend(vertices.ravel());hull_normals.extend(normals.ravel());hull_edges.extend(edges.ravel())
-            vstart.append(len(hull_vertices)//3);nstart.append(len(hull_normals)//3);estart.append(len(hull_edges)//3)
-        for name,values in [('HLO',hull_lo),('HHI',hull_hi),('HV',hull_vertices),('HN',hull_normals),('HE',hull_edges),('VS',np.array(vstart,np.int32)),('NS',np.array(nstart,np.int32)),('ES',np.array(estart,np.int32))]:
-            lines.append(const_fn(name,values))
         names = 'rootxp qin vin qout vout bq bv jforce bforce tq tv warm params diag device_cycles param_errors count shape0 shape1 point0 point1 normal cforce'.split()
         lines.append('struct IO {' + ''.join((('unsigned long long' if x == 'device_cycles' else 'int' if x in ['param_errors', 'count', 'shape0', 'shape1'] else 'float') + '*' + x + ';' for x in names)) + '};')
         self.IO = type('IO', (ct.Structure,), {'_fields_': [(k, ct.c_void_p) for k in names]})
-        lines.append('struct Data {' + '' + 'float root_pos[3],root_quat[4],qpos[NQ],qvel[NV],qacc_warmstart[NV],qfrc_applied[NV],xfrc_applied[NB*6],ctrl[NU+1],table_pos[STATIC_TABLE*3+1],table_quat[STATIC_TABLE*4+1],mocap_pos[NMOCAP*3+1],mocap_quat[NMOCAP*4+1];};')
+        lines.append('struct Data {' + '' + 'float root_pos[3],root_quat[4],qpos[NQ],qvel[NV],qacc_warmstart[NV],qfrc_applied[NV],xfrc_applied[NB*6],ctrl[NU+1];};')
         self.Refresh = type('Refresh', (ct.Structure,), {'_fields_': [(k, ct.c_void_p) for k, *_ in pack_sources]})
         refresh_decl = []
         refresh_ops = []
@@ -223,9 +208,8 @@ class Compact:
         rc = self.lib.resources(res.ctypes.data)
         if rc:
             raise RuntimeError(f'CUDA resource initialization error {rc}')
-        self.metadata = {'source': str(path), 'hash': key, 'defines': dims, 'parameters': specs, 'immutable_constants': immutable, 'parameter_bytes_per_world': len(pack) * 4, 'hot_path_history_bytes_per_world': 4 * self.nv + 20, 'allocated_diagnostic_bytes_per_world': 16 + 4 * (1 + len(pack_sources)) + (56 if dims['STAGE_PROFILE'] else 0), 'resources': dict(zip(['registers', 'static_shared_bytes', 'local_bytes_per_thread', 'resident_blocks', 'dynamic_shared_bytes', 'work_bytes', 'solve_bytes', 'data_bytes'], res.tolist())), 'build_command': cmd, 'pairs': old['pairs'], 'internal_substeps': self.internal_steps, 'specialization': '16 finger hinges and a free cube; fixed hand-hull versus cube SAT, live animated root', 'hot_path': 'direct Newton inputs and outputs; block-shared intermediate state; no MuJoCo Warp buffers'}
+        self.metadata = {'source': str(path), 'hash': key, 'defines': dims, 'parameters': specs, 'immutable_constants': immutable, 'parameter_bytes_per_world': len(pack) * 4, 'hot_path_history_bytes_per_world': 4 * self.nv + 20, 'allocated_diagnostic_bytes_per_world': 16 + 4 * (1 + len(pack_sources)) + (56 if dims['STAGE_PROFILE'] else 0), 'resources': dict(zip(['registers', 'static_shared_bytes', 'local_bytes_per_thread', 'resident_blocks', 'dynamic_shared_bytes', 'work_bytes', 'solve_bytes', 'data_bytes'], res.tolist())), 'build_command': cmd, 'pairs': old['pairs'], 'internal_substeps': self.internal_steps, 'specialization': '16 finger hinges and a free cube; cuboids only, fixed box pairs and analytic SAT/clipping, live animated root', 'hot_path': 'direct Newton inputs and outputs; block-shared intermediate state; no MuJoCo Warp buffers'}
         self.refresh()
-        native_notify = sol.notify_model_changed
 
         def notify(*a, **k):
             pass

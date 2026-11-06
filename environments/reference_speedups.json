@@ -287,58 +287,58 @@
       "tag": "allegro",
       "task": "Allegro cube interaction",
       "environments": 128,
-      "baseline_ms": 5.344042658805847,
-      "fused_ms": 2.0346553615397878,
-      "physics_speedup": 2.6265100025399777,
-      "baseline_steps_per_second": 23951.904610844223,
-      "fused_steps_per_second": 62909.91704026577
+      "baseline_ms": 4.408227569527097,
+      "fused_ms": 0.93818199634552,
+      "physics_speedup": 4.698691284525145,
+      "baseline_steps_per_second": 29036.61346452028,
+      "fused_steps_per_second": 136434.08261786692
     },
     {
       "tag": "allegro",
       "task": "Allegro cube interaction",
       "environments": 512,
-      "baseline_ms": 6.165063129531013,
-      "fused_ms": 5.662735333045323,
-      "physics_speedup": 1.0887076239559208,
-      "baseline_steps_per_second": 83048.62241353052,
-      "fused_steps_per_second": 90415.66838064724,
-      "baseline_kernels_min": 1109,
-      "baseline_kernels_max": 1284,
-      "baseline_kernels_mean": 1196.3333333333333,
+      "baseline_ms": 5.190143985880746,
+      "fused_ms": 1.8053746711876657,
+      "physics_speedup": 2.8748292909562143,
+      "baseline_steps_per_second": 98648.5156082073,
+      "fused_steps_per_second": 283597.64217982563,
+      "baseline_kernels_min": 1065,
+      "baseline_kernels_max": 1306,
+      "baseline_kernels_mean": 1181.6666666666667,
       "fused_kernels": 8
     },
     {
       "tag": "allegro",
       "task": "Allegro cube interaction",
       "environments": 2048,
-      "baseline_ms": 12.703253348668417,
-      "fused_ms": 21.436774452527363,
-      "physics_speedup": 0.5925916409112904,
-      "baseline_steps_per_second": 161218.5432966017,
-      "fused_steps_per_second": 95536.76111746112
+      "baseline_ms": 10.705002665519714,
+      "fused_ms": 6.027580638726552,
+      "physics_speedup": 1.7760032270230004,
+      "baseline_steps_per_second": 191312.42317169215,
+      "fused_steps_per_second": 339771.4809225151
     },
     {
       "tag": "allegro",
       "task": "Allegro cube interaction",
       "environments": 4096,
-      "baseline_ms": 23.623352845509846,
-      "fused_ms": 41.585244523154365,
-      "physics_speedup": 0.5680705528220841,
-      "baseline_steps_per_second": 173387.75011264067,
-      "fused_steps_per_second": 98496.47505906515
+      "baseline_ms": 19.611975179778202,
+      "fused_ms": 11.386156691445244,
+      "physics_speedup": 1.7224403028383808,
+      "baseline_steps_per_second": 208851.9877499826,
+      "fused_steps_per_second": 359735.08102847787
     },
     {
       "tag": "allegro",
       "task": "Allegro cube interaction",
       "environments": 8192,
-      "baseline_ms": 48.55751114421421,
-      "fused_ms": 82.82064421971639,
-      "physics_speedup": 0.5862971919826548,
-      "baseline_steps_per_second": 168707.16408157803,
-      "fused_steps_per_second": 98912.5365683862,
-      "baseline_kernels_min": 1109,
-      "baseline_kernels_max": 1339,
-      "baseline_kernels_mean": 1218.3333333333333,
+      "baseline_ms": 39.64510578579373,
+      "fused_ms": 22.284843855433994,
+      "physics_speedup": 1.779016538907746,
+      "baseline_steps_per_second": 206633.3242812405,
+      "fused_steps_per_second": 367604.10138581437,
+      "baseline_kernels_min": 1065,
+      "baseline_kernels_max": 1328,
+      "baseline_kernels_mean": 1192.6666666666667,
       "fused_kernels": 8
     }
   ],
@@ -483,6 +483,7 @@
       "checks": {
         "finite": true,
         "zero_flags": true,
+        "root_tracks_command": true,
         "hand_near_origin": true,
         "original_example": true,
         "held_fraction_difference": true,
@@ -493,8 +494,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.953125,
-        "mean_cube_height": 1.0017155408859253,
+        "mean_cube_height": 1.0018539428710938,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       },
       "fused": {
@@ -502,8 +505,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.953125,
-        "mean_cube_height": 1.0145068168640137,
+        "mean_cube_height": 1.0052390098571777,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       }
     },
@@ -513,6 +518,7 @@
       "checks": {
         "finite": true,
         "zero_flags": true,
+        "root_tracks_command": true,
         "hand_near_origin": true,
         "original_example": true,
         "held_fraction_difference": true,
@@ -523,8 +529,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95703125,
-        "mean_cube_height": 1.0056674480438232,
+        "mean_cube_height": 1.005792260169983,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       },
       "fused": {
@@ -532,8 +540,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95703125,
-        "mean_cube_height": 1.0185048580169678,
+        "mean_cube_height": 1.0091887712478638,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       }
     },
@@ -543,6 +553,7 @@
       "checks": {
         "finite": true,
         "zero_flags": true,
+        "root_tracks_command": true,
         "hand_near_origin": true,
         "original_example": true,
         "held_fraction_difference": true,
@@ -553,8 +564,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95654296875,
-        "mean_cube_height": 1.0051729679107666,
+        "mean_cube_height": 1.0052940845489502,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       },
       "fused": {
@@ -562,8 +575,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95654296875,
-        "mean_cube_height": 1.0180013179779053,
+        "mean_cube_height": 1.0086966753005981,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       }
     },
@@ -573,6 +588,7 @@
       "checks": {
         "finite": true,
         "zero_flags": true,
+        "root_tracks_command": true,
         "hand_near_origin": true,
         "original_example": true,
         "held_fraction_difference": true,
@@ -583,8 +599,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95654296875,
-        "mean_cube_height": 1.0051740407943726,
+        "mean_cube_height": 1.0052852630615234,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       },
       "fused": {
@@ -592,8 +610,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95654296875,
-        "mean_cube_height": 1.0180013179779053,
+        "mean_cube_height": 1.0086966753005981,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       }
     },
@@ -603,6 +623,7 @@
       "checks": {
         "finite": true,
         "zero_flags": true,
+        "root_tracks_command": true,
         "hand_near_origin": true,
         "original_example": true,
         "held_fraction_difference": true,
@@ -613,8 +634,10 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95654296875,
-        "mean_cube_height": 1.0051743984222412,
+        "mean_cube_height": 1.0052857398986816,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       },
       "fused": {
@@ -622,10 +645,20 @@
         "finite": true,
         "hand_near_origin": true,
         "held_fraction": 0.95654296875,
-        "mean_cube_height": 1.0180014371871948,
+        "mean_cube_height": 1.0086965560913086,
         "overflow_or": 0,
+        "root_pose_error": 0.0,
+        "root_tracks_command": true,
         "example_pass": true
       }
     }
-  ]
+  ],
+  "allegro_model": {
+    "collision_geometry": "20 cuboids shared by both engines",
+    "candidate_pairs": 14,
+    "contact_capacity": 12,
+    "constraint_row_capacity": 64,
+    "contact_method": "six face axes, clipped face, up to four points; edge-cross axes omitted",
+    "root_pose_checked": true
+  }
 }

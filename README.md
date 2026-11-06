@@ -6,9 +6,9 @@ Go2 locomotion, H1 locomotion, Franka reach, Franka lift and Allegro cube intera
 
 ![Five-task physics-only scaling on NVIDIA L4](docs/assets/task_speedups.png)
 
-Across 128 / 512 / 2,048 / 4,096 / 8,192 worlds, the original four tasks run 1.48–10.17× faster than MuJoCo Warp. Allegro's ratios are **2.63×, 1.09×, 0.59×, 0.57×, 0.59×**: it is slower at the three largest batches. Both engines refresh contacts every integration. CUDA events exclude controls, observations and resets. [Exact results](environments/reference_speedups.json) retain every batch size.
+Across 128 / 512 / 2,048 / 4,096 / 8,192 worlds, the original four tasks run 1.48–10.17× faster than MuJoCo Warp. Allegro's ratios are **4.70×, 2.87×, 1.78×, 1.72×, 1.78×** using the same cuboid model in both engines. Both engines refresh contacts every integration. CUDA events exclude controls, observations and resets. [Exact results](environments/reference_speedups.json) retain every batch size.
 
-Allegro passes 5/5 paired retention checks over 20 seconds using Newton's animated-root, sinusoidal-finger example. Cube retention is about 95–96% in both engines. Its approximate hull–cube contact routine preserves retention but is its largest runtime stage; this is not an orientation-tracking or randomized robustness test. [Allegro model, code and benchmark](environments/allegro/README.md).
+Allegro passes 5/5 paired retention checks over 20 seconds using Newton's animated-root, sinusoidal-finger example. Its hand, cube and floor are cuboids. Fourteen fixed pairs, six face axes and a four-point clipped manifold replace general collision handling; edge-cross axes are omitted. The solver keeps 12 contact slots and 64 constraint rows. Retention checks do not establish orientation-tracking or randomized robustness. [Allegro model, code and benchmark](environments/allegro/README.md).
 
 The other tasks retain 18/20 behavioral passes. H1 fails the reward-standard-deviation threshold at 512 and 4,096 worlds. Lift's thin-box success remains limited: 7.5% of 8,192 CUDA worlds ever succeed versus 15.4% native. The [reports page](https://reports.eric-heiden.com/) includes profiling, measured G1 comparisons and rollout videos. The original evaluation harness stays local.
 
