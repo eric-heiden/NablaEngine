@@ -40,15 +40,18 @@ class Compact:
         old = SPECS['h1']
         dims = dict(NMOCAP=cpu.nmocap, NV=m.nv, NQ=m.nq, NB=m.nbody, NG=m.ngeom, NJ=cpu.njnt, NU=m.nu, NEQ=cpu.neq, NR=old['defines']['NR'], NC=(old['defines']['NR'] + 3) // 4, ITERS=m.opt.iterations, NP=len(old['pairs']), NWJ=nm.joint_count // n, NWQ=nm.joint_coord_count // n, NWV=nm.joint_dof_count // n, NWB=nm.body_count // n, NWS=nm.shape_count // n, NWT=backend.control.joint_target_q.size // n, MAX_OUT=n * ((old['defines']['NR'] + 3) // 4))
         assert (dims['NQ'], dims['NV'], dims['NB']) == (26, 25, 21)
-        dims['INTERNAL_STEPS'] = 2
+        dims['INTERNAL_STEPS'] = 8
         self.internal_steps = dims['INTERNAL_STEPS']
+        # Newton calls step four times per control; the last call runs all eight integrations.
+        self.integrations_per_tick = 2
+        self.tick_phase = 0
         capacity = 64
         dims.update(NR=capacity, NC=10, MAX_OUT=n * 10)
         dims['WORLDS_PER_BLOCK'] = 1
         dims['NWORLDS'] = n
         dims['STAGE_PROFILE'] = int(os.getenv('COMPACT_STAGE_PROFILE', '0'))
         self.nv = dims['NV']
-        self.dt = float(backend.solver_dt) / self.internal_steps
+        self.dt = float(backend.solver_dt) / self.integrations_per_tick
         lines = ['#include <cuda_runtime.h>', '#include <math.h>'] + [f'#define {k} {v}' for k, v in dims.items()]
         lines.append('#define STATIC_TABLE 0')
         lines.append('#define REDUCED_GRIP 0')
@@ -205,7 +208,7 @@ class Compact:
         rc = self.lib.resources(res.ctypes.data)
         if rc:
             raise RuntimeError(f'CUDA resource initialization error {rc}')
-        self.metadata = {'source': str(path), 'hash': key, 'defines': dims, 'parameters': specs, 'immutable_constants': immutable, 'parameter_bytes_per_world': len(pack) * 4, 'hot_path_history_bytes_per_world': 4 * self.nv + 20, 'allocated_diagnostic_bytes_per_world': 16 + 4 * (1 + len(pack_sources)) + (56 if dims['STAGE_PROFILE'] else 0), 'resources': dict(zip(['registers', 'static_shared_bytes', 'local_bytes_per_thread', 'resident_blocks', 'dynamic_shared_bytes', 'work_bytes', 'solve_bytes', 'data_bytes'], res.tolist())), 'build_command': cmd, 'pairs': old['pairs'], 'internal_substeps': self.internal_steps, 'specialization': '25 velocities; two capsule soles per foot and one torso capsule; sparse body Jacobians, direct actuator map and register solve', 'hot_path': 'direct Newton inputs and outputs; block-shared intermediate state; no MuJoCo Warp buffers'}
+        self.metadata = {'source': str(path), 'hash': key, 'defines': dims, 'parameters': specs, 'immutable_constants': immutable, 'parameter_bytes_per_world': len(pack) * 4, 'hot_path_history_bytes_per_world': 4 * self.nv + 20, 'allocated_diagnostic_bytes_per_world': 16 + 4 * (1 + len(pack_sources)) + (56 if dims['STAGE_PROFILE'] else 0), 'resources': dict(zip(['registers', 'static_shared_bytes', 'local_bytes_per_thread', 'resident_blocks', 'dynamic_shared_bytes', 'work_bytes', 'solve_bytes', 'data_bytes'], res.tolist())), 'build_command': cmd, 'pairs': old['pairs'], 'internal_substeps': self.internal_steps, 'physics_launches_per_control': 1, 'integrations_per_control': 8, 'specialization': '25 velocities; two capsule soles per foot and one torso capsule; sparse body Jacobians, direct actuator map and register solve', 'hot_path': 'direct Newton inputs and outputs; block-shared intermediate state; no MuJoCo Warp buffers'}
         self.refresh()
         native_notify = sol.notify_model_changed
 
@@ -232,8 +235,12 @@ class Compact:
 
     def step(self, state_in, state_out, control, contacts, dt, **kwargs):
         assert state_in is state_out, 'Task uses in-place Newton state'
-        assert abs(dt - self.internal_steps * self.dt) < 1e-09, (dt, self.dt)
+        assert abs(dt - self.integrations_per_tick * self.dt) < 1e-09, (dt, self.dt)
         assert state_out.body_qdd is None and state_out.body_parent_f is None
+        self.tick_phase = (self.tick_phase + 1) % 4
+        if self.tick_phase:
+            self.sol._step += 1
+            return
         fields = {'qin': state_in.joint_q, 'vin': state_in.joint_qd, 'qout': state_out.joint_q, 'vout': state_out.joint_qd, 'bq': state_out.body_q, 'bv': state_out.body_qd, 'jforce': control.joint_f, 'bforce': state_in.body_f, 'tq': control.joint_target_q, 'tv': control.joint_target_qd}
         for k, a in fields.items():
             setattr(self.io, k, a.ptr)
