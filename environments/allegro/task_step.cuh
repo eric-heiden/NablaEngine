@@ -1,5 +1,7 @@
 // Full-step CUDA research implementation. All dynamics and constraints execute here.
 #include "primitive_math.cuh"
+// Row of packed lower-triangle index t (row-major, j<=i).
+__device__ __forceinline__ int tri_row(int t){int i=(int)((sqrtf(8.f*t+1.f)-1.f)*.5f);if((i+1)*(i+2)/2<=t)i++;else if(i*(i+1)/2>t)i--;return i;}
 struct Contact {int g1,g2,row;float dist,p[3],fr[9];};
 struct Work {int output_base;
 #if STAGE_PROFILE
@@ -197,7 +199,8 @@ __device__ int jslot(int b,int i){return J_SLOT[b*NV+i];}
 __device__ void prepare(Data &dd,Work &s,int w,int l,float*pre_A,float*pre_rhs){
  if(l==0){s.unsupported=0;s.nc=0;}__syncwarp();kin<true>(s,w,dd);if(l==0){MARK(2);}__syncwarp();
  for(int t=l;t<NB*NV;t+=32){int b=t/NV,i=t%NV;if(ancestor(s,b,i,w))jacpoint(s,w,b,s.com[b],i,s.Jv[jslot(b,i)]);}__syncwarp();
- for(int t=l;t<NV*NV;t+=32){int i=t/NV,j=t%NV;float v=i==j?M(dof_armature,i):0;unsigned int bodies=DOF_BODIES[i]&DOF_BODIES[j];while(bodies){int b=__ffs(bodies)-1;bodies&=bodies-1;float Ij[3],Wi[3],Wj[3];for(int k=0;k<3;k++){Wi[k]=s.rot[i]?s.axis[i][k]:0;Wj[k]=s.rot[j]?s.axis[j][k]:0;}inertia_mul(s.IW[b],Wj,Ij);v+=M(body_mass,b)*dot3(s.Jv[jslot(b,i)],s.Jv[jslot(b,j)])+dot3(Wi,Ij);}s.mass[t]=v;}
+ // Symmetric: assemble the lower triangle and mirror it.
+ for(int t=l;t<NV*(NV+1)/2;t+=32){int i=tri_row(t),j=t-i*(i+1)/2;float v=i==j?M(dof_armature,i):0;unsigned int bodies=DOF_BODIES[i]&DOF_BODIES[j];while(bodies){int b=__ffs(bodies)-1;bodies&=bodies-1;float Ij[3],Wi[3],Wj[3];for(int k=0;k<3;k++){Wi[k]=s.rot[i]?s.axis[i][k]:0;Wj[k]=s.rot[j]?s.axis[j][k]:0;}inertia_mul(s.IW[b],Wj,Ij);v+=M(body_mass,b)*dot3(s.Jv[jslot(b,i)],s.Jv[jslot(b,j)])+dot3(Wi,Ij);}s.mass[i*NV+j]=v;s.mass[j*NV+i]=v;}
  for(int i=l;i<NV;i+=32){
   float bias=0,force=D(qfrc_applied,i)-M(dof_damping,i)*D(qvel,i),damp=M(dof_damping,i);
   unsigned int bodies=DOF_BODIES[i];while(bodies){int b=__ffs(bodies)-1;bodies&=bodies-1;float Wi[3];for(int k=0;k<3;k++)Wi[k]=s.rot[i]?s.axis[i][k]:0;bias+=dot3(s.Jv[jslot(b,i)],s.fb[b])+dot3(Wi,s.tb[b]);for(int k=0;k<3;k++)force+=s.Jv[jslot(b,i)][k]*D(xfrc_applied,b*6+k)+Wi[k]*D(xfrc_applied,b*6+3+k);}
@@ -228,7 +231,8 @@ __device__ void solve_integrate(Data &dd,Work &s,Solve &v,int w,int l,const IO&i
   for(int r=l;r<n;r+=32){float x=-s.aref[r];for(int i=0;i<NV;i++)x+=s.J[r*NV+i]*v.a[i];v.x[r]=x;row_eval(x,s.D[r],v.f[r],v.diag[r]);}__syncwarp();
   float gg=0;for(int i=l;i<NV;i+=32){float g=-s.smooth[i];for(int j=0;j<NV;j++)g+=s.mass[i*NV+j]*v.a[j];for(int r=0;r<n;r++)g-=s.J[r*NV+i]*v.f[r];v.g[i]=g;gg+=g*g;}
   float norm=sqrtf(sumwarp(gg));if(uniform(norm<M(tolerance,0)*M(meaninertia,0)*NV))break;
-  for(int t=l;t<NV*NV;t+=32){int i=t/NV,j=t%NV;if(j<=i){float h=s.mass[t];for(int r=0;r<n;r++)h+=s.J[r*NV+i]*v.diag[r]*s.J[r*NV+j];v.H[t]=h;}}__syncwarp();
+  // Lower triangle only; inactive rows (diag==0) contribute nothing.
+  for(int t=l;t<NV*(NV+1)/2;t+=32){int i=tri_row(t),j=t-i*(i+1)/2;float h=s.mass[i*NV+j];for(int r=0;r<n;r++){float d=v.diag[r];if(d!=0.f)h+=s.J[r*NV+i]*d*s.J[r*NV+j];}v.H[i*NV+j]=h;}__syncwarp();
   if(l<NV)v.p[l]=-v.g[l];__syncwarp();chol_parallel(v.H,v.p,l);
   if(l==0){float dec=0;for(int i=0;i<NV;i++)dec-=v.g[i]*v.p[i];v.stop=norm<M(tolerance,0)*M(meaninertia,0)*NV || .5f*dec<M(tolerance,0)*M(meaninertia,0)*NV;}__syncwarp();
   if(uniform(v.stop))break;
