@@ -9,7 +9,7 @@ Use a separate environment from the upstream G1 package, which pins different de
 ```bash
 uv venv .venv-tasks --python 3.12
 uv pip install --python .venv-tasks/bin/python -r environments/requirements.txt
-export CUDA_ARCH=sm_89  # NVIDIA L4; set this to your GPU's architecture
+# CUDA_ARCH defaults to the architecture of cuda:0; set it (e.g. sm_89) to override.
 .venv-tasks/bin/python -m environments.run --task go2 --engine fused --num-envs 128
 .venv-tasks/bin/python -m environments.run --task h1 --engine fused --num-envs 128
 .venv-tasks/bin/python -m environments.run --task franka_reach --engine fused --num-envs 128
@@ -57,11 +57,23 @@ for task in go2 h1 franka_reach franka_lift; do
 done
 ```
 
-CUDA events measure one captured physics control interval from a restored nominal state. Reset, JIT compilation, controller preparation and observations are excluded. Both engines refresh contacts every integration: four 5 ms integrations for Go2, eight 2.5 ms integrations for H1, and eight 4.167 ms integrations for Franka. The fused solvers execute four launches per control interval, except reach, which uses one. A separate wall-clock number includes the minimal Python control loop and CPU state observations.
+CUDA events measure one captured physics control interval from a restored nominal state. Reset, JIT compilation, controller preparation and observations are excluded. Both engines refresh contacts every integration: four 5 ms integrations for Go2, eight 2.5 ms integrations for H1, and eight 4.167 ms integrations for Franka. The fused solvers execute four launches per control interval for Go2; H1, reach and lift use one, and Allegro uses eight. A separate wall-clock number includes the minimal Python control loop and CPU state observations.
 
 The [tiled plot](../docs/assets/task_speedups.svg) and [reference measurements](reference_speedups.json) cover all five tasks and five batch sizes on NVIDIA L4. The original four tasks span 1.48–10.17×. Allegro spans 1.72–4.70×. For the original four tasks, 18/20 behavioral comparisons pass; remaining failures: h1 / 512: reward std relative difference; h1 / 4,096: reward std relative difference. Locomotion rollouts last 1,000 controls and Franka rollouts 600, with unchanged controllers and acceptance thresholds. Every failure is retained. These results do not establish training equivalence. Lift has limited success in both engines; the thin 1×5×5 cm box has any-success frequency 7.5% with CUDA versus 15.4% native at 8,192 worlds.
 
 The original four standalone runners have nominal resets and absolute joint actions. Their timings are a separate experiment; they do not reproduce the randomized evaluation or supply the evaluation policies. The original task harness stays local. Earlier end-to-end results are outside the scope of this physics-only scaling study.
+
+Because the nominal reset starts the legged robots above the ground, `benchmark.py` times contact-free physics for them. `corpus_benchmark.py` first rolls out MuJoCo Warp with the nominal targets and times both engines from controls 16, 64 and 111, with identical Newton state and warm start:
+
+```bash
+.venv-tasks/bin/python -m environments.corpus_benchmark --task h1 --num-envs 4096 --output h1_4096.json
+```
+
+## RTX PRO 6000 measurements
+
+[RTX PRO 6000 results](reference_speedups_rtx_pro_6000.json) were measured on a MIG 1g.24gb partition of an RTX PRO 6000 Blackwell Server Edition: 46 of 188 SMs and 24 GB. Go2, H1 and Franka use `corpus_benchmark.py`; Allegro uses its own benchmark. The fused step is fastest at small batches; Go2 is 2.01× faster at 128 worlds and reach 6.06×. On this partition it is slower than MuJoCo Warp from 512 worlds for H1 and Allegro, from 2,048 for Go2 and from 4,096 for lift; reach remains 1.27× faster at 8,192. Shared scratch admits 5–10 resident worlds per SM (Go2 6, H1 5, reach 10, lift 6, Allegro 5), so larger batches run in sequential waves of a latency-bound per-world step. Allegro passes all five retention comparisons. These results do not describe a full RTX PRO 6000.
+
+Earlier revisions exited the Newton and line-search loops on per-lane float tests. When an optimized build evaluated these differently across lanes, the warp-wide shuffles and barriers after the loops lost synchronization. With nvcc 12.9 this produced non-finite state at the first constrained step for all five tasks, on both sm_89 and sm_120 builds. Lane 0 now decides every loop exit. The L4 results above predate this change.
 
 Regenerate the tiled figure with `uv run --no-project --with matplotlib python -m environments.plot_speedups`.
 

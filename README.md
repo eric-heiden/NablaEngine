@@ -8,6 +8,8 @@ Go2 locomotion, H1 locomotion, Franka reach, Franka lift and Allegro cube intera
 
 Across 128 / 512 / 2,048 / 4,096 / 8,192 worlds, the original four tasks run 1.48–10.17× faster than MuJoCo Warp. Allegro's ratios are **4.70×, 2.87×, 1.78×, 1.72×, 1.78×** using the same cuboid model in both engines. Both engines refresh contacts every integration. CUDA events exclude controls, observations and resets. [Exact results](environments/reference_speedups.json) retain every batch size.
 
+On a MIG 1g.24gb partition of an RTX PRO 6000 (46 of 188 SMs), the fused step is 1.4–6.1× faster at 128 worlds but slower than MuJoCo Warp at large batches for every task except reach; see [RTX PRO 6000 results](environments/README.md#rtx-pro-6000-measurements). A solver fix in this revision makes loop exits warp-uniform; earlier builds could produce non-finite state with nvcc 12.9.
+
 Allegro passes 5/5 paired retention checks over 20 seconds using Newton's animated-root, sinusoidal-finger example. Its hand, cube and floor are cuboids. Fourteen fixed pairs, six face axes and a four-point clipped manifold replace general collision handling; edge-cross axes are omitted. The solver keeps 12 contact slots and 64 constraint rows. Retention checks do not establish orientation-tracking or randomized robustness. [Allegro model, code and benchmark](environments/allegro/README.md).
 
 The other tasks retain 18/20 behavioral passes. H1 fails the reward-standard-deviation threshold at 512 and 4,096 worlds. Lift's thin-box success remains limited: 7.5% of 8,192 CUDA worlds ever succeed versus 15.4% native. The [reports page](https://reports.eric-heiden.com/) includes profiling, measured G1 comparisons and rollout videos. The original evaluation harness stays local.
