@@ -1,0 +1,509 @@
+{
+ "part": "ours",
+ "what": "nablaengine.jax_ffi under jax.jit",
+ "nworld": 4096,
+ "iterations": 10,
+ "substeps": 4,
+ "modes": {
+  "exact": {
+   "clamp_kv": 1,
+   "normal": 0
+  },
+  "interface": {
+   "clamp_kv": 0,
+   "normal": 3
+  }
+ },
+ "env": {
+  "python": "3.12.13",
+  "executable": ".dk_env/venv/bin/python",
+  "packages": {
+   "jax": "0.12.0.1",
+   "jaxlib": "0.12.0.1",
+   "jax-cuda12-plugin": "0.12.0.1",
+   "jax-cuda13-plugin": null,
+   "mujoco": "3.17.0",
+   "numpy": "2.5.4"
+  },
+  "cpu": {
+   "model": "AMD EPYC 9B45",
+   "logical_cpus": 192,
+   "allocated": 192,
+   "affinity": "0-191",
+   "omp_num_threads": "4",
+   "scheduler_cpu_counts": null,
+   "cpu_engine_threads": {
+    "threads": 192,
+    "rule": "len(os.sched_getaffinity(0))"
+   }
+  },
+  "gpu": {
+   "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+   "compute_cap": "12.0",
+   "driver": "595.58.03",
+   "memory": "[Insufficient Permissions]"
+  },
+  "env": {
+   "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+   "PAPER_BENCH_JOB_START": "1794003576",
+   "PAPER_BENCH_PARTS": "ours,mjw_native",
+   "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+   "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+   "DK_REPO": ".",
+   "DK_ENV": ".dk_env",
+   "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+   "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+   "DK_FIXTURES": "fixtures/mjlab"
+  },
+  "quick": false
+ },
+ "provenance": {
+  "date": "2026-11-06T22:23:51Z",
+  "nablaengine": {
+   "version": "0.1.0",
+   "commit": "7dd445d",
+   "dirty": false
+  },
+  "gpu": {
+   "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+   "compute_cap": "12.0",
+   "driver": "595.58.03"
+  },
+  "arch": "sm_120",
+  "nvcc": "12.9.86",
+  "python": "3.12.13",
+  "packages": {
+   "numpy": "2.5.4",
+   "mujoco": "3.17.0",
+   "mujoco-mjx": "3.17.0",
+   "jax": "0.12.0.1",
+   "jaxlib": "0.12.0.1",
+   "jax-cuda12-plugin": "0.12.0.1",
+   "warp-lang": "1.18.0+cu12",
+   "mujoco-warp": "3.17.0",
+   "scipy": "1.18.1"
+  },
+  "mujoco_warp": {
+   "version": "3.17.0",
+   "path": ".dk_env/venv/lib/python3.12/site-packages/mujoco_warp",
+   "switches": [],
+   "tree_sha256": "037432dd2be3aa3d079bd9da146fed58f3b19e102ffb3bd79f31fa4f1ad9bdfa",
+   "tested_tree": null
+  },
+  "environment": {
+   "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+   "DK_ENV": ".dk_env",
+   "DK_FIXTURES": "fixtures/mjlab",
+   "DK_REPO": ".",
+   "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+  },
+  "fixtures": "fixtures/mjlab"
+ },
+ "cells": {
+  "mf_s0/nw4096": {
+   "corpus": {
+    "name": "mf_s0",
+    "path": "benchmarks/data/mf_s0.npz",
+    "states": 4096,
+    "nworld": 4096,
+    "tiled": false
+   },
+   "compile_s": {
+    "fwd": 0.008,
+    "fwd_tape": 0.009,
+    "exact.bwd": 0.009,
+    "exact.vjp": 0.032,
+    "interface.bwd": 0.011,
+    "interface.vjp": 0.027
+   },
+   "fwd": {
+    "ms": {
+     "median": 3.99089,
+     "p10": 3.99064,
+     "p90": 3.99118,
+     "min": 3.9905,
+     "max": 3.99132,
+     "rounds": [
+      3.99085,
+      3.99097,
+      3.9905,
+      3.99089,
+      3.99132
+     ]
+    },
+    "n": 60,
+    "kept_rounds": 5,
+    "warmup_calls": 239,
+    "warmup_s": 1.002,
+    "latency_ms_median": 4.1295
+   },
+   "finite_fwd": true,
+   "fwd_tape": {
+    "ms": {
+     "median": 4.167,
+     "p10": 4.16637,
+     "p90": 4.16772,
+     "min": 4.16636,
+     "max": 4.16791,
+     "rounds": [
+      4.16638,
+      4.16636,
+      4.167,
+      4.16791,
+      4.16744
+     ]
+    },
+    "n": 58,
+    "kept_rounds": 5,
+    "warmup_calls": 231,
+    "warmup_s": 1.0,
+    "latency_ms_median": 4.29214
+   },
+   "forward_info": {
+    "newton_iterations_mean": 4.4091796875,
+    "contacts_mean": 6.6201171875,
+    "rows_max": 112,
+    "unsupported_worlds": 0
+   },
+   "exact": {
+    "bwd": {
+     "ms": {
+      "median": 1.85531,
+      "p10": 1.85514,
+      "p90": 1.85625,
+      "min": 1.85512,
+      "max": 1.85656,
+      "rounds": [
+       1.85512,
+       1.85531,
+       1.85518,
+       1.85578,
+       1.85656
+      ]
+     },
+     "n": 129,
+     "kept_rounds": 5,
+     "warmup_calls": 517,
+     "warmup_s": 1.002,
+     "latency_ms_median": 1.92604
+    },
+    "finite_bwd": true,
+    "vjp": {
+     "ms": {
+      "median": 6.01202,
+      "p10": 6.01007,
+      "p90": 6.03585,
+      "min": 6.00968,
+      "max": 6.05108,
+      "rounds": [
+       6.05108,
+       6.01202,
+       6.00968,
+       6.01065,
+       6.01301
+      ]
+     },
+     "n": 41,
+     "kept_rounds": 5,
+     "warmup_calls": 163,
+     "warmup_s": 1.006,
+     "latency_ms_median": 6.10355
+    }
+   },
+   "interface": {
+    "bwd": {
+     "ms": {
+      "median": 1.85747,
+      "p10": 1.85735,
+      "p90": 1.85811,
+      "min": 1.85734,
+      "max": 1.85817,
+      "rounds": [
+       1.85802,
+       1.85736,
+       1.85747,
+       1.85817,
+       1.85734
+      ]
+     },
+     "n": 130,
+     "kept_rounds": 5,
+     "warmup_calls": 521,
+     "warmup_s": 1.001,
+     "latency_ms_median": 1.9258
+    },
+    "finite_bwd": true,
+    "vjp": {
+     "ms": {
+      "median": 5.99882,
+      "p10": 5.99776,
+      "p90": 6.00146,
+      "min": 5.99754,
+      "max": 6.00273,
+      "rounds": [
+       5.99882,
+       5.99754,
+       5.99809,
+       6.00273,
+       5.99955
+      ]
+     },
+     "n": 41,
+     "kept_rounds": 5,
+     "warmup_calls": 163,
+     "warmup_s": 1.003,
+     "latency_ms_median": 6.11838
+    }
+   }
+  },
+  "mf_s1/nw4096": {
+   "corpus": {
+    "name": "mf_s1",
+    "path": "benchmarks/data/mf_s1.npz",
+    "states": 4096,
+    "nworld": 4096,
+    "tiled": false
+   },
+   "compile_s": {
+    "fwd": 0.0,
+    "fwd_tape": 0.001,
+    "exact.bwd": 0.013,
+    "exact.vjp": 0.03,
+    "interface.bwd": 0.014,
+    "interface.vjp": 0.024
+   },
+   "fwd": {
+    "ms": {
+     "median": 4.05411,
+     "p10": 4.05137,
+     "p90": 4.05657,
+     "min": 4.05045,
+     "max": 4.05804,
+     "rounds": [
+      4.05276,
+      4.05804,
+      4.05045,
+      4.05437,
+      4.05411
+     ]
+    },
+    "n": 60,
+    "kept_rounds": 5,
+    "warmup_calls": 240,
+    "warmup_s": 1.001,
+    "latency_ms_median": 4.18515
+   },
+   "finite_fwd": true,
+   "fwd_tape": {
+    "ms": {
+     "median": 4.20844,
+     "p10": 4.20705,
+     "p90": 4.20883,
+     "min": 4.20619,
+     "max": 4.20894,
+     "rounds": [
+      4.20835,
+      4.20844,
+      4.20619,
+      4.20866,
+      4.20894
+     ]
+    },
+    "n": 58,
+    "kept_rounds": 5,
+    "warmup_calls": 232,
+    "warmup_s": 1.004,
+    "latency_ms_median": 4.33206
+   },
+   "forward_info": {
+    "newton_iterations_mean": 4.436767578125,
+    "contacts_mean": 6.868408203125,
+    "rows_max": 114,
+    "unsupported_worlds": 0
+   },
+   "exact": {
+    "bwd": {
+     "ms": {
+      "median": 1.85447,
+      "p10": 1.85374,
+      "p90": 1.8552,
+      "min": 1.85345,
+      "max": 1.85555,
+      "rounds": [
+       1.85345,
+       1.85555,
+       1.85418,
+       1.85467,
+       1.85447
+      ]
+     },
+     "n": 130,
+     "kept_rounds": 5,
+     "warmup_calls": 521,
+     "warmup_s": 1.0,
+     "latency_ms_median": 1.94323
+    },
+    "finite_bwd": true,
+    "vjp": {
+     "ms": {
+      "median": 6.05856,
+      "p10": 6.05729,
+      "p90": 6.06088,
+      "min": 6.05709,
+      "max": 6.06168,
+      "rounds": [
+       6.05709,
+       6.05856,
+       6.0576,
+       6.06168,
+       6.05968
+      ]
+     },
+     "n": 40,
+     "kept_rounds": 5,
+     "warmup_calls": 161,
+     "warmup_s": 1.004,
+     "latency_ms_median": 6.18626
+    }
+   },
+   "interface": {
+    "bwd": {
+     "ms": {
+      "median": 1.85647,
+      "p10": 1.85615,
+      "p90": 1.85661,
+      "min": 1.85608,
+      "max": 1.85665,
+      "rounds": [
+       1.85624,
+       1.85665,
+       1.85608,
+       1.85655,
+       1.85647
+      ]
+     },
+     "n": 130,
+     "kept_rounds": 5,
+     "warmup_calls": 519,
+     "warmup_s": 1.0,
+     "latency_ms_median": 1.93496
+    },
+    "finite_bwd": true,
+    "vjp": {
+     "ms": {
+      "median": 6.04233,
+      "p10": 6.04099,
+      "p90": 6.04404,
+      "min": 6.04082,
+      "max": 6.04517,
+      "rounds": [
+       6.04233,
+       6.04082,
+       6.04236,
+       6.04517,
+       6.04124
+      ]
+     },
+     "n": 40,
+     "kept_rounds": 5,
+     "warmup_calls": 162,
+     "warmup_s": 1.006,
+     "latency_ms_median": 6.16571
+    }
+   }
+  }
+ },
+ "errors": {},
+ "init": {
+  "seconds": 0.644,
+  "built": false,
+  "key": "51de8db6d5b9e6f7e71c",
+  "arch": "sm_120",
+  "arch_flags": {
+   "forward": [
+    "-arch=compute_90",
+    "-code=sm_120"
+   ],
+   "adjoint": [
+    "-arch=compute_90",
+    "-code=sm_120"
+   ]
+  },
+  "forward_defines": [
+   "-DSPLIT_PRE_MINB=16"
+  ],
+  "front_end": {
+   "forward": "NVVM 7.0.1",
+   "adjoint": "NVVM 7.0.1"
+  },
+  "forward_unit": "dk_kv0_n3",
+  "library": "~/.cache/nablaengine/libdk_g1_sm_120_51de8db6d5b9e6f7e71c.so",
+  "cache_dir": "~/.cache/nablaengine",
+  "commit": "7dd445d",
+  "dirty": false,
+  "sizeof_adj": {
+   "dk_kv0_n0": 10108,
+   "dk_kv0_n1": 10108,
+   "dk_kv0_n2": 10108,
+   "dk_kv0_n3": 10108,
+   "dk_kv1_n0": 10108,
+   "dk_kv1_n1": 10108,
+   "dk_kv1_n2": 10108,
+   "dk_kv1_n3": 10108,
+   "dk_kv2_n0": 10228,
+   "dk_kv2_n1": 10228,
+   "dk_kv2_n2": 10228,
+   "dk_kv2_n3": 10228
+  }
+ },
+ "launch_info": {
+  "dk_kv0_n0": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv0_n1": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv0_n2": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv0_n3": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv1_n0": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv1_n1": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv1_n2": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv1_n3": {
+   "smem": 10108,
+   "worlds_per_sm": 9
+  },
+  "dk_kv2_n0": {
+   "smem": 10228,
+   "worlds_per_sm": 9
+  },
+  "dk_kv2_n1": {
+   "smem": 10228,
+   "worlds_per_sm": 9
+  },
+  "dk_kv2_n2": {
+   "smem": 10228,
+   "worlds_per_sm": 9
+  },
+  "dk_kv2_n3": {
+   "smem": 10228,
+   "worlds_per_sm": 9
+  }
+ }
+}

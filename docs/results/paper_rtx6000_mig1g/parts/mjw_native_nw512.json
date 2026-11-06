@@ -1,0 +1,191 @@
+{
+ "part": "mjw_native",
+ "nworld": 512,
+ "iterations": 10,
+ "substeps": 4,
+ "env": {
+  "python": "3.12.13",
+  "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+  "packages": {
+   "mujoco": "3.17.0",
+   "mujoco-warp": "3.17.0",
+   "warp-lang": "1.18.0",
+   "numpy": "2.5.4"
+  },
+  "cpu": {
+   "model": "AMD EPYC 9B45",
+   "logical_cpus": 192,
+   "allocated": 192,
+   "affinity": "0-191",
+   "omp_num_threads": "4",
+   "scheduler_cpu_counts": null,
+   "cpu_engine_threads": {
+    "threads": 192,
+    "rule": "len(os.sched_getaffinity(0))"
+   }
+  },
+  "gpu": {
+   "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+   "compute_cap": "12.0",
+   "driver": "595.58.03",
+   "memory": "[Insufficient Permissions]"
+  },
+  "env": {
+   "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+   "PAPER_BENCH_JOB_START": "1794003576",
+   "PAPER_BENCH_PARTS": "ours,mjw_native",
+   "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+   "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+   "DK_REPO": ".",
+   "DK_ENV": ".dk_env",
+   "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+   "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+   "DK_FIXTURES": "fixtures/mjlab"
+  },
+  "quick": false
+ },
+ "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+ "warp_version": "1.18.0",
+ "cells": {
+  "mf_s0/procedure/nw512": {
+   "corpus": {
+    "name": "mf_s0",
+    "path": "benchmarks/data/mf_s0.npz",
+    "states": 4096,
+    "nworld": 512,
+    "tiled": false
+   },
+   "capacity": "procedure",
+   "nconmax": 24,
+   "njmax": 128,
+   "naconmax": 11863,
+   "stats_last_substep": {
+    "overflow_bits_or": 1024,
+    "overflow_flags": [
+     "LS_ITERATIONS"
+    ],
+    "capacity_overflow": [],
+    "capacity_overflow_worlds": 0,
+    "nefc": {
+     "mean": 25.884765625,
+     "max": 112.0
+    },
+    "solver_niter": {
+     "mean": 3.318359375,
+     "max": 8.0
+    },
+    "nacon_total": 3418,
+    "finite_worlds": 512
+   },
+   "graph_ctrlstep": {
+    "ms": {
+     "median": 4.21796,
+     "p10": 4.21727,
+     "p90": 4.21842,
+     "min": 4.21697,
+     "max": 4.21852,
+     "rounds": [
+      4.21697,
+      4.21796,
+      4.21771,
+      4.21852,
+      4.21828
+     ]
+    },
+    "n": 59,
+    "kept_rounds": 5,
+    "warmup_calls": 237,
+    "warmup_s": 1.001,
+    "latency_ms_median": 4.22288
+   },
+   "first_call_s": 0.49,
+   "capture_s": 0.021,
+   "put_model_s": 0.094
+  },
+  "mf_s0/matched/nw512": {
+   "corpus": {
+    "name": "mf_s0",
+    "path": "benchmarks/data/mf_s0.npz",
+    "states": 4096,
+    "nworld": 512,
+    "tiled": false
+   },
+   "capacity": "matched",
+   "nconmax": 64,
+   "njmax": 192,
+   "naconmax": 32768,
+   "stats_last_substep": {
+    "overflow_bits_or": 1024,
+    "overflow_flags": [
+     "LS_ITERATIONS"
+    ],
+    "capacity_overflow": [],
+    "capacity_overflow_worlds": 0,
+    "nefc": {
+     "mean": 25.884765625,
+     "max": 112.0
+    },
+    "solver_niter": {
+     "mean": 3.318359375,
+     "max": 8.0
+    },
+    "nacon_total": 3418,
+    "finite_worlds": 512
+   },
+   "graph_ctrlstep": {
+    "ms": {
+     "median": 4.28688,
+     "p10": 4.28634,
+     "p90": 4.28734,
+     "min": 4.28601,
+     "max": 4.28748,
+     "rounds": [
+      4.28688,
+      4.28713,
+      4.28748,
+      4.28685,
+      4.28601
+     ]
+    },
+    "n": 58,
+    "kept_rounds": 5,
+    "warmup_calls": 234,
+    "warmup_s": 1.003,
+    "latency_ms_median": 4.28304
+   },
+   "first_call_s": 0.021,
+   "capture_s": 0.012,
+   "put_model_s": 0.094
+  }
+ },
+ "errors": {},
+ "warp_cuda_toolkit": "13.4",
+ "warp_cuda_driver": "13.2",
+ "opt": {
+  "iterations": "10",
+  "ls_iterations": "8",
+  "tolerance": "[1.e-06]",
+  "ls_tolerance": "[0.01]",
+  "solver": "2",
+  "cone": "0",
+  "integrator": "3",
+  "graph_conditional": "True",
+  "warn_overflow": "2559"
+ },
+ "default_capacity": {
+  "nconmax": 48,
+  "njmax": 64
+ },
+ "procedure_capacity": {
+  "nconmax": 24,
+  "naconmax": 11863,
+  "njmax": 128,
+  "source": "benchmarks/data/mjw_capacity.json",
+  "inputs": {
+   "pool_mean_max": 18.487548828125,
+   "contacts_world_max": 30,
+   "rows_max": 114,
+   "margin": 0.25
+  }
+ }
+}

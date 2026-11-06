@@ -1,0 +1,5448 @@
+{
+ "schema": "paper-bench/1",
+ "kit": "scripts/paper_bench",
+ "started": "2026-11-06T22:20:01Z",
+ "quick": false,
+ "out_dir": "runs/paper_rtx6000_mig",
+ "setup_status": "ok",
+ "budget_min": 53.0,
+ "corpora": [
+  "mf_s0",
+  "mf_s1"
+ ],
+ "sweep": [
+  128,
+  512,
+  1024,
+  2048,
+  4096,
+  8192,
+  16384
+ ],
+ "corpus_kind": {
+  "mf_s0": "benchmark",
+  "mf_s1": "benchmark"
+ },
+ "headline_missing": [],
+ "job_start_includes_setup": true,
+ "gpu_index_for_nvidia_smi": "first CUDA_VISIBLE_DEVICES entry (CUDA_DEVICE_ORDER=PCI_BUS_ID)",
+ "parts": {
+  "ours": {
+   "env": "dev",
+   "python": ".dk_env/venv/bin/python",
+   "argv": [
+    "scripts/paper_bench/ours.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/ours.json",
+    "--corpora",
+    "mf_s0,mf_s1",
+    "--sweep",
+    "128,512,1024,2048,4096,8192,16384"
+   ],
+   "started": "2026-11-06T22:20:02Z",
+   "log": "runs/paper_rtx6000_mig/logs/ours.log",
+   "timeout_s": 900,
+   "other_gpu_processes": [],
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 100.9,
+   "other_gpu_processes_after": [],
+   "gpu_samples": {
+    "samples": 1006,
+    "busy_samples": 1006,
+    "sm_mhz_median": 2385.0,
+    "sm_mhz_min": 180.0,
+    "sm_mhz_max": 2422.0,
+    "power_w_max": 230.33,
+    "temp_c_max": 45.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/ours.smi.csv"
+   },
+   "result": {
+    "part": "ours",
+    "what": "nablaengine.jax_ffi under jax.jit",
+    "nworld": 4096,
+    "iterations": 10,
+    "substeps": 4,
+    "modes": {
+     "exact": {
+      "clamp_kv": 1,
+      "normal": 0
+     },
+     "interface": {
+      "clamp_kv": 0,
+      "normal": 3
+     }
+    },
+    "env": {
+     "python": "3.12.13",
+     "executable": ".dk_env/venv/bin/python",
+     "packages": {
+      "jax": "0.12.0.1",
+      "jaxlib": "0.12.0.1",
+      "jax-cuda12-plugin": "0.12.0.1",
+      "jax-cuda13-plugin": null,
+      "mujoco": "3.17.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "provenance": {
+     "date": "2026-11-06T22:20:02Z",
+     "nablaengine": {
+      "version": "0.1.0",
+      "commit": "7dd445d",
+      "dirty": false
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03"
+     },
+     "arch": "sm_120",
+     "nvcc": "12.9.86",
+     "python": "3.12.13",
+     "packages": {
+      "numpy": "2.5.4",
+      "mujoco": "3.17.0",
+      "mujoco-mjx": "3.17.0",
+      "jax": "0.12.0.1",
+      "jaxlib": "0.12.0.1",
+      "jax-cuda12-plugin": "0.12.0.1",
+      "warp-lang": "1.18.0+cu12",
+      "mujoco-warp": "3.17.0",
+      "scipy": "1.18.1"
+     },
+     "mujoco_warp": {
+      "version": "3.17.0",
+      "path": ".dk_env/venv/lib/python3.12/site-packages/mujoco_warp",
+      "switches": [],
+      "tree_sha256": "037432dd2be3aa3d079bd9da146fed58f3b19e102ffb3bd79f31fa4f1ad9bdfa",
+      "tested_tree": null
+     },
+     "environment": {
+      "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+      "DK_ENV": ".dk_env",
+      "DK_FIXTURES": "fixtures/mjlab",
+      "DK_REPO": ".",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+     },
+     "fixtures": "fixtures/mjlab"
+    },
+    "cells": {
+     "mf_s0/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "compile_s": {
+       "fwd": 0.008,
+       "fwd_tape": 0.009,
+       "exact.bwd": 0.008,
+       "exact.vjp": 0.031,
+       "exact.jac_bwd": 0.051,
+       "exact.jac": 0.049,
+       "interface.bwd": 0.015,
+       "interface.vjp": 0.026,
+       "interface.jac_bwd": 0.046,
+       "interface.jac": 0.047
+      },
+      "fwd": {
+       "ms": {
+        "median": 4.02853,
+        "p10": 4.02791,
+        "p90": 4.02998,
+        "min": 4.02781,
+        "max": 4.03051,
+        "rounds": [
+         4.02853,
+         4.02917,
+         4.03051,
+         4.02781,
+         4.02805
+        ]
+       },
+       "n": 60,
+       "kept_rounds": 5,
+       "warmup_calls": 239,
+       "warmup_s": 1.004,
+       "latency_ms_median": 4.16579
+      },
+      "finite_fwd": true,
+      "fwd_tape": {
+       "ms": {
+        "median": 4.20506,
+        "p10": 4.20429,
+        "p90": 4.20598,
+        "min": 4.20403,
+        "max": 4.20636,
+        "rounds": [
+         4.20403,
+         4.20468,
+         4.20506,
+         4.20636,
+         4.20541
+        ]
+       },
+       "n": 57,
+       "kept_rounds": 5,
+       "warmup_calls": 230,
+       "warmup_s": 1.001,
+       "latency_ms_median": 4.34903
+      },
+      "forward_info": {
+       "newton_iterations_mean": 4.4091796875,
+       "contacts_mean": 6.6201171875,
+       "rows_max": 112,
+       "unsupported_worlds": 0
+      },
+      "exact": {
+       "bwd": {
+        "ms": {
+         "median": 1.84555,
+         "p10": 1.84491,
+         "p90": 1.84585,
+         "min": 1.84482,
+         "max": 1.84605,
+         "rounds": [
+          1.84605,
+          1.84555,
+          1.84482,
+          1.84556,
+          1.84505
+         ]
+        },
+        "n": 129,
+        "kept_rounds": 5,
+        "warmup_calls": 516,
+        "warmup_s": 1.0,
+        "latency_ms_median": 1.95351
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.1004,
+         "p10": 6.0985,
+         "p90": 6.10265,
+         "min": 6.09845,
+         "max": 6.10284,
+         "rounds": [
+          6.10235,
+          6.1004,
+          6.09857,
+          6.10284,
+          6.09845
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 160,
+        "warmup_s": 1.001,
+        "latency_ms_median": 6.23543
+       },
+       "jac_bwd": {
+        "ms": {
+         "median": 132.8029,
+         "p10": 132.76438,
+         "p90": 132.86855,
+         "min": 132.74998,
+         "max": 132.90596,
+         "rounds": [
+          132.90596,
+          132.81243,
+          132.78598,
+          132.74998,
+          132.8029
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 8,
+        "warmup_s": 1.07,
+        "latency_ms_median": 132.91126,
+        "us_per_world": 32.42258,
+        "backward_calls": 71
+       },
+       "jac": {
+        "ms": {
+         "median": 137.06258,
+         "p10": 136.94959,
+         "p90": 137.08105,
+         "min": 136.90952,
+         "max": 137.08845,
+         "rounds": [
+          137.08845,
+          137.06258,
+          137.06995,
+          136.90952,
+          137.0097
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 8,
+        "warmup_s": 1.098,
+        "latency_ms_median": 137.16202,
+        "us_per_world": 33.46254,
+        "backward_calls": 71
+       }
+      },
+      "interface": {
+       "bwd": {
+        "ms": {
+         "median": 1.85722,
+         "p10": 1.85688,
+         "p90": 1.88319,
+         "min": 1.85678,
+         "max": 1.90043,
+         "rounds": [
+          1.85722,
+          1.85678,
+          1.85732,
+          1.90043,
+          1.85702
+         ]
+        },
+        "n": 129,
+        "kept_rounds": 5,
+        "warmup_calls": 518,
+        "warmup_s": 1.0,
+        "latency_ms_median": 1.93184
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.08813,
+         "p10": 6.08592,
+         "p90": 6.09542,
+         "min": 6.08513,
+         "max": 6.09998,
+         "rounds": [
+          6.09998,
+          6.08813,
+          6.0871,
+          6.08859,
+          6.08513
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 160,
+        "warmup_s": 1.001,
+        "latency_ms_median": 6.21652
+       },
+       "jac_bwd": {
+        "ms": {
+         "median": 132.90336,
+         "p10": 132.89594,
+         "p90": 132.93723,
+         "min": 132.8928,
+         "max": 132.95903,
+         "rounds": [
+          132.90336,
+          132.90454,
+          132.95903,
+          132.90065,
+          132.8928
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 8,
+        "warmup_s": 1.064,
+        "latency_ms_median": 132.96732,
+        "us_per_world": 32.44711,
+        "backward_calls": 71
+       },
+       "jac": {
+        "ms": {
+         "median": 137.17173,
+         "p10": 137.14082,
+         "p90": 137.19972,
+         "min": 137.13355,
+         "max": 137.20563,
+         "rounds": [
+          137.19085,
+          137.20563,
+          137.13355,
+          137.15172,
+          137.17173
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 8,
+        "warmup_s": 1.098,
+        "latency_ms_median": 137.18438,
+        "us_per_world": 33.48919,
+        "backward_calls": 71
+       }
+      }
+     },
+     "mf_s1/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "compile_s": {
+       "fwd": 0.0,
+       "fwd_tape": 0.0,
+       "exact.bwd": 0.013,
+       "exact.vjp": 0.026,
+       "exact.jac_bwd": 0.045,
+       "exact.jac": 0.049,
+       "interface.bwd": 0.013,
+       "interface.vjp": 0.027,
+       "interface.jac_bwd": 0.044,
+       "interface.jac": 0.05
+      },
+      "fwd": {
+       "ms": {
+        "median": 4.12836,
+        "p10": 4.12757,
+        "p90": 4.12964,
+        "min": 4.12749,
+        "max": 4.13008,
+        "rounds": [
+         4.12768,
+         4.12836,
+         4.12899,
+         4.12749,
+         4.13008
+        ]
+       },
+       "n": 59,
+       "kept_rounds": 5,
+       "warmup_calls": 235,
+       "warmup_s": 1.003,
+       "latency_ms_median": 4.26823
+      },
+      "finite_fwd": true,
+      "fwd_tape": {
+       "ms": {
+        "median": 4.30394,
+        "p10": 4.30099,
+        "p90": 4.30995,
+        "min": 4.30076,
+        "max": 4.31009,
+        "rounds": [
+         4.30133,
+         4.30394,
+         4.31009,
+         4.30076,
+         4.30973
+        ]
+       },
+       "n": 57,
+       "kept_rounds": 5,
+       "warmup_calls": 227,
+       "warmup_s": 1.004,
+       "latency_ms_median": 4.41752
+      },
+      "forward_info": {
+       "newton_iterations_mean": 4.436767578125,
+       "contacts_mean": 6.868408203125,
+       "rows_max": 114,
+       "unsupported_worlds": 0
+      },
+      "exact": {
+       "bwd": {
+        "ms": {
+         "median": 1.85851,
+         "p10": 1.85558,
+         "p90": 1.97659,
+         "min": 1.85541,
+         "max": 2.05455,
+         "rounds": [
+          1.85541,
+          1.85965,
+          1.85851,
+          1.85582,
+          2.05455
+         ]
+        },
+        "n": 127,
+        "kept_rounds": 5,
+        "warmup_calls": 508,
+        "warmup_s": 1.001,
+        "latency_ms_median": 2.02095
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 7.12949,
+         "p10": 7.12734,
+         "p90": 7.13364,
+         "min": 7.12649,
+         "max": 7.13482,
+         "rounds": [
+          7.12649,
+          7.12949,
+          7.13186,
+          7.13482,
+          7.12862
+         ]
+        },
+        "n": 35,
+        "kept_rounds": 5,
+        "warmup_calls": 142,
+        "warmup_s": 1.004,
+        "latency_ms_median": 7.02179
+       },
+       "jac_bwd": {
+        "ms": {
+         "median": 149.83802,
+         "p10": 149.77664,
+         "p90": 149.89254,
+         "min": 149.76731,
+         "max": 149.92667,
+         "rounds": [
+          149.92667,
+          149.76731,
+          149.79065,
+          149.83802,
+          149.84136
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 7,
+        "warmup_s": 1.05,
+        "latency_ms_median": 149.88578,
+        "us_per_world": 36.58155,
+        "backward_calls": 71
+       },
+       "jac": {
+        "ms": {
+         "median": 154.88379,
+         "p10": 154.72338,
+         "p90": 154.95046,
+         "min": 154.68084,
+         "max": 154.99472,
+         "rounds": [
+          154.88379,
+          154.99472,
+          154.88408,
+          154.68084,
+          154.78719
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 7,
+        "warmup_s": 1.086,
+        "latency_ms_median": 154.96444,
+        "us_per_world": 37.81343,
+        "backward_calls": 71
+       }
+      },
+      "interface": {
+       "bwd": {
+        "ms": {
+         "median": 2.09022,
+         "p10": 2.08868,
+         "p90": 2.09052,
+         "min": 2.08861,
+         "max": 2.09053,
+         "rounds": [
+          2.09022,
+          2.09053,
+          2.09052,
+          2.08861,
+          2.08879
+         ]
+        },
+        "n": 122,
+        "kept_rounds": 5,
+        "warmup_calls": 489,
+        "warmup_s": 1.001,
+        "latency_ms_median": 2.04086
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 7.13181,
+         "p10": 7.1283,
+         "p90": 7.13739,
+         "min": 7.1276,
+         "max": 7.13981,
+         "rounds": [
+          7.13181,
+          7.13981,
+          7.13376,
+          7.12935,
+          7.1276
+         ]
+        },
+        "n": 35,
+        "kept_rounds": 5,
+        "warmup_calls": 142,
+        "warmup_s": 1.003,
+        "latency_ms_median": 7.07508
+       },
+       "jac_bwd": {
+        "ms": {
+         "median": 150.01805,
+         "p10": 149.85095,
+         "p90": 150.05616,
+         "min": 149.79976,
+         "max": 150.07217,
+         "rounds": [
+          150.03213,
+          149.79976,
+          150.07217,
+          149.92775,
+          150.01805
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 7,
+        "warmup_s": 1.052,
+        "latency_ms_median": 150.00547,
+        "us_per_world": 36.6255,
+        "backward_calls": 71
+       },
+       "jac": {
+        "ms": {
+         "median": 155.00363,
+         "p10": 154.9891,
+         "p90": 155.05196,
+         "min": 154.98811,
+         "max": 155.07952,
+         "rounds": [
+          155.01061,
+          154.98811,
+          154.99059,
+          155.00363,
+          155.07952
+         ]
+        },
+        "n": 2,
+        "kept_rounds": 5,
+        "warmup_calls": 7,
+        "warmup_s": 1.087,
+        "latency_ms_median": 155.12721,
+        "us_per_world": 37.84268,
+        "backward_calls": 71
+       }
+      }
+     },
+     "sweep/mf_s0/nw128": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 128,
+       "tiled": false
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.007,
+       "vjp": 0.025
+      },
+      "fwd": {
+       "ms": {
+        "median": 0.64623,
+        "p10": 0.64619,
+        "p90": 0.64643,
+        "min": 0.64617,
+        "max": 0.64653,
+        "rounds": [
+         0.64622,
+         0.64617,
+         0.64628,
+         0.64653,
+         0.64623
+        ]
+       },
+       "n": 200,
+       "kept_rounds": 5,
+       "warmup_calls": 1331,
+       "warmup_s": 1.0,
+       "latency_ms_median": 0.74254
+      },
+      "vjp": {
+       "ms": {
+        "median": 0.8388,
+        "p10": 0.83872,
+        "p90": 0.83916,
+        "min": 0.83868,
+        "max": 0.83928,
+        "rounds": [
+         0.8388,
+         0.83898,
+         0.83928,
+         0.83879,
+         0.83868
+        ]
+       },
+       "n": 200,
+       "kept_rounds": 5,
+       "warmup_calls": 1085,
+       "warmup_s": 1.001,
+       "latency_ms_median": 0.92013
+      }
+     },
+     "sweep/mf_s0/nw512": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 512,
+       "tiled": false
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.007,
+       "vjp": 0.026
+      },
+      "fwd": {
+       "ms": {
+        "median": 0.89341,
+        "p10": 0.89326,
+        "p90": 0.8995,
+        "min": 0.89323,
+        "max": 0.90327,
+        "rounds": [
+         0.89341,
+         0.89386,
+         0.90327,
+         0.89323,
+         0.89331
+        ]
+       },
+       "n": 200,
+       "kept_rounds": 5,
+       "warmup_calls": 1034,
+       "warmup_s": 1.0,
+       "latency_ms_median": 0.96528
+      },
+      "vjp": {
+       "ms": {
+        "median": 1.31398,
+        "p10": 1.31344,
+        "p90": 1.31442,
+        "min": 1.31334,
+        "max": 1.31451,
+        "rounds": [
+         1.31451,
+         1.31334,
+         1.31358,
+         1.31428,
+         1.31398
+        ]
+       },
+       "n": 184,
+       "kept_rounds": 5,
+       "warmup_calls": 737,
+       "warmup_s": 1.001,
+       "latency_ms_median": 1.34705
+      }
+     },
+     "sweep/mf_s0/nw1024": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 1024,
+       "tiled": false
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.007,
+       "vjp": 0.025
+      },
+      "fwd": {
+       "ms": {
+        "median": 1.33979,
+        "p10": 1.3387,
+        "p90": 1.34009,
+        "min": 1.33838,
+        "max": 1.34026,
+        "rounds": [
+         1.33983,
+         1.34026,
+         1.33916,
+         1.33979,
+         1.33838
+        ]
+       },
+       "n": 183,
+       "kept_rounds": 5,
+       "warmup_calls": 731,
+       "warmup_s": 1.001,
+       "latency_ms_median": 1.37987
+      },
+      "vjp": {
+       "ms": {
+        "median": 2.01462,
+        "p10": 2.01052,
+        "p90": 2.016,
+        "min": 2.00915,
+        "max": 2.01627,
+        "rounds": [
+         2.01462,
+         2.01627,
+         2.00915,
+         2.01256,
+         2.01559
+        ]
+       },
+       "n": 128,
+       "kept_rounds": 5,
+       "warmup_calls": 513,
+       "warmup_s": 1.0,
+       "latency_ms_median": 1.94405
+      }
+     },
+     "sweep/mf_s0/nw2048": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 2048,
+       "tiled": false
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.007,
+       "vjp": 0.025
+      },
+      "fwd": {
+       "ms": {
+        "median": 2.407,
+        "p10": 2.40249,
+        "p90": 2.41065,
+        "min": 2.39952,
+        "max": 2.4129,
+        "rounds": [
+         2.40727,
+         2.407,
+         2.40693,
+         2.39952,
+         2.4129
+        ]
+       },
+       "n": 105,
+       "kept_rounds": 5,
+       "warmup_calls": 421,
+       "warmup_s": 1.002,
+       "latency_ms_median": 2.32633
+      },
+      "vjp": {
+       "ms": {
+        "median": 3.62654,
+        "p10": 3.62239,
+        "p90": 3.63394,
+        "min": 3.62049,
+        "max": 3.63445,
+        "rounds": [
+         3.62654,
+         3.63318,
+         3.62524,
+         3.62049,
+         3.63445
+        ]
+       },
+       "n": 67,
+       "kept_rounds": 5,
+       "warmup_calls": 269,
+       "warmup_s": 1.001,
+       "latency_ms_median": 3.73176
+      }
+     },
+     "sweep/mf_s0/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.0,
+       "vjp": 0.027
+      },
+      "fwd": {
+       "ms": {
+        "median": 4.69978,
+        "p10": 4.69855,
+        "p90": 4.70469,
+        "min": 4.6982,
+        "max": 4.70501,
+        "rounds": [
+         4.6982,
+         4.69978,
+         4.70501,
+         4.7042,
+         4.69906
+        ]
+       },
+       "n": 54,
+       "kept_rounds": 5,
+       "warmup_calls": 216,
+       "warmup_s": 1.0,
+       "latency_ms_median": 4.65555
+      },
+      "vjp": {
+       "ms": {
+        "median": 7.03993,
+        "p10": 7.02665,
+        "p90": 7.048,
+        "min": 7.01899,
+        "max": 7.04888,
+        "rounds": [
+         7.03993,
+         7.04888,
+         7.01899,
+         7.04667,
+         7.03814
+        ]
+       },
+       "n": 36,
+       "kept_rounds": 5,
+       "warmup_calls": 145,
+       "warmup_s": 1.006,
+       "latency_ms_median": 6.72361
+      }
+     },
+     "sweep/mf_s0/nw8192": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 8192,
+       "tiled": true
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.007,
+       "vjp": 0.051
+      },
+      "fwd": {
+       "ms": {
+        "median": 9.19295,
+        "p10": 9.17387,
+        "p90": 9.2083,
+        "min": 9.16435,
+        "max": 9.2156,
+        "rounds": [
+         9.16435,
+         9.19295,
+         9.18815,
+         9.19735,
+         9.2156
+        ]
+       },
+       "n": 27,
+       "kept_rounds": 5,
+       "warmup_calls": 109,
+       "warmup_s": 1.001,
+       "latency_ms_median": 9.13239
+      },
+      "vjp": {
+       "ms": {
+        "median": 13.66234,
+        "p10": 13.65393,
+        "p90": 13.66701,
+        "min": 13.64928,
+        "max": 13.66962,
+        "rounds": [
+         13.6631,
+         13.66962,
+         13.66234,
+         13.66091,
+         13.64928
+        ]
+       },
+       "n": 18,
+       "kept_rounds": 5,
+       "warmup_calls": 74,
+       "warmup_s": 1.008,
+       "latency_ms_median": 13.56791
+      }
+     },
+     "sweep/mf_s0/nw16384": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 16384,
+       "tiled": true
+      },
+      "mode": "exact",
+      "compile_s": {
+       "fwd": 0.007,
+       "vjp": 0.025
+      },
+      "fwd": {
+       "ms": {
+        "median": 17.91149,
+        "p10": 17.90942,
+        "p90": 18.07161,
+        "min": 17.90874,
+        "max": 18.08371,
+        "rounds": [
+         18.05346,
+         18.08371,
+         17.91045,
+         17.91149,
+         17.90874
+        ]
+       },
+       "n": 14,
+       "kept_rounds": 5,
+       "warmup_calls": 55,
+       "warmup_s": 1.001,
+       "latency_ms_median": 18.00566
+      },
+      "vjp": {
+       "ms": {
+        "median": 26.76354,
+        "p10": 26.74574,
+        "p90": 26.77704,
+        "min": 26.74192,
+        "max": 26.78337,
+        "rounds": [
+         26.76354,
+         26.74192,
+         26.75147,
+         26.76756,
+         26.78337
+        ]
+       },
+       "n": 9,
+       "kept_rounds": 5,
+       "warmup_calls": 38,
+       "warmup_s": 1.021,
+       "latency_ms_median": 26.72814
+      }
+     }
+    },
+    "errors": {},
+    "init": {
+     "seconds": 0.677,
+     "built": false,
+     "key": "51de8db6d5b9e6f7e71c",
+     "arch": "sm_120",
+     "arch_flags": {
+      "forward": [
+       "-arch=compute_90",
+       "-code=sm_120"
+      ],
+      "adjoint": [
+       "-arch=compute_90",
+       "-code=sm_120"
+      ]
+     },
+     "forward_defines": [
+      "-DSPLIT_PRE_MINB=16"
+     ],
+     "front_end": {
+      "forward": "NVVM 7.0.1",
+      "adjoint": "NVVM 7.0.1"
+     },
+     "forward_unit": "dk_kv0_n3",
+     "library": "~/.cache/nablaengine/libdk_g1_sm_120_51de8db6d5b9e6f7e71c.so",
+     "cache_dir": "~/.cache/nablaengine",
+     "commit": "7dd445d",
+     "dirty": false,
+     "sizeof_adj": {
+      "dk_kv0_n0": 10108,
+      "dk_kv0_n1": 10108,
+      "dk_kv0_n2": 10108,
+      "dk_kv0_n3": 10108,
+      "dk_kv1_n0": 10108,
+      "dk_kv1_n1": 10108,
+      "dk_kv1_n2": 10108,
+      "dk_kv1_n3": 10108,
+      "dk_kv2_n0": 10228,
+      "dk_kv2_n1": 10228,
+      "dk_kv2_n2": 10228,
+      "dk_kv2_n3": 10228
+     }
+    },
+    "launch_info": {
+     "dk_kv0_n0": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n1": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n2": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n3": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n0": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n1": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n2": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n3": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n0": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n1": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n2": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n3": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/ours.json"
+  },
+  "mjw_native": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native.json",
+    "--corpora",
+    "mf_s0,mf_s1"
+   ],
+   "started": "2026-11-06T22:21:43Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native.log",
+   "timeout_s": 600,
+   "other_gpu_processes": [],
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 37.0,
+   "other_gpu_processes_after": [],
+   "gpu_samples": {
+    "samples": 369,
+    "busy_samples": 369,
+    "sm_mhz_median": 2355.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2385.0,
+    "power_w_max": 187.77,
+    "temp_c_max": 43.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 4096,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 94687,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.28759765625,
+        "max": 10.0
+       },
+       "nacon_total": 27117,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.44859,
+        "p10": 15.44822,
+        "p90": 15.45032,
+        "min": 15.44817,
+        "max": 15.4506,
+        "rounds": [
+         15.4506,
+         15.44817,
+         15.44859,
+         15.4483,
+         15.44991
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 65,
+       "warmup_s": 1.006,
+       "latency_ms_median": 15.4509
+      },
+      "first_call_s": 24.048,
+      "capture_s": 0.037,
+      "put_model_s": 0.16
+     },
+     "mf_s1/procedure/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 94687,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 26.466796875,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.34033203125,
+        "max": 10.0
+       },
+       "nacon_total": 28130,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.55715,
+        "p10": 15.55519,
+        "p90": 15.55844,
+        "min": 15.5546,
+        "max": 15.55856,
+        "rounds": [
+         15.55715,
+         15.5546,
+         15.55827,
+         15.55856,
+         15.55608
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 65,
+       "warmup_s": 1.011,
+       "latency_ms_median": 15.56573
+      },
+      "first_call_s": 24.048,
+      "capture_s": 0.037,
+      "put_model_s": 0.16
+     },
+     "mf_s0/matched/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 262144,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.2880859375,
+        "max": 10.0
+       },
+       "nacon_total": 27117,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.72841,
+        "p10": 15.7245,
+        "p90": 15.73429,
+        "min": 15.72366,
+        "max": 15.73541,
+        "rounds": [
+         15.73541,
+         15.72841,
+         15.7326,
+         15.72366,
+         15.72576
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 64,
+       "warmup_s": 1.008,
+       "latency_ms_median": 15.72301
+      },
+      "first_call_s": 0.028,
+      "capture_s": 0.012,
+      "put_model_s": 0.16
+     },
+     "mf_s1/matched/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 262144,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 26.4658203125,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.34033203125,
+        "max": 10.0
+       },
+       "nacon_total": 28129,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.82876,
+        "p10": 15.82644,
+        "p90": 15.83112,
+        "min": 15.82542,
+        "max": 15.83148,
+        "rounds": [
+         15.82542,
+         15.83059,
+         15.82876,
+         15.83148,
+         15.82797
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 64,
+       "warmup_s": 1.013,
+       "latency_ms_median": 15.82901
+      },
+      "first_call_s": 0.028,
+      "capture_s": 0.012,
+      "put_model_s": 0.16
+     },
+     "mf_s0/default/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "default",
+      "nconmax": 48,
+      "njmax": 64,
+      "naconmax": 196608,
+      "stats_last_substep": {
+       "overflow_bits_or": 1537,
+       "overflow_flags": [
+        "NEFC",
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [
+        "NEFC"
+       ],
+       "capacity_overflow_worlds": 317,
+       "nefc": {
+        "mean": 25.561279296875,
+        "max": 115.0
+       },
+       "solver_niter": {
+        "mean": 3.276123046875,
+        "max": 9.0
+       },
+       "nacon_total": 27229,
+       "finite_worlds": 4096
+      },
+      "skipped": "capacity overflow ['NEFC'] (not timed)"
+     },
+     "mf_s1/default/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "default",
+      "nconmax": 48,
+      "njmax": 64,
+      "naconmax": 196608,
+      "stats_last_substep": {
+       "overflow_bits_or": 1537,
+       "overflow_flags": [
+        "NEFC",
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [
+        "NEFC"
+       ],
+       "capacity_overflow_worlds": 378,
+       "nefc": {
+        "mean": 26.5439453125,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.336181640625,
+        "max": 9.0
+       },
+       "nacon_total": 28219,
+       "finite_worlds": 4096
+      },
+      "skipped": "capacity overflow ['NEFC'] (not timed)"
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 94687,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native.json"
+  },
+  "mjw_native_nw128": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native_nw128.json",
+    "--corpora",
+    "mf_s0",
+    "--nworld",
+    "128",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:22:20Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native_nw128.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 7.3,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 73,
+    "busy_samples": 73,
+    "sm_mhz_median": 2370.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2377.0,
+    "power_w_max": 134.52,
+    "temp_c_max": 39.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native_nw128.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 128,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw128": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 128,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 2989,
+      "stats_last_substep": {
+       "overflow_bits_or": 1024,
+       "overflow_flags": [
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 24.2734375,
+        "max": 84.0
+       },
+       "solver_niter": {
+        "mean": 3.140625,
+        "max": 8.0
+       },
+       "nacon_total": 798,
+       "finite_worlds": 128
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 3.31369,
+        "p10": 3.31308,
+        "p90": 3.31418,
+        "min": 3.31288,
+        "max": 3.31444,
+        "rounds": [
+         3.31288,
+         3.31338,
+         3.3138,
+         3.31369,
+         3.31444
+        ]
+       },
+       "n": 75,
+       "kept_rounds": 5,
+       "warmup_calls": 302,
+       "warmup_s": 1.002,
+       "latency_ms_median": 3.31281
+      },
+      "first_call_s": 0.496,
+      "capture_s": 0.022,
+      "put_model_s": 0.093
+     },
+     "mf_s0/matched/nw128": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 128,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 8192,
+      "stats_last_substep": {
+       "overflow_bits_or": 1024,
+       "overflow_flags": [
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 24.2734375,
+        "max": 84.0
+       },
+       "solver_niter": {
+        "mean": 3.140625,
+        "max": 8.0
+       },
+       "nacon_total": 798,
+       "finite_worlds": 128
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 3.31093,
+        "p10": 3.31055,
+        "p90": 3.31176,
+        "min": 3.3103,
+        "max": 3.31228,
+        "rounds": [
+         3.3103,
+         3.31228,
+         3.31098,
+         3.31093,
+         3.31092
+        ]
+       },
+       "n": 75,
+       "kept_rounds": 5,
+       "warmup_calls": 302,
+       "warmup_s": 1.001,
+       "latency_ms_median": 3.30876
+      },
+      "first_call_s": 0.02,
+      "capture_s": 0.012,
+      "put_model_s": 0.093
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 2989,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native_nw128.json"
+  },
+  "mjw_native_nw512": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native_nw512.json",
+    "--corpora",
+    "mf_s0",
+    "--nworld",
+    "512",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:22:27Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native_nw512.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 7.3,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 73,
+    "busy_samples": 73,
+    "sm_mhz_median": 2370.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2370.0,
+    "power_w_max": 144.15,
+    "temp_c_max": 39.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native_nw512.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 512,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw512": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 512,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 11863,
+      "stats_last_substep": {
+       "overflow_bits_or": 1024,
+       "overflow_flags": [
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.884765625,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.318359375,
+        "max": 8.0
+       },
+       "nacon_total": 3418,
+       "finite_worlds": 512
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 4.21796,
+        "p10": 4.21727,
+        "p90": 4.21842,
+        "min": 4.21697,
+        "max": 4.21852,
+        "rounds": [
+         4.21697,
+         4.21796,
+         4.21771,
+         4.21852,
+         4.21828
+        ]
+       },
+       "n": 59,
+       "kept_rounds": 5,
+       "warmup_calls": 237,
+       "warmup_s": 1.001,
+       "latency_ms_median": 4.22288
+      },
+      "first_call_s": 0.49,
+      "capture_s": 0.021,
+      "put_model_s": 0.094
+     },
+     "mf_s0/matched/nw512": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 512,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 32768,
+      "stats_last_substep": {
+       "overflow_bits_or": 1024,
+       "overflow_flags": [
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.884765625,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.318359375,
+        "max": 8.0
+       },
+       "nacon_total": 3418,
+       "finite_worlds": 512
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 4.28688,
+        "p10": 4.28634,
+        "p90": 4.28734,
+        "min": 4.28601,
+        "max": 4.28748,
+        "rounds": [
+         4.28688,
+         4.28713,
+         4.28748,
+         4.28685,
+         4.28601
+        ]
+       },
+       "n": 58,
+       "kept_rounds": 5,
+       "warmup_calls": 234,
+       "warmup_s": 1.003,
+       "latency_ms_median": 4.28304
+      },
+      "first_call_s": 0.021,
+      "capture_s": 0.012,
+      "put_model_s": 0.094
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 11863,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native_nw512.json"
+  },
+  "mjw_native_nw1024": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native_nw1024.json",
+    "--corpora",
+    "mf_s0",
+    "--nworld",
+    "1024",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:22:34Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native_nw1024.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 7.3,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 73,
+    "busy_samples": 73,
+    "sm_mhz_median": 2377.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2377.0,
+    "power_w_max": 156.96,
+    "temp_c_max": 40.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native_nw1024.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 1024,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw1024": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 1024,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 23695,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.357421875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.3056640625,
+        "max": 9.0
+       },
+       "nacon_total": 6723,
+       "finite_worlds": 1024
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 5.70279,
+        "p10": 5.70186,
+        "p90": 5.70356,
+        "min": 5.70148,
+        "max": 5.70373,
+        "rounds": [
+         5.7033,
+         5.70279,
+         5.70244,
+         5.70148,
+         5.70373
+        ]
+       },
+       "n": 44,
+       "kept_rounds": 5,
+       "warmup_calls": 175,
+       "warmup_s": 1.004,
+       "latency_ms_median": 5.70478
+      },
+      "first_call_s": 0.499,
+      "capture_s": 0.021,
+      "put_model_s": 0.095
+     },
+     "mf_s0/matched/nw1024": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 1024,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 65536,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.357421875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.3056640625,
+        "max": 9.0
+       },
+       "nacon_total": 6723,
+       "finite_worlds": 1024
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 5.76143,
+        "p10": 5.76041,
+        "p90": 5.76194,
+        "min": 5.76,
+        "max": 5.76196,
+        "rounds": [
+         5.76192,
+         5.76102,
+         5.76,
+         5.76143,
+         5.76196
+        ]
+       },
+       "n": 43,
+       "kept_rounds": 5,
+       "warmup_calls": 174,
+       "warmup_s": 1.004,
+       "latency_ms_median": 5.76416
+      },
+      "first_call_s": 0.023,
+      "capture_s": 0.012,
+      "put_model_s": 0.095
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 23695,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native_nw1024.json"
+  },
+  "mjw_native_nw2048": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native_nw2048.json",
+    "--corpora",
+    "mf_s0",
+    "--nworld",
+    "2048",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:22:42Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native_nw2048.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 7.4,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 74,
+    "busy_samples": 74,
+    "sm_mhz_median": 2377.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2385.0,
+    "power_w_max": 174.77,
+    "temp_c_max": 41.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native_nw2048.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 2048,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw2048": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 2048,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 47359,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.19482421875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.27978515625,
+        "max": 10.0
+       },
+       "nacon_total": 13411,
+       "finite_worlds": 2048
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 8.79375,
+        "p10": 8.79231,
+        "p90": 8.7943,
+        "min": 8.79214,
+        "max": 8.7943,
+        "rounds": [
+         8.79375,
+         8.79214,
+         8.7943,
+         8.79429,
+         8.79256
+        ]
+       },
+       "n": 28,
+       "kept_rounds": 5,
+       "warmup_calls": 114,
+       "warmup_s": 1.004,
+       "latency_ms_median": 8.79536
+      },
+      "first_call_s": 0.496,
+      "capture_s": 0.022,
+      "put_model_s": 0.099
+     },
+     "mf_s0/matched/nw2048": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 2048,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 131072,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.19482421875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.2802734375,
+        "max": 10.0
+       },
+       "nacon_total": 13411,
+       "finite_worlds": 2048
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 8.93665,
+        "p10": 8.9346,
+        "p90": 8.93909,
+        "min": 8.93355,
+        "max": 8.9399,
+        "rounds": [
+         8.93665,
+         8.93355,
+         8.9399,
+         8.93618,
+         8.93788
+        ]
+       },
+       "n": 28,
+       "kept_rounds": 5,
+       "warmup_calls": 112,
+       "warmup_s": 1.002,
+       "latency_ms_median": 8.93947
+      },
+      "first_call_s": 0.024,
+      "capture_s": 0.012,
+      "put_model_s": 0.099
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 47359,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native_nw2048.json"
+  },
+  "mjw_native_nw8192": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native_nw8192.json",
+    "--corpora",
+    "mf_s0",
+    "--nworld",
+    "8192",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:22:49Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native_nw8192.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 8.0,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 80,
+    "busy_samples": 80,
+    "sm_mhz_median": 2385.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2385.0,
+    "power_w_max": 192.79,
+    "temp_c_max": 41.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native_nw8192.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 8192,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw8192": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 8192,
+       "tiled": true
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 189343,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.287841796875,
+        "max": 10.0
+       },
+       "nacon_total": 54234,
+       "finite_worlds": 8192
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 29.84457,
+        "p10": 29.84389,
+        "p90": 29.85343,
+        "min": 29.84384,
+        "max": 29.85811,
+        "rounds": [
+         29.84457,
+         29.84384,
+         29.84641,
+         29.84396,
+         29.85811
+        ]
+       },
+       "n": 8,
+       "kept_rounds": 5,
+       "warmup_calls": 34,
+       "warmup_s": 1.016,
+       "latency_ms_median": 29.85159
+      },
+      "first_call_s": 0.496,
+      "capture_s": 0.021,
+      "put_model_s": 0.119
+     },
+     "mf_s0/matched/nw8192": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 8192,
+       "tiled": true
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 524288,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.2879638671875,
+        "max": 10.0
+       },
+       "nacon_total": 54234,
+       "finite_worlds": 8192
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 30.44574,
+        "p10": 30.4401,
+        "p90": 30.45627,
+        "min": 30.4394,
+        "max": 30.45758,
+        "rounds": [
+         30.45432,
+         30.4394,
+         30.45758,
+         30.44116,
+         30.44574
+        ]
+       },
+       "n": 8,
+       "kept_rounds": 5,
+       "warmup_calls": 33,
+       "warmup_s": 1.006,
+       "latency_ms_median": 30.44905
+      },
+      "first_call_s": 0.036,
+      "capture_s": 0.012,
+      "put_model_s": 0.119
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 189343,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native_nw8192.json"
+  },
+  "mjw_native_nw16384": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/mjw_native_nw16384.json",
+    "--corpora",
+    "mf_s0",
+    "--nworld",
+    "16384",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:22:57Z",
+   "log": "runs/paper_rtx6000_mig/logs/mjw_native_nw16384.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 9.0,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 90,
+    "busy_samples": 90,
+    "sm_mhz_median": 2385.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2385.0,
+    "power_w_max": 198.44,
+    "temp_c_max": 42.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/mjw_native_nw16384.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 16384,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw16384": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 16384,
+       "tiled": true
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 378655,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.287841796875,
+        "max": 10.0
+       },
+       "nacon_total": 108468,
+       "finite_worlds": 16384
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 58.92187,
+        "p10": 58.91704,
+        "p90": 58.9269,
+        "min": 58.9139,
+        "max": 58.92985,
+        "rounds": [
+         58.92247,
+         58.92985,
+         58.92174,
+         58.9139,
+         58.92187
+        ]
+       },
+       "n": 4,
+       "kept_rounds": 5,
+       "warmup_calls": 17,
+       "warmup_s": 1.003,
+       "latency_ms_median": 58.91401
+      },
+      "first_call_s": 0.511,
+      "capture_s": 0.021,
+      "put_model_s": 0.138
+     },
+     "mf_s0/matched/nw16384": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 16384,
+       "tiled": true
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 1048576,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.28802490234375,
+        "max": 10.0
+       },
+       "nacon_total": 108468,
+       "finite_worlds": 16384
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 60.21562,
+        "p10": 60.20939,
+        "p90": 60.22301,
+        "min": 60.20649,
+        "max": 60.22595,
+        "rounds": [
+         60.20649,
+         60.22595,
+         60.21562,
+         60.2186,
+         60.21372
+        ]
+       },
+       "n": 4,
+       "kept_rounds": 5,
+       "warmup_calls": 17,
+       "warmup_s": 1.025,
+       "latency_ms_median": 60.24276
+      },
+      "first_call_s": 0.064,
+      "capture_s": 0.012,
+      "put_model_s": 0.138
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 378655,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/mjw_native_nw16384.json"
+  },
+  "rep2_ours": {
+   "env": "dev",
+   "python": ".dk_env/venv/bin/python",
+   "argv": [
+    "scripts/paper_bench/ours.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/rep2_ours.json",
+    "--corpora",
+    "mf_s0,mf_s1",
+    "--no-jac",
+    "--sweep",
+    ""
+   ],
+   "started": "2026-11-06T22:23:06Z",
+   "log": "runs/paper_rtx6000_mig/logs/rep2_ours.log",
+   "timeout_s": 600,
+   "other_gpu_processes": [],
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 31.5,
+   "other_gpu_processes_after": [],
+   "gpu_samples": {
+    "samples": 314,
+    "busy_samples": 314,
+    "sm_mhz_median": 2385.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2422.0,
+    "power_w_max": 253.17,
+    "temp_c_max": 45.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/rep2_ours.smi.csv"
+   },
+   "result": {
+    "part": "ours",
+    "what": "nablaengine.jax_ffi under jax.jit",
+    "nworld": 4096,
+    "iterations": 10,
+    "substeps": 4,
+    "modes": {
+     "exact": {
+      "clamp_kv": 1,
+      "normal": 0
+     },
+     "interface": {
+      "clamp_kv": 0,
+      "normal": 3
+     }
+    },
+    "env": {
+     "python": "3.12.13",
+     "executable": ".dk_env/venv/bin/python",
+     "packages": {
+      "jax": "0.12.0.1",
+      "jaxlib": "0.12.0.1",
+      "jax-cuda12-plugin": "0.12.0.1",
+      "jax-cuda13-plugin": null,
+      "mujoco": "3.17.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "provenance": {
+     "date": "2026-11-06T22:23:07Z",
+     "nablaengine": {
+      "version": "0.1.0",
+      "commit": "7dd445d",
+      "dirty": false
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03"
+     },
+     "arch": "sm_120",
+     "nvcc": "12.9.86",
+     "python": "3.12.13",
+     "packages": {
+      "numpy": "2.5.4",
+      "mujoco": "3.17.0",
+      "mujoco-mjx": "3.17.0",
+      "jax": "0.12.0.1",
+      "jaxlib": "0.12.0.1",
+      "jax-cuda12-plugin": "0.12.0.1",
+      "warp-lang": "1.18.0+cu12",
+      "mujoco-warp": "3.17.0",
+      "scipy": "1.18.1"
+     },
+     "mujoco_warp": {
+      "version": "3.17.0",
+      "path": ".dk_env/venv/lib/python3.12/site-packages/mujoco_warp",
+      "switches": [],
+      "tree_sha256": "037432dd2be3aa3d079bd9da146fed58f3b19e102ffb3bd79f31fa4f1ad9bdfa",
+      "tested_tree": null
+     },
+     "environment": {
+      "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+      "DK_ENV": ".dk_env",
+      "DK_FIXTURES": "fixtures/mjlab",
+      "DK_REPO": ".",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+     },
+     "fixtures": "fixtures/mjlab"
+    },
+    "cells": {
+     "mf_s0/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "compile_s": {
+       "fwd": 0.008,
+       "fwd_tape": 0.008,
+       "exact.bwd": 0.007,
+       "exact.vjp": 0.031,
+       "interface.bwd": 0.011,
+       "interface.vjp": 0.026
+      },
+      "fwd": {
+       "ms": {
+        "median": 4.05618,
+        "p10": 4.05184,
+        "p90": 4.05794,
+        "min": 4.04895,
+        "max": 4.05797,
+        "rounds": [
+         4.04895,
+         4.05789,
+         4.05618,
+         4.05617,
+         4.05797
+        ]
+       },
+       "n": 59,
+       "kept_rounds": 5,
+       "warmup_calls": 237,
+       "warmup_s": 1.002,
+       "latency_ms_median": 4.19763
+      },
+      "finite_fwd": true,
+      "fwd_tape": {
+       "ms": {
+        "median": 4.21295,
+        "p10": 4.20932,
+        "p90": 4.21637,
+        "min": 4.20852,
+        "max": 4.2175,
+        "rounds": [
+         4.21295,
+         4.21467,
+         4.21052,
+         4.20852,
+         4.2175
+        ]
+       },
+       "n": 57,
+       "kept_rounds": 5,
+       "warmup_calls": 229,
+       "warmup_s": 1.001,
+       "latency_ms_median": 4.34105
+      },
+      "forward_info": {
+       "newton_iterations_mean": 4.4091796875,
+       "contacts_mean": 6.6201171875,
+       "rows_max": 112,
+       "unsupported_worlds": 0
+      },
+      "exact": {
+       "bwd": {
+        "ms": {
+         "median": 1.8557,
+         "p10": 1.85554,
+         "p90": 1.85575,
+         "min": 1.85545,
+         "max": 1.85577,
+         "rounds": [
+          1.85569,
+          1.8557,
+          1.85545,
+          1.85577,
+          1.85572
+         ]
+        },
+        "n": 129,
+        "kept_rounds": 5,
+        "warmup_calls": 516,
+        "warmup_s": 1.001,
+        "latency_ms_median": 1.94883
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.08314,
+         "p10": 6.07833,
+         "p90": 6.0886,
+         "min": 6.07614,
+         "max": 6.0911,
+         "rounds": [
+          6.07614,
+          6.08314,
+          6.08486,
+          6.0911,
+          6.08161
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 161,
+        "warmup_s": 1.003,
+        "latency_ms_median": 6.24951
+       }
+      },
+      "interface": {
+       "bwd": {
+        "ms": {
+         "median": 1.85769,
+         "p10": 1.8575,
+         "p90": 1.85796,
+         "min": 1.85743,
+         "max": 1.85805,
+         "rounds": [
+          1.85769,
+          1.85805,
+          1.85781,
+          1.85743,
+          1.8576
+         ]
+        },
+        "n": 130,
+        "kept_rounds": 5,
+        "warmup_calls": 520,
+        "warmup_s": 1.001,
+        "latency_ms_median": 1.92946
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.06547,
+         "p10": 6.05833,
+         "p90": 6.07863,
+         "min": 6.05418,
+         "max": 6.08091,
+         "rounds": [
+          6.08091,
+          6.06456,
+          6.07521,
+          6.05418,
+          6.06547
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 161,
+        "warmup_s": 1.003,
+        "latency_ms_median": 6.26105
+       }
+      }
+     },
+     "mf_s1/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "compile_s": {
+       "fwd": 0.0,
+       "fwd_tape": 0.001,
+       "exact.bwd": 0.013,
+       "exact.vjp": 0.024,
+       "interface.bwd": 0.01,
+       "interface.vjp": 0.025
+      },
+      "fwd": {
+       "ms": {
+        "median": 4.07643,
+        "p10": 4.07567,
+        "p90": 4.08577,
+        "min": 4.07521,
+        "max": 4.08991,
+        "rounds": [
+         4.07956,
+         4.08991,
+         4.07643,
+         4.07521,
+         4.07637
+        ]
+       },
+       "n": 59,
+       "kept_rounds": 5,
+       "warmup_calls": 237,
+       "warmup_s": 1.001,
+       "latency_ms_median": 4.21498
+      },
+      "finite_fwd": true,
+      "fwd_tape": {
+       "ms": {
+        "median": 4.20962,
+        "p10": 4.20855,
+        "p90": 4.21062,
+        "min": 4.20853,
+        "max": 4.2112,
+        "rounds": [
+         4.20962,
+         4.20858,
+         4.20973,
+         4.2112,
+         4.20853
+        ]
+       },
+       "n": 58,
+       "kept_rounds": 5,
+       "warmup_calls": 231,
+       "warmup_s": 1.003,
+       "latency_ms_median": 4.33243
+      },
+      "forward_info": {
+       "newton_iterations_mean": 4.436767578125,
+       "contacts_mean": 6.868408203125,
+       "rows_max": 114,
+       "unsupported_worlds": 0
+      },
+      "exact": {
+       "bwd": {
+        "ms": {
+         "median": 1.85442,
+         "p10": 1.85421,
+         "p90": 1.85479,
+         "min": 1.85414,
+         "max": 1.85489,
+         "rounds": [
+          1.85431,
+          1.85489,
+          1.85442,
+          1.85414,
+          1.85464
+         ]
+        },
+        "n": 131,
+        "kept_rounds": 5,
+        "warmup_calls": 523,
+        "warmup_s": 1.001,
+        "latency_ms_median": 1.91573
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.10443,
+         "p10": 6.09931,
+         "p90": 6.11273,
+         "min": 6.09798,
+         "max": 6.11381,
+         "rounds": [
+          6.10131,
+          6.11111,
+          6.09798,
+          6.10443,
+          6.11381
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 161,
+        "warmup_s": 1.004,
+        "latency_ms_median": 6.19251
+       }
+      },
+      "interface": {
+       "bwd": {
+        "ms": {
+         "median": 1.85664,
+         "p10": 1.85648,
+         "p90": 1.85757,
+         "min": 1.8564,
+         "max": 1.85806,
+         "rounds": [
+          1.85661,
+          1.85806,
+          1.85664,
+          1.85682,
+          1.8564
+         ]
+        },
+        "n": 130,
+        "kept_rounds": 5,
+        "warmup_calls": 521,
+        "warmup_s": 1.001,
+        "latency_ms_median": 1.94725
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.0538,
+         "p10": 6.04958,
+         "p90": 6.09409,
+         "min": 6.04946,
+         "max": 6.09833,
+         "rounds": [
+          6.09833,
+          6.08772,
+          6.04977,
+          6.0538,
+          6.04946
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 161,
+        "warmup_s": 1.003,
+        "latency_ms_median": 6.19743
+       }
+      }
+     }
+    },
+    "errors": {},
+    "init": {
+     "seconds": 0.642,
+     "built": false,
+     "key": "51de8db6d5b9e6f7e71c",
+     "arch": "sm_120",
+     "arch_flags": {
+      "forward": [
+       "-arch=compute_90",
+       "-code=sm_120"
+      ],
+      "adjoint": [
+       "-arch=compute_90",
+       "-code=sm_120"
+      ]
+     },
+     "forward_defines": [
+      "-DSPLIT_PRE_MINB=16"
+     ],
+     "front_end": {
+      "forward": "NVVM 7.0.1",
+      "adjoint": "NVVM 7.0.1"
+     },
+     "forward_unit": "dk_kv0_n3",
+     "library": "~/.cache/nablaengine/libdk_g1_sm_120_51de8db6d5b9e6f7e71c.so",
+     "cache_dir": "~/.cache/nablaengine",
+     "commit": "7dd445d",
+     "dirty": false,
+     "sizeof_adj": {
+      "dk_kv0_n0": 10108,
+      "dk_kv0_n1": 10108,
+      "dk_kv0_n2": 10108,
+      "dk_kv0_n3": 10108,
+      "dk_kv1_n0": 10108,
+      "dk_kv1_n1": 10108,
+      "dk_kv1_n2": 10108,
+      "dk_kv1_n3": 10108,
+      "dk_kv2_n0": 10228,
+      "dk_kv2_n1": 10228,
+      "dk_kv2_n2": 10228,
+      "dk_kv2_n3": 10228
+     }
+    },
+    "launch_info": {
+     "dk_kv0_n0": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n1": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n2": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n3": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n0": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n1": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n2": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n3": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n0": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n1": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n2": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n3": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/rep2_ours.json"
+  },
+  "rep2_mjw_native": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/rep2_mjw_native.json",
+    "--corpora",
+    "mf_s0,mf_s1",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:23:38Z",
+   "log": "runs/paper_rtx6000_mig/logs/rep2_mjw_native.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 13.0,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 130,
+    "busy_samples": 130,
+    "sm_mhz_median": 2385.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2415.0,
+    "power_w_max": 207.72,
+    "temp_c_max": 45.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/rep2_mjw_native.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 4096,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 94687,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.287841796875,
+        "max": 10.0
+       },
+       "nacon_total": 27117,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.45565,
+        "p10": 15.45239,
+        "p90": 15.4592,
+        "min": 15.45084,
+        "max": 15.46112,
+        "rounds": [
+         15.46112,
+         15.45471,
+         15.45565,
+         15.45632,
+         15.45084
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 65,
+       "warmup_s": 1.006,
+       "latency_ms_median": 15.45894
+      },
+      "first_call_s": 0.495,
+      "capture_s": 0.022,
+      "put_model_s": 0.105
+     },
+     "mf_s1/procedure/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 94687,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 26.466796875,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.34033203125,
+        "max": 10.0
+       },
+       "nacon_total": 28130,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.56218,
+        "p10": 15.55773,
+        "p90": 15.56394,
+        "min": 15.55593,
+        "max": 15.56501,
+        "rounds": [
+         15.56233,
+         15.56501,
+         15.56218,
+         15.55593,
+         15.56042
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 65,
+       "warmup_s": 1.012,
+       "latency_ms_median": 15.56017
+      },
+      "first_call_s": 0.495,
+      "capture_s": 0.022,
+      "put_model_s": 0.105
+     },
+     "mf_s0/matched/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 262144,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.287841796875,
+        "max": 10.0
+       },
+       "nacon_total": 27117,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.73511,
+        "p10": 15.73082,
+        "p90": 15.7373,
+        "min": 15.7307,
+        "max": 15.73869,
+        "rounds": [
+         15.73102,
+         15.73521,
+         15.73869,
+         15.73511,
+         15.7307
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 64,
+       "warmup_s": 1.008,
+       "latency_ms_median": 15.742
+      },
+      "first_call_s": 0.026,
+      "capture_s": 0.012,
+      "put_model_s": 0.105
+     },
+     "mf_s1/matched/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 262144,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 26.466796875,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.34033203125,
+        "max": 10.0
+       },
+       "nacon_total": 28130,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.80968,
+        "p10": 15.79037,
+        "p90": 15.82798,
+        "min": 15.78541,
+        "max": 15.84011,
+        "rounds": [
+         15.8098,
+         15.84011,
+         15.78541,
+         15.7978,
+         15.80968
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 64,
+       "warmup_s": 1.014,
+       "latency_ms_median": 15.84617
+      },
+      "first_call_s": 0.026,
+      "capture_s": 0.012,
+      "put_model_s": 0.105
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 94687,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/rep2_mjw_native.json"
+  },
+  "rep3_ours": {
+   "env": "dev",
+   "python": ".dk_env/venv/bin/python",
+   "argv": [
+    "scripts/paper_bench/ours.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/rep3_ours.json",
+    "--corpora",
+    "mf_s0,mf_s1",
+    "--no-jac",
+    "--sweep",
+    ""
+   ],
+   "started": "2026-11-06T22:23:51Z",
+   "log": "runs/paper_rtx6000_mig/logs/rep3_ours.log",
+   "timeout_s": 600,
+   "other_gpu_processes": [],
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 31.6,
+   "other_gpu_processes_after": [],
+   "gpu_samples": {
+    "samples": 315,
+    "busy_samples": 315,
+    "sm_mhz_median": 2407.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2422.0,
+    "power_w_max": 209.8,
+    "temp_c_max": 45.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/rep3_ours.smi.csv"
+   },
+   "result": {
+    "part": "ours",
+    "what": "nablaengine.jax_ffi under jax.jit",
+    "nworld": 4096,
+    "iterations": 10,
+    "substeps": 4,
+    "modes": {
+     "exact": {
+      "clamp_kv": 1,
+      "normal": 0
+     },
+     "interface": {
+      "clamp_kv": 0,
+      "normal": 3
+     }
+    },
+    "env": {
+     "python": "3.12.13",
+     "executable": ".dk_env/venv/bin/python",
+     "packages": {
+      "jax": "0.12.0.1",
+      "jaxlib": "0.12.0.1",
+      "jax-cuda12-plugin": "0.12.0.1",
+      "jax-cuda13-plugin": null,
+      "mujoco": "3.17.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "provenance": {
+     "date": "2026-11-06T22:23:51Z",
+     "nablaengine": {
+      "version": "0.1.0",
+      "commit": "7dd445d",
+      "dirty": false
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03"
+     },
+     "arch": "sm_120",
+     "nvcc": "12.9.86",
+     "python": "3.12.13",
+     "packages": {
+      "numpy": "2.5.4",
+      "mujoco": "3.17.0",
+      "mujoco-mjx": "3.17.0",
+      "jax": "0.12.0.1",
+      "jaxlib": "0.12.0.1",
+      "jax-cuda12-plugin": "0.12.0.1",
+      "warp-lang": "1.18.0+cu12",
+      "mujoco-warp": "3.17.0",
+      "scipy": "1.18.1"
+     },
+     "mujoco_warp": {
+      "version": "3.17.0",
+      "path": ".dk_env/venv/lib/python3.12/site-packages/mujoco_warp",
+      "switches": [],
+      "tree_sha256": "037432dd2be3aa3d079bd9da146fed58f3b19e102ffb3bd79f31fa4f1ad9bdfa",
+      "tested_tree": null
+     },
+     "environment": {
+      "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+      "DK_ENV": ".dk_env",
+      "DK_FIXTURES": "fixtures/mjlab",
+      "DK_REPO": ".",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false"
+     },
+     "fixtures": "fixtures/mjlab"
+    },
+    "cells": {
+     "mf_s0/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "compile_s": {
+       "fwd": 0.008,
+       "fwd_tape": 0.009,
+       "exact.bwd": 0.009,
+       "exact.vjp": 0.032,
+       "interface.bwd": 0.011,
+       "interface.vjp": 0.027
+      },
+      "fwd": {
+       "ms": {
+        "median": 3.99089,
+        "p10": 3.99064,
+        "p90": 3.99118,
+        "min": 3.9905,
+        "max": 3.99132,
+        "rounds": [
+         3.99085,
+         3.99097,
+         3.9905,
+         3.99089,
+         3.99132
+        ]
+       },
+       "n": 60,
+       "kept_rounds": 5,
+       "warmup_calls": 239,
+       "warmup_s": 1.002,
+       "latency_ms_median": 4.1295
+      },
+      "finite_fwd": true,
+      "fwd_tape": {
+       "ms": {
+        "median": 4.167,
+        "p10": 4.16637,
+        "p90": 4.16772,
+        "min": 4.16636,
+        "max": 4.16791,
+        "rounds": [
+         4.16638,
+         4.16636,
+         4.167,
+         4.16791,
+         4.16744
+        ]
+       },
+       "n": 58,
+       "kept_rounds": 5,
+       "warmup_calls": 231,
+       "warmup_s": 1.0,
+       "latency_ms_median": 4.29214
+      },
+      "forward_info": {
+       "newton_iterations_mean": 4.4091796875,
+       "contacts_mean": 6.6201171875,
+       "rows_max": 112,
+       "unsupported_worlds": 0
+      },
+      "exact": {
+       "bwd": {
+        "ms": {
+         "median": 1.85531,
+         "p10": 1.85514,
+         "p90": 1.85625,
+         "min": 1.85512,
+         "max": 1.85656,
+         "rounds": [
+          1.85512,
+          1.85531,
+          1.85518,
+          1.85578,
+          1.85656
+         ]
+        },
+        "n": 129,
+        "kept_rounds": 5,
+        "warmup_calls": 517,
+        "warmup_s": 1.002,
+        "latency_ms_median": 1.92604
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.01202,
+         "p10": 6.01007,
+         "p90": 6.03585,
+         "min": 6.00968,
+         "max": 6.05108,
+         "rounds": [
+          6.05108,
+          6.01202,
+          6.00968,
+          6.01065,
+          6.01301
+         ]
+        },
+        "n": 41,
+        "kept_rounds": 5,
+        "warmup_calls": 163,
+        "warmup_s": 1.006,
+        "latency_ms_median": 6.10355
+       }
+      },
+      "interface": {
+       "bwd": {
+        "ms": {
+         "median": 1.85747,
+         "p10": 1.85735,
+         "p90": 1.85811,
+         "min": 1.85734,
+         "max": 1.85817,
+         "rounds": [
+          1.85802,
+          1.85736,
+          1.85747,
+          1.85817,
+          1.85734
+         ]
+        },
+        "n": 130,
+        "kept_rounds": 5,
+        "warmup_calls": 521,
+        "warmup_s": 1.001,
+        "latency_ms_median": 1.9258
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 5.99882,
+         "p10": 5.99776,
+         "p90": 6.00146,
+         "min": 5.99754,
+         "max": 6.00273,
+         "rounds": [
+          5.99882,
+          5.99754,
+          5.99809,
+          6.00273,
+          5.99955
+         ]
+        },
+        "n": 41,
+        "kept_rounds": 5,
+        "warmup_calls": 163,
+        "warmup_s": 1.003,
+        "latency_ms_median": 6.11838
+       }
+      }
+     },
+     "mf_s1/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "compile_s": {
+       "fwd": 0.0,
+       "fwd_tape": 0.001,
+       "exact.bwd": 0.013,
+       "exact.vjp": 0.03,
+       "interface.bwd": 0.014,
+       "interface.vjp": 0.024
+      },
+      "fwd": {
+       "ms": {
+        "median": 4.05411,
+        "p10": 4.05137,
+        "p90": 4.05657,
+        "min": 4.05045,
+        "max": 4.05804,
+        "rounds": [
+         4.05276,
+         4.05804,
+         4.05045,
+         4.05437,
+         4.05411
+        ]
+       },
+       "n": 60,
+       "kept_rounds": 5,
+       "warmup_calls": 240,
+       "warmup_s": 1.001,
+       "latency_ms_median": 4.18515
+      },
+      "finite_fwd": true,
+      "fwd_tape": {
+       "ms": {
+        "median": 4.20844,
+        "p10": 4.20705,
+        "p90": 4.20883,
+        "min": 4.20619,
+        "max": 4.20894,
+        "rounds": [
+         4.20835,
+         4.20844,
+         4.20619,
+         4.20866,
+         4.20894
+        ]
+       },
+       "n": 58,
+       "kept_rounds": 5,
+       "warmup_calls": 232,
+       "warmup_s": 1.004,
+       "latency_ms_median": 4.33206
+      },
+      "forward_info": {
+       "newton_iterations_mean": 4.436767578125,
+       "contacts_mean": 6.868408203125,
+       "rows_max": 114,
+       "unsupported_worlds": 0
+      },
+      "exact": {
+       "bwd": {
+        "ms": {
+         "median": 1.85447,
+         "p10": 1.85374,
+         "p90": 1.8552,
+         "min": 1.85345,
+         "max": 1.85555,
+         "rounds": [
+          1.85345,
+          1.85555,
+          1.85418,
+          1.85467,
+          1.85447
+         ]
+        },
+        "n": 130,
+        "kept_rounds": 5,
+        "warmup_calls": 521,
+        "warmup_s": 1.0,
+        "latency_ms_median": 1.94323
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.05856,
+         "p10": 6.05729,
+         "p90": 6.06088,
+         "min": 6.05709,
+         "max": 6.06168,
+         "rounds": [
+          6.05709,
+          6.05856,
+          6.0576,
+          6.06168,
+          6.05968
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 161,
+        "warmup_s": 1.004,
+        "latency_ms_median": 6.18626
+       }
+      },
+      "interface": {
+       "bwd": {
+        "ms": {
+         "median": 1.85647,
+         "p10": 1.85615,
+         "p90": 1.85661,
+         "min": 1.85608,
+         "max": 1.85665,
+         "rounds": [
+          1.85624,
+          1.85665,
+          1.85608,
+          1.85655,
+          1.85647
+         ]
+        },
+        "n": 130,
+        "kept_rounds": 5,
+        "warmup_calls": 519,
+        "warmup_s": 1.0,
+        "latency_ms_median": 1.93496
+       },
+       "finite_bwd": true,
+       "vjp": {
+        "ms": {
+         "median": 6.04233,
+         "p10": 6.04099,
+         "p90": 6.04404,
+         "min": 6.04082,
+         "max": 6.04517,
+         "rounds": [
+          6.04233,
+          6.04082,
+          6.04236,
+          6.04517,
+          6.04124
+         ]
+        },
+        "n": 40,
+        "kept_rounds": 5,
+        "warmup_calls": 162,
+        "warmup_s": 1.006,
+        "latency_ms_median": 6.16571
+       }
+      }
+     }
+    },
+    "errors": {},
+    "init": {
+     "seconds": 0.644,
+     "built": false,
+     "key": "51de8db6d5b9e6f7e71c",
+     "arch": "sm_120",
+     "arch_flags": {
+      "forward": [
+       "-arch=compute_90",
+       "-code=sm_120"
+      ],
+      "adjoint": [
+       "-arch=compute_90",
+       "-code=sm_120"
+      ]
+     },
+     "forward_defines": [
+      "-DSPLIT_PRE_MINB=16"
+     ],
+     "front_end": {
+      "forward": "NVVM 7.0.1",
+      "adjoint": "NVVM 7.0.1"
+     },
+     "forward_unit": "dk_kv0_n3",
+     "library": "~/.cache/nablaengine/libdk_g1_sm_120_51de8db6d5b9e6f7e71c.so",
+     "cache_dir": "~/.cache/nablaengine",
+     "commit": "7dd445d",
+     "dirty": false,
+     "sizeof_adj": {
+      "dk_kv0_n0": 10108,
+      "dk_kv0_n1": 10108,
+      "dk_kv0_n2": 10108,
+      "dk_kv0_n3": 10108,
+      "dk_kv1_n0": 10108,
+      "dk_kv1_n1": 10108,
+      "dk_kv1_n2": 10108,
+      "dk_kv1_n3": 10108,
+      "dk_kv2_n0": 10228,
+      "dk_kv2_n1": 10228,
+      "dk_kv2_n2": 10228,
+      "dk_kv2_n3": 10228
+     }
+    },
+    "launch_info": {
+     "dk_kv0_n0": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n1": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n2": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv0_n3": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n0": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n1": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n2": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv1_n3": {
+      "smem": 10108,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n0": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n1": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n2": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     },
+     "dk_kv2_n3": {
+      "smem": 10228,
+      "worlds_per_sm": 9
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/rep3_ours.json"
+  },
+  "rep3_mjw_native": {
+   "env": "mjw",
+   "python": "runs/paper_bench_env/venv_mjw/bin/python",
+   "argv": [
+    "scripts/paper_bench/mjw_native.py",
+    "--out",
+    "runs/paper_rtx6000_mig/parts/rep3_mjw_native.json",
+    "--corpora",
+    "mf_s0,mf_s1",
+    "--capacity",
+    "procedure,matched"
+   ],
+   "started": "2026-11-06T22:24:23Z",
+   "log": "runs/paper_rtx6000_mig/logs/rep3_mjw_native.log",
+   "timeout_s": 300,
+   "status": "ok",
+   "returncode": 0,
+   "seconds": 13.1,
+   "other_gpu_processes_after": [],
+   "other_gpu_processes": [],
+   "gpu_samples": {
+    "samples": 131,
+    "busy_samples": 131,
+    "sm_mhz_median": 2385.0,
+    "sm_mhz_min": 2355.0,
+    "sm_mhz_max": 2400.0,
+    "power_w_max": 210.37,
+    "temp_c_max": 45.0,
+    "memory_used_mib_max": null,
+    "reason_samples": {},
+    "hardware_slowdown_flagged": false,
+    "csv": "runs/paper_rtx6000_mig/logs/rep3_mjw_native.smi.csv"
+   },
+   "result": {
+    "part": "mjw_native",
+    "nworld": 4096,
+    "iterations": 10,
+    "substeps": 4,
+    "env": {
+     "python": "3.12.13",
+     "executable": "runs/paper_bench_env/venv_mjw/bin/python",
+     "packages": {
+      "mujoco": "3.17.0",
+      "mujoco-warp": "3.17.0",
+      "warp-lang": "1.18.0",
+      "numpy": "2.5.4"
+     },
+     "cpu": {
+      "model": "AMD EPYC 9B45",
+      "logical_cpus": 192,
+      "allocated": 192,
+      "affinity": "0-191",
+      "omp_num_threads": "4",
+      "scheduler_cpu_counts": null,
+      "cpu_engine_threads": {
+       "threads": 192,
+       "rule": "len(os.sched_getaffinity(0))"
+      }
+     },
+     "gpu": {
+      "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "compute_cap": "12.0",
+      "driver": "595.58.03",
+      "memory": "[Insufficient Permissions]"
+     },
+     "env": {
+      "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+      "PAPER_BENCH_JOB_START": "1794003576",
+      "PAPER_BENCH_PARTS": "ours,mjw_native",
+      "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
+      "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+      "DK_REPO": ".",
+      "DK_ENV": ".dk_env",
+      "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+      "PAPER_BENCH_PREFIX": "runs/paper_bench_env",
+      "DK_FIXTURES": "fixtures/mjlab"
+     },
+     "quick": false
+    },
+    "mujoco_warp_file": "runs/paper_bench_env/venv_mjw/lib/python3.12/site-packages/mujoco_warp/__init__.py",
+    "warp_version": "1.18.0",
+    "cells": {
+     "mf_s0/procedure/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 94687,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.287841796875,
+        "max": 10.0
+       },
+       "nacon_total": 27117,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.4565,
+        "p10": 15.45461,
+        "p90": 15.46105,
+        "min": 15.454,
+        "max": 15.46197,
+        "rounds": [
+         15.454,
+         15.4565,
+         15.46197,
+         15.45966,
+         15.45553
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 65,
+       "warmup_s": 1.006,
+       "latency_ms_median": 15.4688
+      },
+      "first_call_s": 0.498,
+      "capture_s": 0.022,
+      "put_model_s": 0.107
+     },
+     "mf_s1/procedure/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "procedure",
+      "nconmax": 24,
+      "njmax": 128,
+      "naconmax": 94687,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 26.4658203125,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.34033203125,
+        "max": 10.0
+       },
+       "nacon_total": 28129,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.56277,
+        "p10": 15.55912,
+        "p90": 15.56433,
+        "min": 15.55794,
+        "max": 15.56449,
+        "rounds": [
+         15.56089,
+         15.56277,
+         15.5641,
+         15.56449,
+         15.55794
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 65,
+       "warmup_s": 1.012,
+       "latency_ms_median": 15.56382
+      },
+      "first_call_s": 0.498,
+      "capture_s": 0.022,
+      "put_model_s": 0.107
+     },
+     "mf_s0/matched/nw4096": {
+      "corpus": {
+       "name": "mf_s0",
+       "path": "benchmarks/data/mf_s0.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 262144,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 25.463623046875,
+        "max": 112.0
+       },
+       "solver_niter": {
+        "mean": 3.28759765625,
+        "max": 10.0
+       },
+       "nacon_total": 27117,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.67558,
+        "p10": 15.66914,
+        "p90": 15.69593,
+        "min": 15.66886,
+        "max": 15.70414,
+        "rounds": [
+         15.70414,
+         15.68363,
+         15.66956,
+         15.66886,
+         15.67558
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 64,
+       "warmup_s": 1.007,
+       "latency_ms_median": 15.7344
+      },
+      "first_call_s": 0.026,
+      "capture_s": 0.012,
+      "put_model_s": 0.107
+     },
+     "mf_s1/matched/nw4096": {
+      "corpus": {
+       "name": "mf_s1",
+       "path": "benchmarks/data/mf_s1.npz",
+       "states": 4096,
+       "nworld": 4096,
+       "tiled": false
+      },
+      "capacity": "matched",
+      "nconmax": 64,
+      "njmax": 192,
+      "naconmax": 262144,
+      "stats_last_substep": {
+       "overflow_bits_or": 1536,
+       "overflow_flags": [
+        "ITERATIONS",
+        "LS_ITERATIONS"
+       ],
+       "capacity_overflow": [],
+       "capacity_overflow_worlds": 0,
+       "nefc": {
+        "mean": 26.4658203125,
+        "max": 114.0
+       },
+       "solver_niter": {
+        "mean": 3.34033203125,
+        "max": 10.0
+       },
+       "nacon_total": 28129,
+       "finite_worlds": 4096
+      },
+      "graph_ctrlstep": {
+       "ms": {
+        "median": 15.84148,
+        "p10": 15.83721,
+        "p90": 15.84467,
+        "min": 15.83642,
+        "max": 15.84531,
+        "rounds": [
+         15.83839,
+         15.83642,
+         15.84148,
+         15.84531,
+         15.84372
+        ]
+       },
+       "n": 16,
+       "kept_rounds": 5,
+       "warmup_calls": 64,
+       "warmup_s": 1.014,
+       "latency_ms_median": 15.85302
+      },
+      "first_call_s": 0.026,
+      "capture_s": 0.012,
+      "put_model_s": 0.107
+     }
+    },
+    "errors": {},
+    "warp_cuda_toolkit": "13.4",
+    "warp_cuda_driver": "13.2",
+    "opt": {
+     "iterations": "10",
+     "ls_iterations": "8",
+     "tolerance": "[1.e-06]",
+     "ls_tolerance": "[0.01]",
+     "solver": "2",
+     "cone": "0",
+     "integrator": "3",
+     "graph_conditional": "True",
+     "warn_overflow": "2559"
+    },
+    "default_capacity": {
+     "nconmax": 48,
+     "njmax": 64
+    },
+    "procedure_capacity": {
+     "nconmax": 24,
+     "naconmax": 94687,
+     "njmax": 128,
+     "source": "benchmarks/data/mjw_capacity.json",
+     "inputs": {
+      "pool_mean_max": 18.487548828125,
+      "contacts_world_max": 30,
+      "rows_max": 114,
+      "margin": 0.25
+     }
+    }
+   },
+   "result_file": "runs/paper_rtx6000_mig/parts/rep3_mjw_native.json"
+  }
+ },
+ "environment": {
+  "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+  "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+  "PAPER_BENCH_JOB_START": "1794003576",
+  "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+  "PAPER_BENCH_PARTS": "ours,mjw_native",
+  "PAPER_BENCH_PREFIX": "runs/paper_bench_env"
+ },
+ "provenance": {
+  "date": "2026-11-06T22:20:01Z",
+  "nablaengine": {
+   "version": "0.1.0",
+   "commit": "7dd445d",
+   "dirty": false
+  },
+  "gpu": {
+   "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+   "compute_cap": "12.0",
+   "driver": "595.58.03"
+  },
+  "arch": "sm_120",
+  "nvcc": "12.9.86",
+  "python": "3.12.13",
+  "packages": {
+   "numpy": "2.5.4",
+   "mujoco": "3.17.0",
+   "mujoco-mjx": "3.17.0",
+   "jax": "0.12.0.1",
+   "jaxlib": "0.12.0.1",
+   "jax-cuda12-plugin": "0.12.0.1",
+   "warp-lang": "1.18.0+cu12",
+   "mujoco-warp": "3.17.0",
+   "scipy": "1.18.1"
+  },
+  "mujoco_warp": {
+   "version": "3.17.0",
+   "path": ".dk_env/venv/lib/python3.12/site-packages/mujoco_warp",
+   "switches": [],
+   "tree_sha256": "037432dd2be3aa3d079bd9da146fed58f3b19e102ffb3bd79f31fa4f1ad9bdfa",
+   "tested_tree": null
+  },
+  "environment": {
+   "DK_ENV": ".dk_env",
+   "DK_REPO": "."
+  },
+  "fixtures": "fixtures/mjlab"
+ },
+ "system": {
+  "python": "3.12.13",
+  "executable": ".dk_env/venv/bin/python",
+  "packages": {
+   "jax": "0.12.0.1",
+   "jaxlib": "0.12.0.1",
+   "mujoco": "3.17.0",
+   "mujoco-mjx": "3.17.0",
+   "warp-lang": "1.18.0+cu12",
+   "mujoco-warp": "3.17.0",
+   "numpy": "2.5.4"
+  },
+  "cpu": {
+   "model": "AMD EPYC 9B45",
+   "logical_cpus": 192,
+   "allocated": 192,
+   "affinity": "0-191",
+   "omp_num_threads": "4",
+   "scheduler_cpu_counts": null,
+   "cpu_engine_threads": {
+    "threads": 192,
+    "rule": "len(os.sched_getaffinity(0))"
+   }
+  },
+  "gpu": {
+   "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+   "compute_cap": "12.0",
+   "driver": "595.58.03",
+   "memory": "[Insufficient Permissions]"
+  },
+  "env": {
+   "PAPER_BENCH_SWEEP": "128,512,1024,2048,4096,8192,16384",
+   "PAPER_BENCH_JOB_START": "1794003576",
+   "PAPER_BENCH_PARTS": "ours,mjw_native",
+   "PAPER_BENCH_PYTHON": ".dk_env/venv/bin/python",
+   "DK_REPO": ".",
+   "DK_ENV": ".dk_env",
+   "PAPER_BENCH_DEV_PYTHON": ".dk_env/venv/bin/python",
+   "PAPER_BENCH_PREFIX": "runs/paper_bench_env"
+  },
+  "quick": false
+ },
+ "setup": {
+  "warp_wheel": "default",
+  "driver_at_setup": "595.58.03",
+  "venvs": {
+   "venv_mjw": {
+    "absl-py": "2.5.1",
+    "etils": "1.15.0",
+    "fsspec": "2026.9.0",
+    "glfw": "2.11.0",
+    "mujoco": "3.17.0",
+    "mujoco-warp": "3.17.0",
+    "numpy": "2.5.4",
+    "pyopengl": "3.1.10",
+    "typing_extensions": "4.16.0",
+    "warp-lang": "1.18.0",
+    "websockets": "17.4",
+    "zipp": "4.1.2"
+   },
+   "venv_pr": {
+    "absl-py": "2.5.1",
+    "etils": "1.15.0",
+    "fsspec": "2026.9.0",
+    "glfw": "2.11.0",
+    "mujoco": "3.17.0",
+    "numpy": "2.5.4",
+    "pyopengl": "3.1.10",
+    "typing_extensions": "4.16.0",
+    "warp-lang": "1.18.0",
+    "websockets": "17.4",
+    "zipp": "4.1.2"
+   }
+  },
+  "trees": {
+   "mujoco_warp_357a75d": "357a75d60a56d67d476942a1b6e54b3045ee8e87",
+   "mujoco_warp_4af093f": "4af093f02a3f48f0009ca7c916674b928136f310"
+  },
+  "menagerie": "f3b6013629c7b94f8ee93fd977b161fa8350f9bc"
+ },
+ "trees": {
+  "357a75d": {
+   "path": "runs/paper_bench_env/src/mujoco_warp_357a75d",
+   "commit": "357a75d60a56d67d476942a1b6e54b3045ee8e87",
+   "tree_sha256": "58f6458cb8065c9dea0b6a304723c112adc8859c2d8f4e21caaec47582a20481"
+  },
+  "4af093f": {
+   "path": "runs/paper_bench_env/src/mujoco_warp_4af093f",
+   "commit": "4af093f02a3f48f0009ca7c916674b928136f310",
+   "tree_sha256": "e8978fc74dc912b685810aae3429538dc0c6e4844b6a8335b491edf7b30f437a"
+  }
+ },
+ "seconds": 300.4,
+ "table": [
+  {
+   "section": "forward",
+   "engine": "ours",
+   "op": "fwd (no tape)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 4.02853,
+   "p10": 4.02791,
+   "p90": 4.02998
+  },
+  {
+   "section": "forward",
+   "engine": "ours",
+   "op": "fwd_tape (with tape)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 4.20506,
+   "p10": 4.20429,
+   "p90": 4.20598
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "bwd (exact)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 1.84555,
+   "p10": 1.84491,
+   "p90": 1.84585,
+   "note": "exact: clamp_kv=1, normal=0"
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "vjp = fwd_tape + bwd, one jit (exact)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 6.1004,
+   "p10": 6.0985,
+   "p90": 6.10265,
+   "note": "exact: clamp_kv=1, normal=0"
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "fwd_tape + 71 bwd (exact)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 137.06258,
+   "p10": 136.94959,
+   "p90": 137.08105,
+   "note": "exact: clamp_kv=1, normal=0",
+   "us_per_world": 33.46254
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "71 bwd on one tape (exact)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 132.8029,
+   "p10": 132.76438,
+   "p90": 132.86855,
+   "note": "exact: clamp_kv=1, normal=0",
+   "us_per_world": 32.42258
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "bwd (interface)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 1.85722,
+   "p10": 1.85688,
+   "p90": 1.88319,
+   "note": "interface defaults: clamp_kv=0, normal=3"
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "vjp = fwd_tape + bwd, one jit (interface)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 6.08813,
+   "p10": 6.08592,
+   "p90": 6.09542,
+   "note": "interface defaults: clamp_kv=0, normal=3"
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "fwd_tape + 71 bwd (interface)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 137.17173,
+   "p10": 137.14082,
+   "p90": 137.19972,
+   "note": "interface defaults: clamp_kv=0, normal=3",
+   "us_per_world": 33.48919
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "71 bwd on one tape (interface)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 132.90336,
+   "p10": 132.89594,
+   "p90": 132.93723,
+   "note": "interface defaults: clamp_kv=0, normal=3",
+   "us_per_world": 32.44711
+  },
+  {
+   "section": "forward",
+   "engine": "ours",
+   "op": "fwd (no tape)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 4.12836,
+   "p10": 4.12757,
+   "p90": 4.12964
+  },
+  {
+   "section": "forward",
+   "engine": "ours",
+   "op": "fwd_tape (with tape)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 4.30394,
+   "p10": 4.30099,
+   "p90": 4.30995
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "bwd (exact)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 1.85851,
+   "p10": 1.85558,
+   "p90": 1.97659,
+   "note": "exact: clamp_kv=1, normal=0"
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "vjp = fwd_tape + bwd, one jit (exact)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 7.12949,
+   "p10": 7.12734,
+   "p90": 7.13364,
+   "note": "exact: clamp_kv=1, normal=0"
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "fwd_tape + 71 bwd (exact)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 154.88379,
+   "p10": 154.72338,
+   "p90": 154.95046,
+   "note": "exact: clamp_kv=1, normal=0",
+   "us_per_world": 37.81343
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "71 bwd on one tape (exact)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 149.83802,
+   "p10": 149.77664,
+   "p90": 149.89254,
+   "note": "exact: clamp_kv=1, normal=0",
+   "us_per_world": 36.58155
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "bwd (interface)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 2.09022,
+   "p10": 2.08868,
+   "p90": 2.09052,
+   "note": "interface defaults: clamp_kv=0, normal=3"
+  },
+  {
+   "section": "gradient",
+   "engine": "ours",
+   "op": "vjp = fwd_tape + bwd, one jit (interface)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 7.13181,
+   "p10": 7.1283,
+   "p90": 7.13739,
+   "note": "interface defaults: clamp_kv=0, normal=3"
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "fwd_tape + 71 bwd (interface)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 155.00363,
+   "p10": 154.9891,
+   "p90": 155.05196,
+   "note": "interface defaults: clamp_kv=0, normal=3",
+   "us_per_world": 37.84268
+  },
+  {
+   "section": "jacobian",
+   "engine": "ours",
+   "op": "71 bwd on one tape (interface)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 150.01805,
+   "p10": 149.85095,
+   "p90": 150.05616,
+   "note": "interface defaults: clamp_kv=0, normal=3",
+   "us_per_world": 36.6255
+  },
+  {
+   "section": "forward",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 15.44859,
+   "p10": 15.44822,
+   "p90": 15.45032,
+   "note": "naconmax 94687 (nconmax 24) / njmax 128; the documented sizing rule (native headline)"
+  },
+  {
+   "section": "forward",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 15.72841,
+   "p10": 15.7245,
+   "p90": 15.73429,
+   "note": "naconmax 262144 (nconmax 64) / njmax 192; our engine's capacity"
+  },
+  {
+   "section": "forward",
+   "engine": "mjw",
+   "op": "forward graph (default capacity)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": null,
+   "p10": null,
+   "p90": null,
+   "note": "naconmax 196608 (nconmax 48) / njmax 64; put_data's defaults; capacity overflow: not timed",
+   "cell": "NEFC overflow in 317 worlds"
+  },
+  {
+   "section": "gradient",
+   "engine": "mjw",
+   "op": "backward",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": null,
+   "note": "none in any release (no timing)"
+  },
+  {
+   "section": "forward",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 15.55715,
+   "p10": 15.55519,
+   "p90": 15.55844,
+   "note": "naconmax 94687 (nconmax 24) / njmax 128; the documented sizing rule (native headline)"
+  },
+  {
+   "section": "forward",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": 15.82876,
+   "p10": 15.82644,
+   "p90": 15.83112,
+   "note": "naconmax 262144 (nconmax 64) / njmax 192; our engine's capacity"
+  },
+  {
+   "section": "forward",
+   "engine": "mjw",
+   "op": "forward graph (default capacity)",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": null,
+   "p10": null,
+   "p90": null,
+   "note": "naconmax 196608 (nconmax 48) / njmax 64; put_data's defaults; capacity overflow: not timed",
+   "cell": "NEFC overflow in 378 worlds"
+  },
+  {
+   "section": "gradient",
+   "engine": "mjw",
+   "op": "backward",
+   "corpus": "mf_s1",
+   "nworld": 4096,
+   "ms_median": null,
+   "note": "none in any release (no timing)"
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 128,
+   "ms_median": 0.64623,
+   "p10": 0.64619,
+   "p90": 0.64643
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 128,
+   "ms_median": 0.8388,
+   "p10": 0.83872,
+   "p90": 0.83916
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 512,
+   "ms_median": 0.89341,
+   "p10": 0.89326,
+   "p90": 0.8995
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 512,
+   "ms_median": 1.31398,
+   "p10": 1.31344,
+   "p90": 1.31442
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 1024,
+   "ms_median": 1.33979,
+   "p10": 1.3387,
+   "p90": 1.34009
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 1024,
+   "ms_median": 2.01462,
+   "p10": 2.01052,
+   "p90": 2.016
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 2048,
+   "ms_median": 2.407,
+   "p10": 2.40249,
+   "p90": 2.41065
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 2048,
+   "ms_median": 3.62654,
+   "p10": 3.62239,
+   "p90": 3.63394
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 4.69978,
+   "p10": 4.69855,
+   "p90": 4.70469
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 7.03993,
+   "p10": 7.02665,
+   "p90": 7.048
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 8192,
+   "ms_median": 9.19295,
+   "p10": 9.17387,
+   "p90": 9.2083
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 8192,
+   "ms_median": 13.66234,
+   "p10": 13.65393,
+   "p90": 13.66701
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "fwd",
+   "corpus": "mf_s0",
+   "nworld": 16384,
+   "ms_median": 17.91149,
+   "p10": 17.90942,
+   "p90": 18.07161
+  },
+  {
+   "section": "sweep",
+   "engine": "ours",
+   "op": "vjp (exact)",
+   "corpus": "mf_s0",
+   "nworld": 16384,
+   "ms_median": 26.76354,
+   "p10": 26.74574,
+   "p90": 26.77704
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 15.44859,
+   "p10": 15.44822,
+   "p90": 15.45032
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 4096,
+   "ms_median": 15.72841,
+   "p10": 15.7245,
+   "p90": 15.73429
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 128,
+   "ms_median": 3.31369,
+   "p10": 3.31308,
+   "p90": 3.31418
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 128,
+   "ms_median": 3.31093,
+   "p10": 3.31055,
+   "p90": 3.31176
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 512,
+   "ms_median": 4.21796,
+   "p10": 4.21727,
+   "p90": 4.21842
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 512,
+   "ms_median": 4.28688,
+   "p10": 4.28634,
+   "p90": 4.28734
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 1024,
+   "ms_median": 5.70279,
+   "p10": 5.70186,
+   "p90": 5.70356
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 1024,
+   "ms_median": 5.76143,
+   "p10": 5.76041,
+   "p90": 5.76194
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 2048,
+   "ms_median": 8.79375,
+   "p10": 8.79231,
+   "p90": 8.7943
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 2048,
+   "ms_median": 8.93665,
+   "p10": 8.9346,
+   "p90": 8.93909
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 8192,
+   "ms_median": 29.84457,
+   "p10": 29.84389,
+   "p90": 29.85343
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 8192,
+   "ms_median": 30.44574,
+   "p10": 30.4401,
+   "p90": 30.45627
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (procedure capacity)",
+   "corpus": "mf_s0",
+   "nworld": 16384,
+   "ms_median": 58.92187,
+   "p10": 58.91704,
+   "p90": 58.9269
+  },
+  {
+   "section": "sweep",
+   "engine": "mjw",
+   "op": "forward graph (matched capacity)",
+   "corpus": "mf_s0",
+   "nworld": 16384,
+   "ms_median": 60.21562,
+   "p10": 60.20939,
+   "p90": 60.22301
+  }
+ ],
+ "finished": "2026-11-06T22:24:36Z"
+}
