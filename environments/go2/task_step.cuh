@@ -179,6 +179,9 @@ __device__ void prepare(Data &dd,Work &s,int w,int l,float*pre_A,float*pre_rhs){
  for(int i=1;i<s.nc;i++){Contact v=s.con[i];int j=i;while(j>0&&s.con[j-1].row>v.row){s.con[j]=s.con[j-1];j--;}s.con[j]=v;}MARK(4);}
  __syncwarp();constraints(s,dd,w);__syncwarp();if(l==0){MARK(5);}__syncwarp();
 }
+// Loop exits must be warp-uniform: later shuffles and __syncwarp() use the full mask.
+// Optimized code may evaluate the same float expression differently per lane, so lane 0 decides.
+__device__ __forceinline__ bool uniform(bool c){return __shfl_sync(0xffffffff,(int)c,0)!=0;}
 __device__ float sumwarp(float v){for(int k=16;k;k/=2)v+=__shfl_down_sync(0xffffffff,v,k);return __shfl_sync(0xffffffff,v,0);}
 __device__ void row_eval(float x,float d,float fl,int r,int ne,int nf,float&f,float&diag){f=diag=0;if(r<ne){f=-d*x;diag=d;}else if(r<ne+nf){f=clampf(-d*x,-fl,fl);if(fabsf(x)<fl/d)diag=d;}else if(x<0){f=-d*x;diag=d;}}
 struct Solve {float H[NV*NV],a[NV],g[NV],p[NV],x[NR],jp[NR],f[NR],diag[NR],lo,hi,gd,pmp;int stop;};
@@ -194,23 +197,23 @@ __device__ void solve_integrate(Data &dd,Work &s,Solve &v,int w,int l,const IO&i
  for(int it=0;it<ITERS && n>0;it++){
   for(int r=l;r<n;r+=32){float x=-s.aref[r];for(int i=0;i<NV;i++)x+=s.J[r*NV+i]*v.a[i];v.x[r]=x;row_eval(x,s.D[r],s.fl[r],r,s.ne,s.nf,v.f[r],v.diag[r]);}__syncwarp();
   float gg=0;for(int i=l;i<NV;i+=32){float g=-s.smooth[i];for(int j=0;j<NV;j++)g+=s.mass[i*NV+j]*v.a[j];for(int r=0;r<n;r++)g-=s.J[r*NV+i]*v.f[r];v.g[i]=g;gg+=g*g;}
-  float norm=sqrtf(sumwarp(gg));if(norm<M(tolerance,0)*M(meaninertia,0)*NV)break;
+  float norm=sqrtf(sumwarp(gg));if(uniform(norm<M(tolerance,0)*M(meaninertia,0)*NV))break;
   for(int t=l;t<NV*NV;t+=32){int i=t/NV,j=t%NV;if(j<=i){float h=s.mass[t];for(int r=0;r<n;r++)h+=s.J[r*NV+i]*v.diag[r]*s.J[r*NV+j];v.H[t]=h;}}__syncwarp();
   if(l<NV)v.p[l]=-v.g[l];__syncwarp();chol_parallel(v.H,v.p,l);
   if(l==0){float dec=0;for(int i=0;i<NV;i++)dec-=v.g[i]*v.p[i];v.stop=norm<M(tolerance,0)*M(meaninertia,0)*NV || .5f*dec<M(tolerance,0)*M(meaninertia,0)*NV;}__syncwarp();
-  if(v.stop)break;
+  if(uniform(v.stop))break;
   for(int r=l;r<n;r+=32){float jp=0;for(int i=0;i<NV;i++)jp+=s.J[r*NV+i]*v.p[i];v.jp[r]=jp;}
   float gd=0,pmp=0;for(int i=l;i<NV;i+=32){float mp=0,ma=-s.smooth[i];for(int j=0;j<NV;j++){mp+=s.mass[i*NV+j]*v.p[j];ma+=s.mass[i*NV+j]*v.a[j];}gd+=ma*v.p[i];pmp+=mp*v.p[i];}gd=sumwarp(gd);pmp=sumwarp(pmp);if(l==0){v.gd=gd;v.pmp=pmp;v.lo=0;v.hi=1;}__syncwarp();
-  for(int k=0;k<16;k++){float df=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+v.hi*v.jp[r],s.D[r],s.fl[r],r,s.ne,s.nf,f,d);df-=f*v.jp[r];}df=sumwarp(df)+v.gd+v.hi*v.pmp;if(df>=0)break;if(l==0){v.lo=v.hi;v.hi*=2;}__syncwarp();}
+  for(int k=0;k<16;k++){float df=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+v.hi*v.jp[r],s.D[r],s.fl[r],r,s.ne,s.nf,f,d);df-=f*v.jp[r];}df=sumwarp(df)+v.gd+v.hi*v.pmp;if(uniform(df>=0))break;if(l==0){v.lo=v.hi;v.hi*=2;}__syncwarp();}
   float alpha=.5f*(v.lo+v.hi);
   for(int k=0;k<24;k++){
    float df=0,curv=0;for(int r=l;r<n;r+=32){float f,d;row_eval(v.x[r]+alpha*v.jp[r],s.D[r],s.fl[r],r,s.ne,s.nf,f,d);df-=f*v.jp[r];curv+=d*v.jp[r]*v.jp[r];}
    df=sumwarp(df)+v.gd+alpha*v.pmp;curv=sumwarp(curv)+v.pmp;
-   if(fabsf(df)<=1e-7f*(fabsf(v.gd)+fabsf(alpha*v.pmp)+1.f))break;
+   if(uniform(fabsf(df)<=1e-7f*(fabsf(v.gd)+fabsf(alpha*v.pmp)+1.f)))break;
    if(l==0){if(df<0)v.lo=alpha;else v.hi=alpha;}__syncwarp();
    float next=alpha-df/fmaxf(curv,1e-30f);
    if(!(next>v.lo&&next<v.hi))next=.5f*(v.lo+v.hi);
-   if(next==alpha)break;alpha=next;
+   next=__shfl_sync(0xffffffff,next,0);if(next==alpha)break;alpha=next;
   }
   for(int i=l;i<NV;i+=32)v.a[i]+=alpha*v.p[i];__syncwarp();nit=it+1;
  }
